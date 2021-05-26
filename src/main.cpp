@@ -27,16 +27,10 @@
 #include "framebuffer.h"
 #include "map.h"
 #include "player.h"
+#include "sprite.h"
 
-void render(FrameBuffer &framebuffer, Map &map, Player &player, Texture &wall_tex)
+void draw_map(FrameBuffer &framebuffer, Map &map, std::size_t rect_w, std::size_t rect_h, Texture &wall_tex)
 {
-
-	framebuffer.clear(pack_color(255, 255, 255));
-
-	// Blocks on the map (wall, etc)
-	const std::size_t rect_w = (framebuffer.w / 2) / map.w;
-	const std::size_t rect_h = framebuffer.h / map.h;
-
 	// Render the map
 	for (std::size_t row = 0; row < map.h; row++)
 	{
@@ -58,16 +52,16 @@ void render(FrameBuffer &framebuffer, Map &map, Player &player, Texture &wall_te
 			framebuffer.draw_rectangle(rect_x, rect_y, rect_w, rect_h, wall_tex.get(0, 0, texture_index));
 		}
 	}
+}
 
-	// Show player position on the map
-	framebuffer.draw_rectangle(player.x * rect_w, player.y * rect_h, 5, 5, pack_color(0, 255, 0));
-
+void cast_ray(FrameBuffer &framebuffer, Map &map, std::size_t rect_w, std::size_t rect_h, Player &player, Texture &wall_tex)
+{
 	// window_w so we can see through the whole screen
 	for (std::size_t i = 0; i < framebuffer.w / 2; i++)
 	{
 		// fov * i / float(window_w / 2) increasingly gives higher value until it reaches 100% of fov, so that we can actually rotate the ray
-		// player_angle is the current viewing point, directly ahead. fov / 2 is setting the current view to render to be the left peripheral
-		float angle = player.a - player.fov / 2 + player.fov * i / float(framebuffer.w / 2);
+		// curr_angle is the current viewing point, directly ahead. fov / 2 is setting the current view to render to be the left peripheral
+		float curr_angle = player.a - player.fov / 2 + player.fov * i / float(framebuffer.w / 2);
 
 		// soh cah toa
 		// hypothenuse = h, adjacent = a, opposite = o
@@ -78,8 +72,8 @@ void render(FrameBuffer &framebuffer, Map &map, Player &player, Texture &wall_te
 		for (float h = 0; h < 20; h += h_step)
 		{
 			// offset_x + h * a / h so we just get a!
-			float view_x = player.x + h * cos(angle);
-			float view_y = player.y + h * sin(angle);
+			float view_x = player.x + h * cos(curr_angle);
+			float view_y = player.y + h * sin(curr_angle);
 
 			std::size_t pix_x = view_x * rect_w;
 			std::size_t pix_y = view_y * rect_h;
@@ -91,7 +85,7 @@ void render(FrameBuffer &framebuffer, Map &map, Player &player, Texture &wall_te
 			if (map.is_empty(view_y, view_x) == false)
 			{
 				// http://www.permadi.com/tutorial/raycast/rayc4.html
-				size_t wall_height = framebuffer.h / (h * cos(angle - player.a));
+				size_t wall_height = framebuffer.h / (h * cos(curr_angle - player.a));
 				size_t texture_index = map.get(view_y, view_x);
 
 				// Count texture pixels
@@ -125,21 +119,40 @@ void render(FrameBuffer &framebuffer, Map &map, Player &player, Texture &wall_te
 	}
 }
 
-int main(int argc, char *argv[])
+void render(FrameBuffer &framebuffer, Map &map, Player &player, std::vector<Sprite> &sprites, Texture &wall_tex)
 {
 
-	// Set size of framebuffer
-	FrameBuffer framebuffer{1024, 512};
 	// Clear and reset framebuffer image to white
 	framebuffer.clear(pack_color(255, 255, 255));
 
-	// player position x, y, initial player view direction (angle between view direction and x axis), fov (1/3rd of screen)
+	// Size of blocks on the map (wall, etc)
+	const std::size_t rect_w = (framebuffer.w / 2) / map.w;
+	const std::size_t rect_h = framebuffer.h / map.h;
+
+	draw_map(framebuffer, map, rect_w, rect_h, wall_tex);
+
+	cast_ray(framebuffer, map, rect_w, rect_h, player, wall_tex);
+
+	// Show player position on the map
+	framebuffer.draw_rectangle(player.x * rect_w, player.y * rect_h, 5, 5, pack_color(0, 255, 0));
+
+	// Show monsters positions on the map
+	for (int i = 0; i < sprites.size(); i++)
+	{
+		framebuffer.draw_rectangle(sprites[i].x * rect_w, sprites[i].y * rect_h, 5, 5, pack_color(255, 0, 0));
+	}
+}
+
+int main(int argc, char *argv[])
+{
+	FrameBuffer framebuffer{1024, 512};
+	Map map;
+	std::vector<Sprite> sprites{ {1.834, 8.765, 0}, {5.323, 5.365, 1}, {4.123, 10.265, 1} };
+
+	// player position x, y, initial player view direction (curr_angle between view direction and x axis), fov (1/3rd of screen)
 	Player player{3.456, 2.345, 1.523, M_PI / 3.};
 
-	Map map;
-
 	Texture wall_tex("assets/walltext.png");
-
 	if (wall_tex.count == 0)
 	{
 		std::cerr << "Failed to load wall textures" << std::endl;
@@ -156,7 +169,7 @@ int main(int argc, char *argv[])
 
 		player.a += 2 * (M_PI / 360);
 
-		render(framebuffer, map, player, wall_tex);
+		render(framebuffer, map, player, sprites, wall_tex);
 		drop_ppm_image(ss.str(), framebuffer.img, framebuffer.w, framebuffer.h);
 	}
 }
