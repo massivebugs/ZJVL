@@ -7,6 +7,7 @@ struct Sprite
 {
     float x, y;
     std::size_t texture_index;
+    float player_dist;
 };
 
 #endif

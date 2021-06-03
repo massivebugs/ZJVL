@@ -5,6 +5,7 @@
 #include <cassert>
 
 #include "utils.h"
+#include "sprite.h"
 
 // Return a 32 byte unsigned int containing rgba values
 uint32_t pack_color(const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a)
@@ -21,6 +22,17 @@ void unpack_color(const uint32_t &color, uint8_t &r, uint8_t &g, uint8_t &b, uin
 	g = (color >> 8) & 255;
 	b = (color >> 16) & 255;
 	a = (color >> 24) & 255;
+}
+
+bool is_transparent_pixel(const uint32_t &color)
+{
+	std::uint8_t opacity = color >> 24 & 255;
+	return opacity == 0;
+}
+
+void sort_sprites(std::vector<Sprite> &sprites)
+{
+	// Merge sort sprites
 }
 
 // Outputs a vector(array of rgba values) into a file

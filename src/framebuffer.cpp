@@ -25,7 +25,7 @@ void FrameBuffer::draw_rectangle(const std::size_t rect_x, const std::size_t rec
             std::size_t x = rect_x + curr_w;
             std::size_t y = rect_y + curr_h;
 
-            // Draw only what fits
+            // Draw only what fits - do we need this?
             if (x < w && y < h)
                 set_pixel(x, y, color);
         }

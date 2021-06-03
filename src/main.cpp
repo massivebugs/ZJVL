@@ -54,9 +54,51 @@ void draw_map(FrameBuffer &framebuffer, Map &map, std::size_t rect_w, std::size_
 	}
 }
 
-void cast_ray(FrameBuffer &framebuffer, Map &map, std::size_t rect_w, std::size_t rect_h, Player &player, Texture &wall_tex)
+void draw_sprite(FrameBuffer &framebuffer, Player &player, Sprite &sprite, Texture &sprite_tex, std::vector<float> &depth_buffer)
 {
-	// window_w so we can see through the whole screen
+	// https://www.youtube.com/watch?v=BJ0-3kERCwc
+	// https://www.youtube.com/watch?v=MHoFqRyeP3o の2:52を見てみるとちょっとわかるかも
+	// https://boxbase.org/entries/2014/jun/23/why-radians/ Why we use radians
+	// sprite_dir is like the angle between the x axis and curr sprite's location
+	float sprite_dir = atan2(sprite.y - player.y, sprite.x - player.x);
+
+	// TODO: Wtf is this?!
+	while (sprite_dir - player.a > M_PI) // while sprite in the oppsite+ direction
+		sprite_dir -= 2 * M_PI;			 // remove unncesessary periods from the relative direction
+	while (sprite_dir - player.a < -M_PI)
+		sprite_dir += 2 * M_PI;
+
+	size_t sprite_size = std::min(1000, static_cast<int>(framebuffer.h / sprite.player_dist));
+
+	// Kind of like when drawing the wall. Gets the upper left coordinates of the sprite to draw
+	int w_offset = (sprite_dir - player.a) * (framebuffer.w / 2) / (player.fov) + (framebuffer.w / 2) / 2 - sprite_size / 2;
+	int h_offset = (framebuffer.h / 2) - (sprite_size / 2);
+
+	for (size_t i = 0; i < sprite_size; i++)
+	{
+		if (w_offset + int(i) < 0 || w_offset + i >= framebuffer.w / 2)
+			continue;
+
+		// Don't draw the sprite if it is behind a wall
+		if (depth_buffer[w_offset + i] <= sprite.player_dist)
+			continue;
+
+		size_t sprite_col = (float(sprite_tex.size) / float(sprite_size)) * i;
+
+		std::vector<uint32_t> column = sprite_tex.get_scaled_column(sprite.texture_index, sprite_col, sprite_size);
+		for (int curr_height = 0; curr_height < column.size(); curr_height++)
+		{
+			if (is_transparent_pixel(column[curr_height]))
+				continue;
+
+			framebuffer.set_pixel(framebuffer.w / 2 + w_offset + i, (framebuffer.h / 2) - (sprite_size / 2) + curr_height, column[curr_height]);
+		}
+	}
+}
+
+void cast_ray(FrameBuffer &framebuffer, Map &map, std::size_t rect_w, std::size_t rect_h, Player &player, Texture &wall_tex, std::vector<float> &depth_buffer)
+{
+	// window_w so we can render the whole screen width
 	for (std::size_t i = 0; i < framebuffer.w / 2; i++)
 	{
 		// fov * i / float(window_w / 2) increasingly gives higher value until it reaches 100% of fov, so that we can actually rotate the ray
@@ -80,10 +122,14 @@ void cast_ray(FrameBuffer &framebuffer, Map &map, std::size_t rect_w, std::size_
 
 			// This draws the visibility cone
 			framebuffer.set_pixel(pix_x, pix_y, pack_color(160, 160, 160));
+			// std::cout << view_x << ':' << view_y << std::endl;
 
 			// ray is touching a wall
 			if (map.is_empty(view_y, view_x) == false)
 			{
+				// Store the depth of the map
+				depth_buffer[i] = h;
+
 				// http://www.permadi.com/tutorial/raycast/rayc4.html
 				size_t wall_height = framebuffer.h / (h * cos(curr_angle - player.a));
 				size_t texture_index = map.get(view_y, view_x);
@@ -119,7 +165,7 @@ void cast_ray(FrameBuffer &framebuffer, Map &map, std::size_t rect_w, std::size_
 	}
 }
 
-void render(FrameBuffer &framebuffer, Map &map, Player &player, std::vector<Sprite> &sprites, Texture &wall_tex)
+void render(FrameBuffer &framebuffer, Map &map, Player &player, std::vector<Sprite> &sprites, Texture &wall_tex, Texture &sprites_tex)
 {
 
 	// Clear and reset framebuffer image to white
@@ -129,17 +175,31 @@ void render(FrameBuffer &framebuffer, Map &map, Player &player, std::vector<Spri
 	const std::size_t rect_w = (framebuffer.w / 2) / map.w;
 	const std::size_t rect_h = framebuffer.h / map.h;
 
+	// Depth map of the walls
+	std::vector<float> depth_buffer(framebuffer.w / 2, 1e3);
+
 	draw_map(framebuffer, map, rect_w, rect_h, wall_tex);
 
-	cast_ray(framebuffer, map, rect_w, rect_h, player, wall_tex);
+	cast_ray(framebuffer, map, rect_w, rect_h, player, wall_tex, depth_buffer);
 
 	// Show player position on the map
 	framebuffer.draw_rectangle(player.x * rect_w, player.y * rect_h, 5, 5, pack_color(0, 255, 0));
+
+	// Store sprite distance relative to player
+	for (int i = 0; i < sprites.size(); i++)
+	{
+		// pythagoras theorem here!
+		sprites[i].player_dist = std::sqrt(pow(sprites[i].x - player.x, 2) + pow(sprites[i].y - player.y, 2));
+	}
+	// TODO: Sort here!
+	// Sort the sprites by distance
+	sort_sprites(sprites);
 
 	// Show monsters positions on the map
 	for (int i = 0; i < sprites.size(); i++)
 	{
 		framebuffer.draw_rectangle(sprites[i].x * rect_w, sprites[i].y * rect_h, 5, 5, pack_color(255, 0, 0));
+		draw_sprite(framebuffer, player, sprites[i], sprites_tex, depth_buffer);
 	}
 }
 
@@ -147,15 +207,26 @@ int main(int argc, char *argv[])
 {
 	FrameBuffer framebuffer{1024, 512};
 	Map map;
-	std::vector<Sprite> sprites{ {1.834, 8.765, 0}, {5.323, 5.365, 1}, {4.123, 10.265, 1} };
+	std::vector<Sprite> sprites{{3.523, 3.812, 2}, {1.834, 8.765, 0}, {5.323, 5.365, 1}, {4.123, 10.265, 2}};
 
 	// player position x, y, initial player view direction (curr_angle between view direction and x axis), fov (1/3rd of screen)
+	// The player's positions are relative to the map's width and height so 16 is like max
 	Player player{3.456, 2.345, 1.523, M_PI / 3.};
+
+	// 1/6 of 360 deg or 1/3pi rad!!!!!!!!!!
+	// std::cout << M_PI / 3. << std::endl;
 
 	Texture wall_tex("assets/walltext.png");
 	if (wall_tex.count == 0)
 	{
 		std::cerr << "Failed to load wall textures" << std::endl;
+		return -1;
+	}
+
+	Texture sprites_tex("assets/monsters.png");
+	if (sprites_tex.count == 0)
+	{
+		std::cerr << "Failed to load sprite textures" << std::endl;
 		return -1;
 	}
 
@@ -167,9 +238,11 @@ int main(int argc, char *argv[])
 		// Fill 5 0's as initial string and then add the frame number
 		ss << std::setfill('0') << std::setw(5) << frame_num << ".ppm";
 
-		player.a += 2 * (M_PI / 360);
+		// incr by 1 deg in radians - 360 deg is about 6.28319 rad
+		player.a += 2 * M_PI / 360;
+		// std::cout << player.a << std::endl;
 
-		render(framebuffer, map, player, sprites, wall_tex);
+		render(framebuffer, map, player, sprites, wall_tex, sprites_tex);
 		drop_ppm_image(ss.str(), framebuffer.img, framebuffer.w, framebuffer.h);
 	}
 }
