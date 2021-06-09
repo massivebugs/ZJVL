@@ -191,7 +191,7 @@ void render(FrameBuffer &framebuffer, Map &map, Player &player, std::vector<Spri
 		// pythagoras theorem here!
 		sprites[i].player_dist = std::sqrt(pow(sprites[i].x - player.x, 2) + pow(sprites[i].y - player.y, 2));
 	}
-	// TODO: Sort here!
+
 	// Sort the sprites by distance
 	sort_sprites(sprites);
 

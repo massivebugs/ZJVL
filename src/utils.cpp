@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <string>
 #include <cassert>
+#include <cmath>
 
 #include "utils.h"
 #include "sprite.h"
@@ -30,9 +31,62 @@ bool is_transparent_pixel(const uint32_t &color)
 	return opacity == 0;
 }
 
-void sort_sprites(std::vector<Sprite> &sprites)
+void merge(std::vector<Sprite> &l_vect, std::vector<Sprite> &r_vect, std::vector<Sprite> &merged)
 {
-	// Merge sort sprites
+	std::size_t merged_idx = 0;
+	std::size_t l_size = l_vect.size();
+	std::size_t r_size = r_vect.size();
+	std::size_t l_idx = 0;
+	std::size_t r_idx = 0;
+
+	for (merged_idx; merged_idx < merged.size(); merged_idx++)
+	{
+		if (l_idx == l_size)
+		{
+			merged[merged_idx] = r_vect[r_idx];
+			r_idx++;
+			continue;
+		}
+		else if (r_idx == r_size)
+		{
+			merged[merged_idx] = l_vect[l_idx];
+			l_idx++;
+			continue;
+		}
+
+		// compare and add the smaller value to merged
+		if (l_vect[l_idx].player_dist >= r_vect[r_idx].player_dist)
+		{
+			merged[merged_idx] = l_vect[l_idx];
+			l_idx++;
+		}
+		else
+		{
+			merged[merged_idx] = r_vect[r_idx];
+			r_idx++;
+		}
+	}
+}
+
+void sort_sprites(std::vector<Sprite> &to_sort)
+{
+	// Merge sort sprites just for practice
+	if (to_sort.size() == 1)
+		return;
+
+	std::size_t half_idx = std::ceil((float)to_sort.size() / 2);
+
+	// The iterator pointing to the half element of the vector
+	std::vector<Sprite>::iterator half_iter = to_sort.end() - (to_sort.size() - half_idx);
+
+	// Iterators in C++ by The Cherno https://www.youtube.com/watch?v=SgcHcbQ0RCQ
+	std::vector<Sprite> l_half(to_sort.begin(), half_iter);
+	std::vector<Sprite> r_half(half_iter, to_sort.end());
+
+	sort_sprites(l_half);
+	sort_sprites(r_half);
+
+	merge(l_half, r_half, to_sort);
 }
 
 // Outputs a vector(array of rgba values) into a file
