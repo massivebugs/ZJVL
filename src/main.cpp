@@ -243,6 +243,6 @@ int main(int argc, char *argv[])
 		// std::cout << player.a << std::endl;
 
 		render(framebuffer, map, player, sprites, wall_tex, sprites_tex);
-		drop_ppm_image(ss.str(), framebuffer.img, framebuffer.w, framebuffer.h);
+		drop_ppm_image("output/" + ss.str(), framebuffer.img, framebuffer.w, framebuffer.h);
 	}
 }

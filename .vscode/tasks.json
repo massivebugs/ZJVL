@@ -6,14 +6,22 @@
 			"label": "C/C++: g++.exe build active file",
 			"command": "C:\\Program Files\\mingw-w64\\x86_64-8.1.0-posix-seh-rt_v6-rev0\\mingw64\\bin\\g++.exe",
 			"args": [
-				"-g",
+				"-g", // more debug info
 				"${workspaceFolder}\\src\\*.cpp",
 				"-o",
-				"${fileDirname}\\${fileBasenameNoExtension}.exe",
+				"${workspaceFolder}\\output\\${fileBasenameNoExtension}.exe",
 				"-I",
 				"${workspaceFolder}\\lib",
 				"-I",
 				"${workspaceFolder}\\src",
+				"-I",
+				"C:\\Users\\personal\\src\\sdl_64\\include",
+				// "-Wall", // warnings
+				"-L",
+				"C:\\Users\\personal\\src\\sdl_64\\lib",
+				"-lSDL2main",
+				"-lSDL2",
+				"-lSDL2_image"
 			],
 			"options": {
 				"cwd": "${fileDirname}"
@@ -26,6 +34,11 @@
 				"isDefault": true
 			},
 			"detail": "compiler: \"C:\\Program Files\\mingw-w64\\x86_64-8.1.0-posix-seh-rt_v6-rev0\\mingw64\\bin\\g++.exe\""
+		},
+		{
+			"label": "Delete ppm output files",
+			"type": "shell",
+			"command": "rm output/*.ppm"
 		}
 	]
 }
