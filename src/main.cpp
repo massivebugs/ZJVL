@@ -66,7 +66,7 @@ void draw_sprite(FrameBuffer &framebuffer, Player &player, Sprite &sprite, Textu
 
 	// TODO: Wtf is this?!
 	while (sprite_dir - player.a > M_PI) // while sprite in the oppsite+ direction
-		sprite_dir -= 2 * M_PI;			 // remove unncesessary periods from the relative direction
+		sprite_dir -= 2 * M_PI;	     // remove unncesessary periods from the relative direction
 	while (sprite_dir - player.a < -M_PI)
 		sprite_dir += 2 * M_PI;
 
@@ -205,8 +205,21 @@ void render(FrameBuffer &framebuffer, Map &map, Player &player, std::vector<Spri
 	}
 }
 
+// Args required for compatibility with SDL
 int main(int argc, char *argv[])
 {
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
+	{
+		std::cout << "Failed to initialize SDL. SDL ERROR: " << SDL_GetError() << std::endl;
+		return -1;
+	}
+
+	if (!IMG_Init(IMG_INIT_PNG))
+	{
+		std::cout << "Failed to initialize SDL_image. SDL ERROR: " << SDL_GetError() << std::endl;
+		return -1;
+	}
+
 	FrameBuffer framebuffer{1024, 512};
 	Map map;
 	std::vector<Sprite> sprites{{3.523, 3.812, 2}, {1.834, 8.765, 0}, {5.323, 5.365, 1}, {4.123, 10.265, 2}};
@@ -232,20 +245,64 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-	for (size_t frame_num = 0; frame_num < 360; frame_num++)
+	render(framebuffer, map, player, sprites, wall_tex, sprites_tex);
+
+	// https: //stackoverflow.com/questions/21007329/what-is-an-sdl-renderer
+	SDL_Window *window = nullptr;
+	SDL_Renderer *renderer = nullptr;
+	SDL_Texture *texture = nullptr;
+	SDL_Event event;
+
+	window = SDL_CreateWindow(
+	    "Raycast Engine",	    // window title
+	    SDL_WINDOWPOS_CENTERED, // initial x position
+	    SDL_WINDOWPOS_CENTERED, // initial y position
+	    framebuffer.w,	    // width, in pixels
+	    framebuffer.h,	    // height, in pixels
+	    SDL_WINDOW_SHOWN	    // flags - see below
+	);
+
+	if (window == nullptr)
 	{
-		std::stringstream ss;
+		std::cout << "Failed to create SDL Window. SDL_ERROR: " << SDL_GetError() << std::endl;
+		return -1;
+	}
 
-		// Set the name of the output frame (ppm) file
-		// Fill 5 0's as initial string and then add the frame number
-		ss << std::setfill('0') << std::setw(5) << frame_num << ".ppm";
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-		// incr by 1 deg in radians - 360 deg is about 6.28319 rad
-		player.a += 2 * M_PI / 360;
-		// std::cout << player.a << std::endl;
+	SDL_UpdateWindowSurface(window);
+
+	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, framebuffer.w, framebuffer.h);
+	SDL_UpdateTexture(texture, NULL, reinterpret_cast<void *>(framebuffer.img.data()), framebuffer.w * 4);
+
+	SDL_SetRelativeMouseMode(SDL_TRUE);
+	int mouse_x, mouse_y;
+	while (1)
+	{
+		SDL_PollEvent(&event);
+		if (event.type == SDL_QUIT)
+		{
+			break;
+		}
+
+		// Use this instead of xrel to prevent mouse movement noise and delay
+		SDL_GetRelativeMouseState(&mouse_x, &mouse_y);
+
+		player.a += mouse_x * M_PI / 360;
 
 		render(framebuffer, map, player, sprites, wall_tex, sprites_tex);
-		drop_ppm_image("output/" + ss.str(), framebuffer.img, framebuffer.w, framebuffer.h);
+
+		SDL_UpdateTexture(texture, NULL, reinterpret_cast<void *>(framebuffer.img.data()), framebuffer.w * 4);
+		SDL_RenderClear(renderer);
+		SDL_RenderCopy(renderer, texture, NULL, NULL);
+		SDL_RenderPresent(renderer);
 	}
+
+	SDL_DestroyTexture(texture);
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+
+	IMG_Quit();
+	SDL_Quit();
 	return 0;
 }
