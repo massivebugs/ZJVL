@@ -15,6 +15,8 @@
 // * float division: returns float if divided by float! std::cout << 255 * (2 / float(3)) << std::endl;
 // * NULL, null_ptr: https://stackoverflow.com/questions/20509734/null-vs-nullptr-why-was-it-replaced
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <iostream>
 #include <vector>
 #include <cstdint>
@@ -245,4 +247,5 @@ int main(int argc, char *argv[])
 		render(framebuffer, map, player, sprites, wall_tex, sprites_tex);
 		drop_ppm_image("output/" + ss.str(), framebuffer.img, framebuffer.w, framebuffer.h);
 	}
+	return 0;
 }

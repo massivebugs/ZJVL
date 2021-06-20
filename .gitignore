@@ -1,4 +1,5 @@
 main.exe.stackdump
-src/*.exe
-*.ppm
+output/*.ppm
 *.code-workspace
+bin/debug/*.exe
+bin/release/*.exe

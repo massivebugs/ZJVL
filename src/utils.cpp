@@ -54,8 +54,8 @@ void merge(std::vector<Sprite> &l_vect, std::vector<Sprite> &r_vect, std::vector
 			continue;
 		}
 
-		// compare and add the smaller value to merged
-		if (l_vect[l_idx].player_dist >= r_vect[r_idx].player_dist)
+		// compare and add the smaller size to merged
+		if (l_vect[l_idx] < r_vect[r_idx])
 		{
 			merged[merged_idx] = l_vect[l_idx];
 			l_idx++;
