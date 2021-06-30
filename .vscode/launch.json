@@ -8,8 +8,28 @@
 			"name": "g++.exe - Build and debug active file",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}\\bin\\debug\\${fileBasenameNoExtension}.exe",
-			"args": [],
+			"program": "${workspaceFolder}\\bin\\debug\\zjvl.exe",
+			"args": [
+				"-O3", // optimization 
+				"-s", // strip all debugging symbols
+				"-DNDEBUG",
+				"${workspaceFolder}\\src\\*.cpp",
+				"${workspaceFolder}\\src\\app\\*.cpp",
+				"-o",
+				"${workspaceFolder}\\bin\\debug\\zjvl.exe",
+				"-I",
+				"${workspaceFolder}\\lib",
+				"-I",
+				"${workspaceFolder}\\src",
+				"-I",
+				"${workspaceFolder}\\dependencies\\sdl64\\include",
+				"-L",
+				"${workspaceFolder}\\dependencies\\sdl64\\lib",
+				"-lmingw32",
+				"-lSDL2main",
+				"-lSDL2",
+				"-lSDL2_image"
+			],
 			"stopAtEntry": false,
 			"cwd": "${fileDirname}",
 			"environment": [],
@@ -23,7 +43,7 @@
 					"ignoreFailures": true
 				}
 			],
-			"preLaunchTask": "C/C++: g++.exe build active file"
+			"preLaunchTask": "C/C++: g++.exe build active debug file"
 		}
 	]
 }

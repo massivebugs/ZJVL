@@ -8,17 +8,18 @@
 			"args": [
 				"-g", // more debug info
 				"${workspaceFolder}\\src\\*.cpp",
+				"${workspaceFolder}\\src\\app\\*.cpp",
 				"-o",
-				"${workspaceFolder}\\bin\\debug\\${fileBasenameNoExtension}.exe",
+				"${workspaceFolder}\\bin\\debug\\zjvl.exe",
 				"-I",
 				"${workspaceFolder}\\lib",
 				"-I",
 				"${workspaceFolder}\\src",
 				"-I",
-				"C:\\Users\\personal\\src\\sdl_64\\include",
+				"${workspaceFolder}\\dependencies\\sdl64\\include",
 				// "-Wall", // warnings
 				"-L",
-				"C:\\Users\\personal\\src\\sdl_64\\lib",
+				"${workspaceFolder}\\dependencies\\sdl64\\lib",
 				"-lmingw32",
 				"-lSDL2main",
 				"-lSDL2",
@@ -42,18 +43,20 @@
 			"command": "C:\\Program Files\\mingw-w64\\x86_64-8.1.0-posix-seh-rt_v6-rev0\\mingw64\\bin\\g++.exe",
 			"args": [
 				"-O3", // optimization 
+				"-s", // strip all debugging symbols
+				"-DNDEBUG",
 				"${workspaceFolder}\\src\\*.cpp",
+				"${workspaceFolder}\\src\\app\\*.cpp",
 				"-o",
-				"${workspaceFolder}\\bin\\release\\${fileBasenameNoExtension}.exe",
+				"${workspaceFolder}\\bin\\debug\\zjvl.exe",
 				"-I",
 				"${workspaceFolder}\\lib",
 				"-I",
 				"${workspaceFolder}\\src",
 				"-I",
-				"C:\\Users\\personal\\src\\sdl_64\\include",
-				"-s", // strip all debugging symbols
+				"${workspaceFolder}\\dependencies\\sdl64\\include",
 				"-L",
-				"C:\\Users\\personal\\src\\sdl_64\\lib",
+				"${workspaceFolder}\\dependencies\\sdl64\\lib",
 				"-lmingw32",
 				"-lSDL2main",
 				"-lSDL2",
@@ -71,10 +74,5 @@
 			},
 			"detail": "compiler: \"C:\\Program Files\\mingw-w64\\x86_64-8.1.0-posix-seh-rt_v6-rev0\\mingw64\\bin\\g++.exe\""
 		},
-		{
-			"label": "Delete ppm output files",
-			"type": "shell",
-			"command": "rm output\\*.ppm"
-		}
 	]
 }

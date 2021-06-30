@@ -30,6 +30,7 @@
 #include "map.h"
 #include "player.h"
 #include "sprite.h"
+#include "app/app.h"
 
 void draw_map(FrameBuffer &framebuffer, Map &map, std::size_t rect_w, std::size_t rect_h, Texture &wall_tex)
 {
@@ -208,101 +209,126 @@ void render(FrameBuffer &framebuffer, Map &map, Player &player, std::vector<Spri
 // Args required for compatibility with SDL
 int main(int argc, char *argv[])
 {
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
-	{
-		std::cout << "Failed to initialize SDL. SDL ERROR: " << SDL_GetError() << std::endl;
-		return -1;
-	}
+	// if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
+	// {
+	// 	std::cout << "Failed to initialize SDL. SDL ERROR: " << SDL_GetError() << std::endl;
+	// 	return -1;
+	// }
 
-	if (!IMG_Init(IMG_INIT_PNG))
-	{
-		std::cout << "Failed to initialize SDL_image. SDL ERROR: " << SDL_GetError() << std::endl;
-		return -1;
-	}
+	// if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
+	// {
+	// 	std::cout << "Failed to initialize SDL_image. SDL ERROR: " << SDL_GetError() << std::endl;
+	// 	return -1;
+	// }
 
-	FrameBuffer framebuffer{1024, 512};
-	Map map;
-	std::vector<Sprite> sprites{{3.523, 3.812, 2}, {1.834, 8.765, 0}, {5.323, 5.365, 1}, {4.123, 10.265, 2}};
+	// FrameBuffer framebuffer{1024, 512};
+	// Map map;
+	// std::vector<Sprite> sprites{{3.523, 3.812, 2}, {1.834, 8.765, 0}, {5.323, 5.365, 1}, {4.123, 10.265, 2}};
 
-	// player position x, y, initial player view direction (curr_angle between view direction and x axis), fov (1/3rd of screen)
-	// The player's positions are relative to the map's width and height so 16 is like max
-	Player player{3.456, 2.345, 1.523, M_PI / 3.};
+	// // player position x, y, initial player view direction (curr_angle between view direction and x axis), fov (1/3rd of screen)
+	// // The player's positions are relative to the map's width and height so 16 is like max
+	// Player player{3.456, 2.345, 1.523, M_PI / 3.};
 
-	// 1/6 of 360 deg or 1/3pi rad!!!!!!!!!!
-	// std::cout << M_PI / 3. << std::endl;
+	// // 1/6 of 360 deg or 1/3pi rad!!!!!!!!!!
+	// // std::cout << M_PI / 3. << std::endl;
 
-	Texture wall_tex("assets/walltext.png");
-	if (wall_tex.count == 0)
-	{
-		std::cerr << "Failed to load wall textures" << std::endl;
-		return -1;
-	}
+	// Texture wall_tex("assets/walltext.png");
+	// if (wall_tex.count == 0)
+	// {
+	// 	std::cerr << "Failed to load wall textures" << std::endl;
+	// 	return -1;
+	// }
 
-	Texture sprites_tex("assets/monsters.png");
-	if (sprites_tex.count == 0)
-	{
-		std::cerr << "Failed to load sprite textures" << std::endl;
-		return -1;
-	}
+	// Texture sprites_tex("assets/monsters.png");
+	// if (sprites_tex.count == 0)
+	// {
+	// 	std::cerr << "Failed to load sprite textures" << std::endl;
+	// 	return -1;
+	// }
 
-	render(framebuffer, map, player, sprites, wall_tex, sprites_tex);
+	// render(framebuffer, map, player, sprites, wall_tex, sprites_tex);
 
-	// https: //stackoverflow.com/questions/21007329/what-is-an-sdl-renderer
-	SDL_Window *window = nullptr;
-	SDL_Renderer *renderer = nullptr;
-	SDL_Texture *texture = nullptr;
-	SDL_Event event;
+	// // https: //stackoverflow.com/questions/21007329/what-is-an-sdl-renderer
+	// SDL_Window *window = nullptr;
+	// SDL_Renderer *renderer = nullptr;
+	// SDL_Texture *texture = nullptr;
+	// SDL_Event event;
 
-	window = SDL_CreateWindow(
-	    "Raycast Engine",	    // window title
-	    SDL_WINDOWPOS_CENTERED, // initial x position
-	    SDL_WINDOWPOS_CENTERED, // initial y position
-	    framebuffer.w,	    // width, in pixels
-	    framebuffer.h,	    // height, in pixels
-	    SDL_WINDOW_SHOWN	    // flags - see below
-	);
+	// window = SDL_CreateWindow(
+	//     "Raycast Engine",	    // window title
+	//     SDL_WINDOWPOS_CENTERED, // initial x position
+	//     SDL_WINDOWPOS_CENTERED, // initial y position
+	//     framebuffer.w,	    // width, in pixels
+	//     framebuffer.h,	    // height, in pixels
+	//     SDL_WINDOW_SHOWN	    // flags - see below
+	// );
 
-	if (window == nullptr)
-	{
-		std::cout << "Failed to create SDL Window. SDL_ERROR: " << SDL_GetError() << std::endl;
-		return -1;
-	}
+	// if (window == nullptr)
+	// {
+	// 	std::cout << "Failed to create SDL Window. SDL_ERROR: " << SDL_GetError() << std::endl;
+	// 	return -1;
+	// }
 
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	// SDL_SetRelativeMouseMode(SDL_TRUE);
+	// int mouse_x, mouse_y;
 
-	SDL_UpdateWindowSurface(window);
+	// renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	// SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
 
-	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, framebuffer.w, framebuffer.h);
-	SDL_UpdateTexture(texture, NULL, reinterpret_cast<void *>(framebuffer.img.data()), framebuffer.w * 4);
+	// SDL_UpdateWindowSurface(window);
 
-	SDL_SetRelativeMouseMode(SDL_TRUE);
-	int mouse_x, mouse_y;
-	while (1)
-	{
-		SDL_PollEvent(&event);
-		if (event.type == SDL_QUIT)
-		{
-			break;
-		}
+	// texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, framebuffer.w, framebuffer.h);
 
-		// Use this instead of xrel to prevent mouse movement noise and delay
-		SDL_GetRelativeMouseState(&mouse_x, &mouse_y);
+	// // Render splash
+	// SDL_Texture *splash_texture = nullptr;
+	// SDL_Surface *splash_surface = IMG_Load("assets/splash_zjvl.png");
+	// if (splash_surface == nullptr)
+	// {
+	// 	std::cout << "Failed to load splash image . SDL_ERROR: " << SDL_GetError() << std::endl;
+	// }
+	// else
+	// {
+	// 	splash_texture = SDL_CreateTextureFromSurface(renderer, splash_surface);
+	// 	if (splash_texture == nullptr)
+	// 	{
+	// 		std::cout << "Failed to load splash image . SDL_ERROR: " << SDL_GetError() << std::endl;
+	// 	}
+	// 	SDL_RenderClear(renderer);
+	// 	SDL_RenderCopy(renderer, splash_texture, NULL, NULL);
+	// 	SDL_RenderPresent(renderer);
+	// 	SDL_Delay(3000);
+	// 	SDL_FreeSurface(splash_surface);
+	// 	SDL_DestroyTexture(splash_texture);
+	// }
 
-		player.a += mouse_x * M_PI / 360;
+	// SDL_UpdateTexture(texture, NULL, static_cast<void *>(framebuffer.img.data()), framebuffer.w * 4);
+	// while (1)
+	// {
+	// 	SDL_PollEvent(&event);
+	// 	if (event.type == SDL_QUIT)
+	// 	{
+	// 		break;
+	// 	}
 
-		render(framebuffer, map, player, sprites, wall_tex, sprites_tex);
+	// 	// Use this instead of xrel to prevent mouse movement noise and delay
+	// 	SDL_GetRelativeMouseState(&mouse_x, &mouse_y);
 
-		SDL_UpdateTexture(texture, NULL, reinterpret_cast<void *>(framebuffer.img.data()), framebuffer.w * 4);
-		SDL_RenderClear(renderer);
-		SDL_RenderCopy(renderer, texture, NULL, NULL);
-		SDL_RenderPresent(renderer);
-	}
+	// 	player.a += mouse_x * M_PI / 360;
 
-	SDL_DestroyTexture(texture);
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
+	// 	render(framebuffer, map, player, sprites, wall_tex, sprites_tex);
 
-	IMG_Quit();
-	SDL_Quit();
-	return 0;
+	// 	SDL_UpdateTexture(texture, NULL, reinterpret_cast<void *>(framebuffer.img.data()), framebuffer.w * 4);
+	// 	SDL_RenderClear(renderer);
+	// 	SDL_RenderCopy(renderer, texture, NULL, NULL);
+	// 	SDL_RenderPresent(renderer);
+	// }
+
+	// SDL_DestroyTexture(texture);
+	// SDL_DestroyRenderer(renderer);
+	// SDL_DestroyWindow(window);
+
+	// IMG_Quit();
+	// SDL_Quit();
+	// return 0;
+	return App("Test game", 1024, 512).on_execute();
 }

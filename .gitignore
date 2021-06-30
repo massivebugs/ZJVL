@@ -3,3 +3,4 @@ output/*.ppm
 *.code-workspace
 bin/debug/*.exe
 bin/release/*.exe
+assets/splash_zjvl.png
