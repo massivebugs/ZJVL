@@ -15,6 +15,7 @@
 				"-DNDEBUG",
 				"${workspaceFolder}\\src\\*.cpp",
 				"${workspaceFolder}\\src\\app\\*.cpp",
+				"${workspaceFolder}\\src\\renderer\\*.cpp",
 				"-o",
 				"${workspaceFolder}\\bin\\debug\\zjvl.exe",
 				"-I",

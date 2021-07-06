@@ -4,11 +4,30 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <vector>
+#include "renderer/renderer.h"
 
 class App
 {
 public:
-	App(const char* app_name, size_t win_w, size_t win_h);
+	App(const char *app_name, size_t win_w, size_t win_h);
+	void load_splash(Splash splash_image);
+	int run();
+
+private:
+	Renderer renderer;
+
+	bool running;
+	const char *app_name;
+	std::vector<Splash> splash_images;
+
+	int mouse_x, mouse_y;
+
+	// Map map;
+	// std::vector<Sprite> sprites;
+	// Player player;
+	// Texture wall_tex;
+	// Texture sprites_tex;
+
 	int on_execute();
 
 	bool on_init();
@@ -20,26 +39,6 @@ public:
 	void on_render();
 
 	void on_cleanup();
-
-	bool add_splash_image(const char *path, int seconds);
-
-private:
-	bool running;
-	const char *app_name;
-	size_t win_w, win_h;
-
-	SDL_Window *window;
-	SDL_Renderer *renderer;
-	SDL_Texture *texture;
-	// SDL_Texture *splash_texture;
-	int mouse_x, mouse_y;
-
-	// std::vector<const char *> splash_images;
-	// Map map;
-	// std::vector<Sprite> sprites;
-	// Player player;
-	// Texture wall_tex;
-	// Texture sprites_tex;
 };
 
 #endif

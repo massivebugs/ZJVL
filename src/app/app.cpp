@@ -3,18 +3,25 @@
 #include <iostream>
 #include <vector>
 #include "app.h"
+#include "renderer/renderer.h"
 
 App::App(const char *app_name, size_t win_w, size_t win_h)
 {
 	this->app_name = app_name;
-	this->win_w = win_w;
-	this->win_h = win_h;
 
-	window = nullptr;
-	renderer = nullptr;
-	texture = nullptr;
+	renderer = Renderer(app_name, win_w, win_h);
 
 	running = true;
+}
+
+void App::load_splash(Splash splash_image)
+{
+	splash_images.push_back(splash_image);
+}
+
+int App::run()
+{
+	return on_execute();
 }
 
 int App::on_execute()
@@ -24,10 +31,13 @@ int App::on_execute()
 		return -1;
 	}
 
-	// Load splash textures here
+	// Loop over and display the splash images
+	for (Splash splash_image : splash_images)
+	{
+		renderer.render_splash(splash_image);
+	};
 
-	// Setup game here 
-
+	// Setup game here
 	SDL_Event event;
 
 	while (running)
@@ -59,34 +69,17 @@ bool App::on_init()
 		return false;
 	}
 
-	// Initialize SDL window
-	window = SDL_CreateWindow(
-	    app_name,		    // window title
-	    SDL_WINDOWPOS_CENTERED, // initial x position
-	    SDL_WINDOWPOS_CENTERED, // initial y position
-	    win_w,
-	    win_h,
-	    SDL_WINDOW_SHOWN	    // flags - see below
-	);
-
-	if (window == nullptr)
-	{
-		std::cout << "Failed to create SDL Window. SDL_ERROR: " << SDL_GetError() << std::endl;
-		return false;
-	}
-
-	// Initialize SDL renderer
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
-	SDL_UpdateWindowSurface(window);
-
 	// Additional SDL configurations
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 
-	return true;
+	return renderer.init();
 }
 
-void App::on_event(const SDL_Event &event) {}
+void App::on_event(const SDL_Event &event) {
+	if(event.type == SDL_QUIT) {
+		running = false;
+	}
+}
 
 void App::on_loop() {}
 
@@ -95,15 +88,7 @@ void App::on_render() {}
 void App::on_cleanup()
 {
 	// SDL Cleanup
-	SDL_DestroyTexture(texture);
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
+	renderer.cleanup();
 	IMG_Quit();
 	SDL_Quit();
 }
-
-// // TODO: for test purposes
-// int main(int argc, char *argv[])
-// {
-// 	return App("Test game", 1024, 512).on_execute();
-// }
