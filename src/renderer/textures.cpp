@@ -5,9 +5,10 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_ONLY_PNG
 #include "stb_image.h"
-#include "utils.h"
+#include "utils/utils.h"
 #include "textures.h"
 
+Texture::Texture() : img_w(0), img_h(0), count(0), size(0), img(){};
 Texture::Texture(const std::string filename) : img_w(0), img_h(0), count(0), size(0), img()
 {
     int pix_channels, tex_w, tex_h;

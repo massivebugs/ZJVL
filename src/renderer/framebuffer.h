@@ -13,4 +13,4 @@ struct FrameBuffer {
    void draw_rectangle(const size_t x, const size_t y, const size_t w, const size_t h, const uint32_t color);
 };
 
-#endif // FRAMEBUFFER_H
+#endif

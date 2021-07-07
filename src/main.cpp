@@ -24,12 +24,11 @@
 #include <math.h>
 #include <sstream>
 #include <iomanip>
-#include "utils.h"
-#include "textures.h"
-#include "framebuffer.h"
-#include "map.h"
-#include "player.h"
-#include "sprite.h"
+#include "utils/utils.h"
+#include "renderer/textures.h"
+#include "renderer/framebuffer.h"
+#include "renderer/map.h"
+#include "entity/entity.h"
 #include "app/app.h"
 
 void draw_map(FrameBuffer &framebuffer, Map &map, std::size_t rect_w, std::size_t rect_h, Texture &wall_tex)
@@ -57,7 +56,7 @@ void draw_map(FrameBuffer &framebuffer, Map &map, std::size_t rect_w, std::size_
 	}
 }
 
-void draw_sprite(FrameBuffer &framebuffer, Player &player, Sprite &sprite, Texture &sprite_tex, std::vector<float> &depth_buffer)
+void draw_sprite(FrameBuffer &framebuffer, Entity &player, Entity &sprite, Texture &sprite_tex, std::vector<float> &depth_buffer)
 {
 	// https://www.youtube.com/watch?v=BJ0-3kERCwc
 	// https://www.youtube.com/watch?v=MHoFqRyeP3o の2:52を見てみるとちょっとわかるかも
@@ -66,15 +65,15 @@ void draw_sprite(FrameBuffer &framebuffer, Player &player, Sprite &sprite, Textu
 	float sprite_dir = atan2(sprite.y - player.y, sprite.x - player.x);
 
 	// TODO: Wtf is this?!
-	while (sprite_dir - player.a > M_PI) // while sprite in the oppsite+ direction
+	while (sprite_dir - player.angle > M_PI) // while sprite in the oppsite+ direction
 		sprite_dir -= 2 * M_PI;	     // remove unncesessary periods from the relative direction
-	while (sprite_dir - player.a < -M_PI)
+	while (sprite_dir - player.angle < -M_PI)
 		sprite_dir += 2 * M_PI;
 
-	size_t sprite_size = std::min(1000, static_cast<int>(framebuffer.h / sprite.player_dist));
+	size_t sprite_size = std::min(1000, static_cast<int>(framebuffer.h / sprite.dist));
 
 	// Kind of like when drawing the wall. Gets the upper left coordinates of the sprite to draw
-	int w_offset = (sprite_dir - player.a) * (framebuffer.w / 2) / (player.fov) + (framebuffer.w / 2) / 2 - sprite_size / 2;
+	int w_offset = (sprite_dir - player.angle) * (framebuffer.w / 2) / (player.fov) + (framebuffer.w / 2) / 2 - sprite_size / 2;
 	int h_offset = (framebuffer.h / 2) - (sprite_size / 2);
 
 	for (size_t i = 0; i < sprite_size; i++)
@@ -83,7 +82,7 @@ void draw_sprite(FrameBuffer &framebuffer, Player &player, Sprite &sprite, Textu
 			continue;
 
 		// Don't draw the sprite if it is behind a wall
-		if (depth_buffer[w_offset + i] <= sprite.player_dist)
+		if (depth_buffer[w_offset + i] <= sprite.dist)
 			continue;
 
 		size_t sprite_col = (float(sprite_tex.size) / float(sprite_size)) * i;
@@ -99,14 +98,14 @@ void draw_sprite(FrameBuffer &framebuffer, Player &player, Sprite &sprite, Textu
 	}
 }
 
-void cast_ray(FrameBuffer &framebuffer, Map &map, std::size_t rect_w, std::size_t rect_h, Player &player, Texture &wall_tex, std::vector<float> &depth_buffer)
+void cast_ray(FrameBuffer &framebuffer, Map &map, std::size_t rect_w, std::size_t rect_h, Entity &player, Texture &wall_tex, std::vector<float> &depth_buffer)
 {
 	// window_w so we can render the whole screen width
 	for (std::size_t i = 0; i < framebuffer.w / 2; i++)
 	{
 		// fov * i / float(window_w / 2) increasingly gives higher value until it reaches 100% of fov, so that we can actually rotate the ray
 		// curr_angle is the current viewing point, directly ahead. fov / 2 is setting the current view to render to be the left peripheral
-		float curr_angle = player.a - player.fov / 2 + player.fov * i / float(framebuffer.w / 2);
+		float curr_angle = player.angle - player.fov / 2 + player.fov * i / float(framebuffer.w / 2);
 
 		// soh cah toa
 		// hypothenuse = h, adjacent = a, opposite = o
@@ -134,7 +133,7 @@ void cast_ray(FrameBuffer &framebuffer, Map &map, std::size_t rect_w, std::size_
 				depth_buffer[i] = h;
 
 				// http://www.permadi.com/tutorial/raycast/rayc4.html
-				size_t wall_height = framebuffer.h / (h * cos(curr_angle - player.a));
+				size_t wall_height = framebuffer.h / (h * cos(curr_angle - player.angle));
 				size_t texture_index = map.get(view_y, view_x);
 
 				// Count texture pixels
@@ -168,7 +167,7 @@ void cast_ray(FrameBuffer &framebuffer, Map &map, std::size_t rect_w, std::size_
 	}
 }
 
-void render(FrameBuffer &framebuffer, Map &map, Player &player, std::vector<Sprite> &sprites, Texture &wall_tex, Texture &sprites_tex)
+void render(FrameBuffer &framebuffer, Map &map, Entity &player, std::vector<Entity> &sprites, Texture &wall_tex, Texture &sprites_tex)
 {
 
 	// Clear and reset framebuffer image to white
@@ -192,11 +191,11 @@ void render(FrameBuffer &framebuffer, Map &map, Player &player, std::vector<Spri
 	for (int i = 0; i < sprites.size(); i++)
 	{
 		// pythagoras theorem here!
-		sprites[i].player_dist = std::sqrt(pow(sprites[i].x - player.x, 2) + pow(sprites[i].y - player.y, 2));
+		sprites[i].dist = std::sqrt(pow(sprites[i].x - player.x, 2) + pow(sprites[i].y - player.y, 2));
 	}
 
 	// Sort the sprites by distance
-	sort_sprites(sprites);
+	sort_entities(sprites);
 
 	// Show monsters positions on the map
 	for (int i = 0; i < sprites.size(); i++)
@@ -212,11 +211,11 @@ int main(int argc, char *argv[])
 	// TODO
 	// FrameBuffer framebuffer{1024, 512};
 	// Map map;
-	// std::vector<Sprite> sprites{{3.523, 3.812, 2}, {1.834, 8.765, 0}, {5.323, 5.365, 1}, {4.123, 10.265, 2}};
+	// std::vector<Entity> sprites{{3.523, 3.812, 2}, {1.834, 8.765, 0}, {5.323, 5.365, 1}, {4.123, 10.265, 2}};
 
 	// // player position x, y, initial player view direction (curr_angle between view direction and x axis), fov (1/3rd of screen)
 	// // The player's positions are relative to the map's width and height so 16 is like max
-	// Player player{3.456, 2.345, 1.523, M_PI / 3.};
+	// Entity player{3.456, 2.345, 1.523, M_PI / 3.};
 
 	// // 1/6 of 360 deg or 1/3pi rad!!!!!!!!!!
 	// // std::cout << M_PI / 3. << std::endl;
@@ -252,7 +251,7 @@ int main(int argc, char *argv[])
 	// 	// Use this instead of xrel to prevent mouse movement noise and delay
 	// 	SDL_GetRelativeMouseState(&mouse_x, &mouse_y);
 
-	// 	player.a += mouse_x * M_PI / 360;
+	// 	player.angle += mouse_x * M_PI / 360;
 
 	// 	render(framebuffer, map, player, sprites, wall_tex, sprites_tex);
 
@@ -262,7 +261,7 @@ int main(int argc, char *argv[])
 	// 	SDL_RenderPresent(renderer);
 	// }
 
-	App app = App("Test game", 1024, 512);
-	app.load_splash(Splash{"assets/splash_zjvl.png", 3000});
+	Engine::App app = Engine::App("Test game", 1024, 512);
+	// app.load_splash(Splash{"../assets/splash_zjvl.png", 3000});
 	return app.run();
 }

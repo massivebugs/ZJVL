@@ -4,7 +4,7 @@
 #include <cassert>
 
 #include "framebuffer.h"
-#include "utils.h"
+#include "utils/utils.h"
 
 void FrameBuffer::set_pixel(const std::size_t x, const std::size_t y, const std::uint32_t color)
 {

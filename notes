@@ -1,1 +1,11 @@
 SDL coordinate system, and the map
+https://stackoverflow.com/questions/3141087/what-is-meant-with-const-at-end-of-function-declaration
+// Operator overloading using member functions
+
+
+// // player position x, y, initial player view direction (curr_angle between view direction and x axis), fov (1/3rd of screen)
+// // The player's positions are relative to the map's width and height so 16 is like max
+// Entity player{3.456, 2.345, 1.523, M_PI / 3.};
+
+// // 1/6 of 360 deg or 1/3pi rad!!!!!!!!!!
+// // std::cout << M_PI / 3. << std::endl;
