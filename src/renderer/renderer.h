@@ -1,51 +1,45 @@
-#ifndef RENDERER_H
-#define RENDERER_H
+#ifndef ZJVL_RENDERER_H
+#define ZJVL_RENDERER_H
 
 #include <vector>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include "splash.h"
-#include "map.h"
+#include "scene/splash.h"
+#include "scene/map.h"
 #include "framebuffer.h"
 #include "textures.h"
-#include "entity/entity.h"
+#include "scene/entity.h"
+#include "scene/scene.h"
 
-class Renderer
+namespace Engine
 {
-public:
-	Renderer();
-	Renderer(const char *title, size_t win_w, size_t win_h);
+	class Renderer
+	{
+	public:
+		Renderer(int w, int h);
 
-	bool init();
-	bool render(Entity &player, std::vector<Entity> &entities);
-	void cleanup();
+		bool init();
+		void set_scene(Scene scene);
+		FrameBuffer* render();
+		void cleanup();
 
-	bool render_splash(const Splash &splash_image);
-	void load_splash(Splash splash_image);
+	private:
+		std::size_t rect_w;
+		std::size_t rect_h;
 
+		Scene scene;
+		FrameBuffer framebuffer;
+		Texture wall_tex = Texture("assets/walltext.png");
+		Texture entities_tex = Texture("assets/monsters.png");
+		std::vector<float> depth_buffer;
 
-private:
-	const char *title;
-	std::size_t win_w, win_h;
-	std::size_t rect_w;
-	std::size_t rect_h;
+		void draw_map();
+		void draw_entity(Entity &entity);
+		void cast_ray();
 
-	SDL_Window *window;
-	SDL_Renderer *renderer;
-	SDL_Texture *texture;
-
-	SDL_Texture *splash_texture;
-	SDL_Surface *splash_surface;
-
-	FrameBuffer framebuffer;
-	Map map;
-	Texture wall_tex = Texture("assets/walltext.png");
-	Texture entities_tex = Texture("assets/monsters.png");
-	std::vector<float> depth_buffer;
-
-	void draw_map();
-	void draw_entity(Entity &player, Entity &entity);
-	void cast_ray(Entity &player);
-};
+		void clear(const uint32_t color);
+		void set_pixel(const size_t x, const size_t y, const uint32_t color);
+		void draw_rectangle(const size_t x, const size_t y, const size_t w, const size_t h, const uint32_t color);
+		bool is_transparent_pixel(const uint32_t &color);
+	};
+}
 
 #endif

@@ -1,3 +1,5 @@
+// https://www.youtube.com/watch?v=oIV2KchSyGQ
+
 SDL coordinate system, and the map
 https://stackoverflow.com/questions/3141087/what-is-meant-with-const-at-end-of-function-declaration
 // Operator overloading using member functions
@@ -9,3 +11,28 @@ https://stackoverflow.com/questions/3141087/what-is-meant-with-const-at-end-of-f
 
 // // 1/6 of 360 deg or 1/3pi rad!!!!!!!!!!
 // // std::cout << M_PI / 3. << std::endl;
+
+
+// Library references
+// - cstdint: https://stackoverflow.com/questions/6144682/should-i-use-cstdint
+// - stb_image.h: https://github.com/nothings/stb
+
+// New things I have learned
+// * const in C++ by Cherno: https://www.youtube.com/watch?v=4fJBrditnJU
+// * uint8_t: unsigned integer type with width of exactly 8 bits (1 byte, 0 to 255) kinda good for colors
+// * std::size_t: std::size_t is result of sizeof. Use size_t for variables that model size or index in an array.
+// * std::ofstream output file stream. There is also ifstream!
+//   the second argument for file.open() are modes like std::ios::app for append
+//   http://www.eecs.umich.edu/courses/eecs380/HANDOUTS/cppBinaryFileIO-2.html
+// * PPM files: http://netpbm.sourceforge.net/doc/ppm.html
+// * static_cast: Casting in C++ by Cherno - https://www.youtube.com/watch?v=pWZS1MtxI-A
+// http://www.cplusplus.com/doc/tutorial/typecasting/
+// * float division: returns float if divided by float! std::cout << 255 * (2 / float(3)) << std::endl;
+// * NULL, null_ptr: https://stackoverflow.com/questions/20509734/null-vs-nullptr-why-was-it-replaced
+
+
+** When to use an initializer list:
+https://stackoverflow.com/questions/926752/why-should-i-prefer-to-use-member-initialization-lists
+on app.h/cpp, an initializer list is used because Renderer does not have a default constructor.
+Using initizlizer lists, I can prevent an unnecessary call to the Renderer's nonexistent default constructor
+(also used for consts)
