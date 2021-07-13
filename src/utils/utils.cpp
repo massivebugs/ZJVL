@@ -7,7 +7,7 @@
 #include "utils.h"
 #include "scene/entity.h"
 
-namespace Engine
+namespace ZJVL
 {
 	// Return a 32 byte unsigned int containing rgba values
 	uint32_t pack_color(const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a)

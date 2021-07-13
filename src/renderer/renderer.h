@@ -9,7 +9,7 @@
 #include "scene/entity.h"
 #include "scene/scene.h"
 
-namespace Engine
+namespace ZJVL
 {
 	class Renderer
 	{

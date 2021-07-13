@@ -1,6 +1,6 @@
 #include "entity.h"
 
-namespace Engine
+namespace ZJVL
 {
 	bool Entity::operator<(const Entity &s) const
 	{

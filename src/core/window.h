@@ -5,7 +5,7 @@
 #include "renderer/framebuffer.h"
 #include "scene/splash.h"
 
-namespace Engine
+namespace ZJVL
 {
 	class Window
 	{

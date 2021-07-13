@@ -3,7 +3,7 @@
 
 #include "map.h"
 
-namespace Engine
+namespace ZJVL
 {
     static const char map[] = "0000222222220000"
                               "1              0"

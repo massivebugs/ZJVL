@@ -3,7 +3,7 @@
 #include "app.h"
 #include "timer.h"
 
-namespace Engine
+namespace ZJVL
 {
 
 	App::App(const char *app_name, int win_w, int win_h) : m_window(app_name, win_w, win_h), m_renderer(win_w, win_h)

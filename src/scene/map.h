@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-namespace Engine
+namespace ZJVL
 {
     struct Map
     {

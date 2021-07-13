@@ -5,7 +5,7 @@
 #include "splash.h"
 #include "entity.h"
 
-namespace Engine
+namespace ZJVL
 {
 	Scene::Scene(){};
 

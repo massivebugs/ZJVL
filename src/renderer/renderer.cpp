@@ -14,7 +14,7 @@
 #include "utils/utils.h"
 #include "scene/scene.h"
 
-namespace Engine
+namespace ZJVL
 {
 	Renderer::Renderer(int w, int h) : framebuffer{w, h} {}
 

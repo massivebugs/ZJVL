@@ -8,7 +8,7 @@
 #include <vector>
 #include <string>
 
-namespace Engine
+namespace ZJVL
 {
     class Texture
     {

@@ -7,7 +7,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-namespace Engine
+namespace ZJVL
 {
 
     Texture::Texture(const char* path) : img_w(0), img_h(0), count(0), size(0), img()

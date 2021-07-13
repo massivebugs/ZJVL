@@ -1,7 +1,7 @@
 #ifndef ZJVL_TIMER_H
 #define ZJVL_TIMER_H
 
-namespace Engine {
+namespace ZJVL {
 	class Timer {
 		public:
 			Timer();

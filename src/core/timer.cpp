@@ -2,7 +2,7 @@
 #include <iostream>
 #include "timer.h"
 
-namespace Engine
+namespace ZJVL
 {
 	Timer::Timer()
 	{
