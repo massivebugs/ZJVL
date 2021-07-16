@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
 #include <iostream>
+#include <math.h>
 #include "app.h"
-#include "timer.h"
 
 namespace ZJVL
 {
@@ -66,15 +66,33 @@ namespace ZJVL
 
 	void App::on_event(const SDL_Event &event)
 	{
-		if (event.type == SDL_QUIT)
+		switch (event.type)
 		{
+		case SDL_QUIT:
 			m_running = false;
-		}
-		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_KP_ENTER)
-		{
-		}
-		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
-		{
+			break;
+		case SDL_KEYDOWN:
+			switch (event.key.keysym.sym)
+			{
+			case SDLK_KP_ENTER:
+				break;
+			case SDLK_ESCAPE:
+				break;
+			case SDLK_w:
+				current_scene.player.x += cos(current_scene.player.angle) * 0.1;
+				current_scene.player.y += sin(current_scene.player.angle) * 0.1;
+				break;
+			case SDLK_a:
+				current_scene.player.y += 0.1;
+				break;
+			case SDLK_s:
+				current_scene.player.x -= cos(current_scene.player.angle) * 0.1;
+				current_scene.player.y -= sin(current_scene.player.angle) * 0.1;
+				break;
+			case SDLK_d:
+				current_scene.player.x -= 0.1;
+				break;
+			}
 		}
 
 		// Switch through and call event handlers here

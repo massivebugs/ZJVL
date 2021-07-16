@@ -1,7 +1,9 @@
 #ifndef ZJVL_APP_H
 #define ZJVL_APP_H
 
-#include "window.h"
+#include "framework/window.h"
+#include "framework/timer.h"
+#include "framework/input.h"
 #include "renderer/renderer.h"
 #include "scene/scene.h"
 

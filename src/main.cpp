@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
 	ZJVL::Entity player {3.456, 2.345, 1.523, M_PI / 3.};
 	ZJVL::Map map;
 	ZJVL::Scene scene{map, player, entities};
-	scene.load_splash(ZJVL::Splash{"assets/splash_zjvl.png", 3000});
+	// scene.load_splash(ZJVL::Splash{"assets/splash_zjvl.png", 3000});
 	app->current_scene = scene;
 	int code = app->run();
 	delete app;

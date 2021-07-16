@@ -7,8 +7,6 @@
 
 #include <iostream>
 #include <vector>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include "renderer.h"
 #include "scene/splash.h"
 #include "utils/utils.h"
@@ -187,7 +185,7 @@ namespace ZJVL
 		}
 	}
 
-	FrameBuffer* Renderer::render()
+	FrameBuffer *Renderer::render()
 	{
 
 		// Clear and reset framebuffer image to white
@@ -229,8 +227,8 @@ namespace ZJVL
 
 	void Renderer::set_pixel(const std::size_t x, const std::size_t y, const std::uint32_t color)
 	{
-		// assert(framebuffer.img.size() == w * h && x < w && y < h);
-		framebuffer.img[x + y * framebuffer.w] = color;
+		if (framebuffer.img.size() == framebuffer.w * framebuffer.h && x < framebuffer.w && y < framebuffer.h)
+			framebuffer.img[x + y * framebuffer.w] = color;
 	}
 
 	void Renderer::draw_rectangle(const std::size_t rect_x, const std::size_t rect_y, const std::size_t rect_w, const std::size_t rect_h, const std::uint32_t color)
