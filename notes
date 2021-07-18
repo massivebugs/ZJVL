@@ -36,3 +36,21 @@ https://stackoverflow.com/questions/926752/why-should-i-prefer-to-use-member-ini
 on app.h/cpp, an initializer list is used because Renderer does not have a default constructor.
 Using initizlizer lists, I can prevent an unnecessary call to the Renderer's nonexistent default constructor
 (also used for consts)
+
+
+	// // Retrieve rgba values from a 32 byte unsigned int
+	// void unpack_color(const uint32_t &color, uint8_t &r, uint8_t &g, uint8_t &b, uint8_t &a)
+	// {
+	// 	// Shift away unnecessary bits (since rgba is 255 bits * 4)
+	// 	// and pluck out least significant 8 bits
+	// 	r = (color >> 0) & 255;
+	// 	g = (color >> 8) & 255;
+	// 	b = (color >> 16) & 255;
+	// 	a = (color >> 24) & 255;
+	// }
+
+	https://gameprogrammingpatterns.com/observer.html
+
+	LICENSES
+	https://bastian.rieck.me/blog/posts/2015/event_system_cxx11/
+	https://creativecommons.org/licenses/by/4.0/

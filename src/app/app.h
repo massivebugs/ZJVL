@@ -1,11 +1,10 @@
-#ifndef ZJVL_APP_H
-#define ZJVL_APP_H
+#ifndef ZJVL_CORE_APP_H
+#define ZJVL_CORE_APP_H
 
 #include "framework/window.h"
 #include "framework/timer.h"
-#include "framework/input.h"
-#include "renderer/renderer.h"
-#include "scene/scene.h"
+#include "core/render/renderer.h"
+#include "core/scene/scene.h"
 
 namespace ZJVL
 {
@@ -14,21 +13,21 @@ namespace ZJVL
 	public:
 		App(const char *app_name, int win_w, int win_h);
 		int run();
-		Scene current_scene;
+		Core::Scene current_scene;
 
 	private:
 		const char *m_app_name;
 		bool m_running;
+		int m_framecount;
 
-		Window m_window;
-		Renderer m_renderer;
+		Framework::Window m_window;
+		Core::Renderer m_renderer;
 
-	private:
 		int on_execute();
 
 		bool on_init();
 
-		void on_event(const SDL_Event &event);
+		void on_event();
 
 		void on_update();
 

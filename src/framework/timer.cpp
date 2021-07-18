@@ -4,19 +4,22 @@
 
 namespace ZJVL
 {
-	Timer::Timer()
+	namespace Framework
 	{
-		reset();
-	};
+		Timer::Timer()
+		{
+			reset();
+		};
 
-	void Timer::reset()
-	{
-		m_start_time = SDL_GetTicks();
-		std::cout << "Timer reset" << std::endl;
-	}
+		void Timer::reset()
+		{
+			m_start_time = SDL_GetTicks();
+			std::cout << "Timer reset" << std::endl;
+		}
 
-	uint32_t Timer::get_duration()
-	{
-		return SDL_GetTicks() - m_start_time;
+		uint32_t Timer::get_duration()
+		{
+			return SDL_GetTicks() - m_start_time;
+		}
 	}
 }
