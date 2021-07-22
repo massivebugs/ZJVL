@@ -36,6 +36,7 @@ namespace ZJVL
 
 		// Set up the game here
 		Framework::Timer fps_timer;
+		SDL_Event event;
 
 		std::vector<Core::Entity> entities = std::vector<Core::Entity>{{3.523, 3.812, NULL, NULL, 2}, {1.834, 8.765, NULL, NULL, 0}, {5.323, 5.365, NULL, NULL, 1}, {4.123, 10.265, NULL, NULL, 2}};
 		Core::Entity player{3.456, 2.345, 1.523, M_PI / 3.};
@@ -49,7 +50,7 @@ namespace ZJVL
 			// if (!current_scene.is_activated())
 			// {
 			// 	// Loop over and display the splash images
-			// 	for (Splash splash_image : current_scene.splash_images)
+			// 	for (Core::Splash &splash_image : current_scene.splash_images)
 			// 	{
 			// 		m_window.flash_image(splash_image.img_path, splash_image.display_ms);
 			// 	};
@@ -65,7 +66,11 @@ namespace ZJVL
 				fps_timer.reset();
 			}
 
-			on_event();
+			while (SDL_PollEvent(&event))
+			{
+				on_event(event);
+			};
+
 			on_update();
 			on_render();
 			m_framecount++;
@@ -75,40 +80,68 @@ namespace ZJVL
 		return 0;
 	}
 
-	void App::on_event()
+	void App::on_event(SDL_Event &event)
 	{
-		while (m_window.poll_event(e))
+		switch (event.type)
 		{
-			switch (e->get_type())
+		case SDL_QUIT:
+			m_running = false;
+			break;
+		case SDL_KEYDOWN:
+			switch (event.key.keysym.sym)
 			{
-			case Core::EventType::QUIT:
-				m_running = false;
+			case SDLK_KP_ENTER:
 				break;
-			case Core::EventType::KEYDOWN:
-				switch (std::static_pointer_cast<Core::KeyDownEvent>(e)->get_key())
-				{
-				case Core::Key::ENTER:
-					break;
-				case Core::Key::ESC:
-					break;
-				case Core::Key::W:
-					current_scene.player.x += cos(current_scene.player.angle) * 0.1;
-					current_scene.player.y += sin(current_scene.player.angle) * 0.1;
-					break;
-				case Core::Key::A:
-					current_scene.player.y += 0.1;
-					break;
-				case Core::Key::S:
-					current_scene.player.x -= cos(current_scene.player.angle) * 0.1;
-					current_scene.player.y -= sin(current_scene.player.angle) * 0.1;
-					break;
-				case Core::Key::D:
-					current_scene.player.x -= 0.1;
-					break;
-				}
+			case SDLK_ESCAPE:
+				break;
+			case SDLK_w:
+				current_scene.player.x += cos(current_scene.player.angle) * 0.1;
+				current_scene.player.y += sin(current_scene.player.angle) * 0.1;
+				break;
+			case SDLK_a:
+				current_scene.player.y += 0.1;
+				break;
+			case SDLK_s:
+				current_scene.player.x -= cos(current_scene.player.angle) * 0.1;
+				current_scene.player.y -= sin(current_scene.player.angle) * 0.1;
+				break;
+			case SDLK_d:
+				current_scene.player.x -= 0.1;
 				break;
 			}
 		}
+		// while (m_window.poll_event(e))
+		// {
+		// 	switch (e->get_type())
+		// 	{
+		// 	case Core::EventType::QUIT:
+		// 		m_running = false;
+		// 		break;
+		// 	case Core::EventType::KEYDOWN:
+		// 		switch (std::static_pointer_cast<Core::KeyDownEvent>(e)->get_key())
+		// 		{
+		// 		case Core::Key::ENTER:
+		// 			break;
+		// 		case Core::Key::ESC:
+		// 			break;
+		// 		case Core::Key::W:
+		// 			current_scene.player.x += cos(current_scene.player.angle) * 0.1;
+		// 			current_scene.player.y += sin(current_scene.player.angle) * 0.1;
+		// 			break;
+		// 		case Core::Key::A:
+		// 			current_scene.player.y += 0.1;
+		// 			break;
+		// 		case Core::Key::S:
+		// 			current_scene.player.x -= cos(current_scene.player.angle) * 0.1;
+		// 			current_scene.player.y -= sin(current_scene.player.angle) * 0.1;
+		// 			break;
+		// 		case Core::Key::D:
+		// 			current_scene.player.x -= 0.1;
+		// 			break;
+		// 		}
+		// 		break;
+		// 	}
+		// }
 	}
 
 	// This is where any post processing gameplay updates may happen.

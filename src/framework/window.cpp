@@ -110,44 +110,44 @@ namespace ZJVL
 			return true;
 		}
 
-		 Window::poll_event(std::shared_ptr<Core::Event> e)
-		{
-			if (SDL_PollEvent(&m_event))
-			{
-				switch (m_event.type)
-				{
-				case SDL_QUIT:
-					e = std::make_shared<Core::WindowEvent>();
-					break;
-				case SDL_KEYDOWN:
-					switch (m_event.key.keysym.sym)
-					{
-					case SDLK_KP_ENTER:
-						e = std::make_shared<Core::KeyDownEvent>(Core::Key::ENTER);
-						break;
-					case SDLK_ESCAPE:
-						e = std::make_shared<Core::KeyDownEvent>(Core::Key::ESC);
-						break;
-					case SDLK_w:
-						e = std::make_shared<Core::KeyDownEvent>(Core::Key::W);
-						break;
-					case SDLK_a:
-						e = std::make_shared<Core::KeyDownEvent>(Core::Key::A);
-						break;
-					case SDLK_s:
-						e = std::make_shared<Core::KeyDownEvent>(Core::Key::S);
-						break;
-					case SDLK_d:
-						e = std::make_shared<Core::KeyDownEvent>(Core::Key::D);
-						break;
-					}
-					default:
-						e = std::make_shared<Core::Event>(Core::EventType::NONE);
-				}
-				return true;
-			}
-			return false;
-		}
+		//  Window::poll_event(std::shared_ptr<Core::Event> e)
+		// {
+		// 	if (SDL_PollEvent(&m_event))
+		// 	{
+		// 		switch (m_event.type)
+		// 		{
+		// 		case SDL_QUIT:
+		// 			e = std::make_shared<Core::WindowEvent>();
+		// 			break;
+		// 		case SDL_KEYDOWN:
+		// 			switch (m_event.key.keysym.sym)
+		// 			{
+		// 			case SDLK_KP_ENTER:
+		// 				e = std::make_shared<Core::KeyDownEvent>(Core::Key::ENTER);
+		// 				break;
+		// 			case SDLK_ESCAPE:
+		// 				e = std::make_shared<Core::KeyDownEvent>(Core::Key::ESC);
+		// 				break;
+		// 			case SDLK_w:
+		// 				e = std::make_shared<Core::KeyDownEvent>(Core::Key::W);
+		// 				break;
+		// 			case SDLK_a:
+		// 				e = std::make_shared<Core::KeyDownEvent>(Core::Key::A);
+		// 				break;
+		// 			case SDLK_s:
+		// 				e = std::make_shared<Core::KeyDownEvent>(Core::Key::S);
+		// 				break;
+		// 			case SDLK_d:
+		// 				e = std::make_shared<Core::KeyDownEvent>(Core::Key::D);
+		// 				break;
+		// 			}
+		// 			default:
+		// 				e = std::make_shared<Core::Event>(Core::EventType::NONE);
+		// 		}
+		// 		return true;
+		// 	}
+		// 	return false;
+		// }
 
 		void Window::cleanup()
 		{

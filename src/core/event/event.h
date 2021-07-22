@@ -5,15 +5,25 @@ namespace ZJVL
 {
 	namespace Core
 	{
+		enum class EventType {
+			APPLICATION,
+			KEYDOWN,
+		};
 
 		class Event
 		{
 		public:
-			using EventType = const char *;
+			Event() {
+				m_type = EventType::APPLICATION;
+			}
+
+			Event(EventType type) {
+				m_type = type;
+			};
 
 			virtual ~Event(){};
 
-			virtual EventType get_type() = 0;
+			virtual EventType get_type();
 
 			bool should_be_handled()
 			{
@@ -26,6 +36,7 @@ namespace ZJVL
 			};
 
 		protected:
+			EventType m_type;
 			bool m_propagate = true;
 		};
 	}

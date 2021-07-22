@@ -27,7 +27,7 @@ namespace ZJVL
 
 		bool on_init();
 
-		void on_event();
+		void on_event(SDL_Event &event);
 
 		void on_update();
 

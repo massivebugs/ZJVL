@@ -21,7 +21,7 @@ namespace ZJVL
 			void cleanup();
 			void get_mouse();
 			int mouse_x, mouse_y;
-			bool poll_event(std::shared_ptr<Core::Event> e);
+			// bool poll_event(std::shared_ptr<Core::Event> e);
 
 		private:
 			const char *m_name;

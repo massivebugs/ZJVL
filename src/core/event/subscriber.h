@@ -5,8 +5,10 @@ namespace ZJVL
 {
 	namespace Core
 	{
-		class EventDispatcher
+		class Subscriber
 		{
+			public:
+				virtual ~Subscriber();
 		};
 	}
 }

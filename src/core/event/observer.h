@@ -7,11 +7,11 @@ namespace ZJVL
 {
 	namespace Core
 	{
-		class EventListener
+		class Observer
 		{
 		public:
-			virtual ~EventListener();
-			virtual void on_notify(Event e) = 0;
+			virtual ~Observer();
+			virtual void on_notify(Event &e) = 0;
 		};
 	}
 }
