@@ -1,7 +1,7 @@
 #ifndef ZJVL_CORE_EVENT_KEY_EVENT_H
 #define ZJVL_CORE_EVENT_KEY_EVENT_H
 
-#include "event.h"
+#include "../event.h"
 
 namespace ZJVL
 {
@@ -75,27 +75,32 @@ namespace ZJVL
 			Z
 		};
 
-		class KeyDownEvent : public Event
+		class KeyEvent : public Event
 		{
 		public:
-			KeyDownEvent() : Event(EventType::KEYDOWN)
+			virtual Key get_key() const = 0;
+
+		private:
+			Key m_key;
+		};
+
+		class KeyDownEvent : public KeyEvent
+		{
+		public:
+			KeyDownEvent(Key key) : m_key(key){};
+			EventType get_type() const override
 			{
-				m_key = Key::NONE;
+				return EventType::KEYDOWN;
 			}
 
-			KeyDownEvent(Key key) : Event(EventType::KEYDOWN)
-			{
-				m_key = key;
-			}
-
-			Key get_key()
+			Key get_key() const override
 			{
 				return m_key;
 			}
 
 		private:
 			Key m_key;
-		}
+		};
 	}
 }
 

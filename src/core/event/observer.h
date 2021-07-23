@@ -1,5 +1,5 @@
-#ifndef ZJVL_CORE_EVENT_LISTENER_H
-#define ZJVL_CORE_EVENT_LISTENER_H
+#ifndef ZJVL_CORE_EVENT_OBSERVER_H
+#define ZJVL_CORE_EVENT_OBSERVER_H
 
 #include "event.h"
 
@@ -10,7 +10,7 @@ namespace ZJVL
 		class Observer
 		{
 		public:
-			virtual ~Observer();
+			virtual ~Observer(){};
 			virtual void on_notify(Event &e) = 0;
 		};
 	}

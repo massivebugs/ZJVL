@@ -1,12 +1,9 @@
 #include <iostream>
-#include <SDL2/SDL.h>
 #include <math.h>
 #include <memory>
 #include "app.h"
 #include "core/scene/scene.h"
 #include "core/render/framebuffer.h"
-#include "core/event/event.h"
-#include "core/event/key_event.h"
 
 namespace ZJVL
 {
@@ -36,7 +33,6 @@ namespace ZJVL
 
 		// Set up the game here
 		Framework::Timer fps_timer;
-		SDL_Event event;
 
 		std::vector<Core::Entity> entities = std::vector<Core::Entity>{{3.523, 3.812, NULL, NULL, 2}, {1.834, 8.765, NULL, NULL, 0}, {5.323, 5.365, NULL, NULL, 1}, {4.123, 10.265, NULL, NULL, 2}};
 		Core::Entity player{3.456, 2.345, 1.523, M_PI / 3.};
@@ -66,11 +62,7 @@ namespace ZJVL
 				fps_timer.reset();
 			}
 
-			while (SDL_PollEvent(&event))
-			{
-				on_event(event);
-			};
-
+			on_event();
 			on_update();
 			on_render();
 			m_framecount++;
@@ -80,69 +72,44 @@ namespace ZJVL
 		return 0;
 	}
 
-	void App::on_event(SDL_Event &event)
+	void App::on_event()
 	{
-		switch (event.type)
+		m_window.poll_event();
+	}
+
+	void App::on_notify(Core::Event &e)
+	{
+		switch (e.get_type())
 		{
-		case SDL_QUIT:
+		case Core::EventType::WINDOW_QUIT:
 			m_running = false;
 			break;
-		case SDL_KEYDOWN:
-			switch (event.key.keysym.sym)
+		case Core::EventType::KEYDOWN:
+			switch (static_cast<Core::KeyDownEvent&>(e).get_key())
 			{
-			case SDLK_KP_ENTER:
+			case Core::Key::ENTER:
 				break;
-			case SDLK_ESCAPE:
+			case Core::Key::ESC:
 				break;
-			case SDLK_w:
+			case Core::Key::W:
 				current_scene.player.x += cos(current_scene.player.angle) * 0.1;
 				current_scene.player.y += sin(current_scene.player.angle) * 0.1;
 				break;
-			case SDLK_a:
+			case Core::Key::A:
 				current_scene.player.y += 0.1;
 				break;
-			case SDLK_s:
+			case Core::Key::S:
 				current_scene.player.x -= cos(current_scene.player.angle) * 0.1;
 				current_scene.player.y -= sin(current_scene.player.angle) * 0.1;
 				break;
-			case SDLK_d:
+			case Core::Key::D:
 				current_scene.player.x -= 0.1;
 				break;
 			}
+			break;
 		}
-		// while (m_window.poll_event(e))
-		// {
-		// 	switch (e->get_type())
-		// 	{
-		// 	case Core::EventType::QUIT:
-		// 		m_running = false;
-		// 		break;
-		// 	case Core::EventType::KEYDOWN:
-		// 		switch (std::static_pointer_cast<Core::KeyDownEvent>(e)->get_key())
-		// 		{
-		// 		case Core::Key::ENTER:
-		// 			break;
-		// 		case Core::Key::ESC:
-		// 			break;
-		// 		case Core::Key::W:
-		// 			current_scene.player.x += cos(current_scene.player.angle) * 0.1;
-		// 			current_scene.player.y += sin(current_scene.player.angle) * 0.1;
-		// 			break;
-		// 		case Core::Key::A:
-		// 			current_scene.player.y += 0.1;
-		// 			break;
-		// 		case Core::Key::S:
-		// 			current_scene.player.x -= cos(current_scene.player.angle) * 0.1;
-		// 			current_scene.player.y -= sin(current_scene.player.angle) * 0.1;
-		// 			break;
-		// 		case Core::Key::D:
-		// 			current_scene.player.x -= 0.1;
-		// 			break;
-		// 		}
-		// 		break;
-		// 	}
-		// }
 	}
+
 
 	// This is where any post processing gameplay updates may happen.
 	// Note that this is called after the event handlers have been called,
@@ -156,6 +123,7 @@ namespace ZJVL
 	bool App::on_init()
 	{
 		m_renderer.init();
+		m_window_subject = m_window.add_observer(this);
 		return m_window.init();
 	}
 
@@ -169,6 +137,7 @@ namespace ZJVL
 	void App::on_cleanup()
 	{
 		m_renderer.cleanup();
+		m_window.remove_observer(m_window_subject);
 		m_window.cleanup();
 	}
 }

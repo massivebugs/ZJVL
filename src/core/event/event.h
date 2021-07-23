@@ -5,27 +5,21 @@ namespace ZJVL
 {
 	namespace Core
 	{
-		enum class EventType {
+		enum class EventType
+		{
 			APPLICATION,
+			WINDOW_QUIT,
 			KEYDOWN,
 		};
 
 		class Event
 		{
 		public:
-			Event() {
-				m_type = EventType::APPLICATION;
-			}
-
-			Event(EventType type) {
-				m_type = type;
-			};
-
 			virtual ~Event(){};
 
-			virtual EventType get_type();
+			virtual EventType get_type() const = 0;
 
-			bool should_be_handled()
+			bool should_be_handled() const
 			{
 				return m_propagate;
 			};
@@ -36,7 +30,6 @@ namespace ZJVL
 			};
 
 		protected:
-			EventType m_type;
 			bool m_propagate = true;
 		};
 	}

@@ -2,14 +2,22 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "window.h"
-#include "core/event/window_event.h"
-#include "core/event/key_event.h"
+#include "core/event/events/window_event.h"
+#include "core/event/events/key_event.h"
 
 namespace ZJVL
 {
 	namespace Framework
 	{
-		Window::Window(const char *name, int w, int h)
+		Window::Window(const char *name, int w, int h) : m_keymap{
+								     {SDLK_KP_ENTER, Core::Key::ENTER},
+								     {SDLK_ESCAPE, Core::Key::ESC},
+								     {SDLK_w, Core::Key::W},
+								     {SDLK_a, Core::Key::A},
+								     {SDLK_s, Core::Key::S},
+								     {SDLK_d, Core::Key::D},
+								 }
+
 		{
 			m_name = name;
 			m_width = w;
@@ -18,7 +26,6 @@ namespace ZJVL
 			m_window = nullptr;
 			m_renderer = nullptr;
 			m_texture = nullptr;
-
 		}
 
 		void Window::get_mouse()
@@ -110,44 +117,26 @@ namespace ZJVL
 			return true;
 		}
 
-		//  Window::poll_event(std::shared_ptr<Core::Event> e)
-		// {
-		// 	if (SDL_PollEvent(&m_event))
-		// 	{
-		// 		switch (m_event.type)
-		// 		{
-		// 		case SDL_QUIT:
-		// 			e = std::make_shared<Core::WindowEvent>();
-		// 			break;
-		// 		case SDL_KEYDOWN:
-		// 			switch (m_event.key.keysym.sym)
-		// 			{
-		// 			case SDLK_KP_ENTER:
-		// 				e = std::make_shared<Core::KeyDownEvent>(Core::Key::ENTER);
-		// 				break;
-		// 			case SDLK_ESCAPE:
-		// 				e = std::make_shared<Core::KeyDownEvent>(Core::Key::ESC);
-		// 				break;
-		// 			case SDLK_w:
-		// 				e = std::make_shared<Core::KeyDownEvent>(Core::Key::W);
-		// 				break;
-		// 			case SDLK_a:
-		// 				e = std::make_shared<Core::KeyDownEvent>(Core::Key::A);
-		// 				break;
-		// 			case SDLK_s:
-		// 				e = std::make_shared<Core::KeyDownEvent>(Core::Key::S);
-		// 				break;
-		// 			case SDLK_d:
-		// 				e = std::make_shared<Core::KeyDownEvent>(Core::Key::D);
-		// 				break;
-		// 			}
-		// 			default:
-		// 				e = std::make_shared<Core::Event>(Core::EventType::NONE);
-		// 		}
-		// 		return true;
-		// 	}
-		// 	return false;
-		// }
+		void Window::poll_event()
+		{
+			while (SDL_PollEvent(&m_event))
+			{
+				if (m_event.type == SDL_QUIT)
+				{
+					Core::WindowCloseEvent e;
+					notify(e);
+				}
+				else if (m_event.type == SDL_KEYDOWN)
+				{
+					SDL_Keycode keycode = m_event.key.keysym.sym;
+					if (m_keymap.find(keycode) != m_keymap.end())
+					{
+						Core::KeyDownEvent e(m_keymap[keycode]);
+						notify(e);
+					}
+				}
+			}
+		}
 
 		void Window::cleanup()
 		{
