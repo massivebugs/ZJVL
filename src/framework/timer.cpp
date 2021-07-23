@@ -8,18 +8,21 @@ namespace ZJVL
 	{
 		Timer::Timer()
 		{
-			reset();
+			reset_duration();
 		};
 
-		void Timer::reset()
-		{
-			m_start_time = SDL_GetTicks();
-			std::cout << "Timer reset" << std::endl;
+		uint32_t Timer::get_time() {
+			return SDL_GetTicks();
 		}
 
 		uint32_t Timer::get_duration()
 		{
-			return SDL_GetTicks() - m_start_time;
+			return get_time() - m_duration_start;
+		}
+
+		void Timer::reset_duration()
+		{
+			m_duration_start = get_time();
 		}
 	}
 }

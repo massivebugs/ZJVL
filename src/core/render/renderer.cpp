@@ -40,7 +40,7 @@ namespace ZJVL
 		{
 		}
 
-		void Renderer::set_scene(Scene scene)
+		void Renderer::set_scene(Scene &scene)
 		{
 			this->scene = scene;
 		}

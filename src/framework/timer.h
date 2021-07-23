@@ -11,11 +11,12 @@ namespace ZJVL
 		{
 		public:
 			Timer();
-			void reset();
+			uint32_t get_time();
 			uint32_t get_duration();
+			void reset_duration();
 
 		private:
-			uint32_t m_start_time;
+			uint32_t m_duration_start;
 		};
 	}
 }

@@ -10,13 +10,7 @@ namespace ZJVL
 	namespace Core
 	{
 		Scene::Scene(){};
-
-		Scene::Scene(Map map, Entity player, std::vector<Entity> entities)
-		{
-			this->map = map;
-			this->player = player;
-			this->entities = entities;
-		};
+		Scene::Scene(Map map, Entity player, std::vector<Entity> entities) : map(map), player(player), entities(entities) {};
 
 		bool Scene::is_activated()
 		{

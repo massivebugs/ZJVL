@@ -20,7 +20,8 @@ namespace ZJVL
 	private:
 		const char *m_app_name;
 		bool m_running;
-		int m_framecount;
+		std::uint32_t m_dt;
+		int m_fps;
 
 		Framework::Window m_window;
 		Core::Renderer m_renderer;

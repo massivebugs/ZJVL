@@ -19,7 +19,7 @@ namespace ZJVL
 			Renderer(int w, int h);
 
 			bool init();
-			void set_scene(Scene scene);
+			void set_scene(Scene &scene);
 			FrameBuffer *render();
 			void cleanup();
 

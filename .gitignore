@@ -1,6 +1,7 @@
 main.exe.stackdump
 *.code-workspace
 bin/debug/*.exe
+bin/debug/assets
 bin/release/*.exe
 assets/splash_zjvl.png
 installing_sdl2.txt
