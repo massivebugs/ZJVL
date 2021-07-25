@@ -21,22 +21,20 @@ namespace ZJVL
 		const char *m_app_name;
 		bool m_running;
 		std::uint32_t m_dt;
-		int m_fps;
+		std::uint32_t m_fps;
 
 		Framework::Window m_window;
 		Core::Renderer m_renderer;
 
-		int on_execute();
+		int execute();
 
-		bool on_init();
+		bool init();
 
-		void on_event();
+		void update();
 
-		void on_update();
+		void render();
 
-		void on_render();
-
-		void on_cleanup();
+		void cleanup();
 
 		// Subject index
 		std::size_t m_window_subject;

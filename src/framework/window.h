@@ -21,13 +21,12 @@ namespace ZJVL
 
 			bool flash_image(const char *img_path, uint32_t ms);
 			void cleanup();
-			void get_mouse();
-			int mouse_x, mouse_y;
-			void poll_event();
+			void poll_events();
 
 		private:
 			const char *m_name;
 			int m_width, m_height;
+			int m_mouse_x, m_mouse_y;
 
 			SDL_Window *m_window;
 			SDL_Renderer *m_renderer;

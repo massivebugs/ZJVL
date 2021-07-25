@@ -4,6 +4,7 @@
 #include "window.h"
 #include "core/event/events/window_event.h"
 #include "core/event/events/key_event.h"
+#include "core/event/events/mouse_event.h"
 
 namespace ZJVL
 {
@@ -26,11 +27,6 @@ namespace ZJVL
 			m_window = nullptr;
 			m_renderer = nullptr;
 			m_texture = nullptr;
-		}
-
-		void Window::get_mouse()
-		{
-			SDL_GetRelativeMouseState(&mouse_x, &mouse_y);
 		}
 
 		bool Window::init()
@@ -117,7 +113,7 @@ namespace ZJVL
 			return true;
 		}
 
-		void Window::poll_event()
+		void Window::poll_events()
 		{
 			while (SDL_PollEvent(&m_event))
 			{
@@ -135,6 +131,11 @@ namespace ZJVL
 						notify(e);
 					}
 				}
+			}
+			SDL_GetRelativeMouseState(&m_mouse_x, &m_mouse_y);
+			if(m_mouse_x != 0 || m_mouse_y != 0) {
+				Core::MouseMoveEvent e(m_mouse_x, m_mouse_y);
+				notify(e);
 			}
 		}
 

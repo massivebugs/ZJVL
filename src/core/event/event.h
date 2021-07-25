@@ -10,6 +10,7 @@ namespace ZJVL
 			APPLICATION,
 			WINDOW_QUIT,
 			KEYDOWN,
+			MOUSEMOVE,
 		};
 
 		class Event

@@ -20,16 +20,16 @@ namespace ZJVL
 	// Begins game loop execution
 	int App::run()
 	{
-		return on_execute();
+		return execute();
 	}
 
 	// This is the main execution loop,
 	// where all of the game loop functionalities
 	// are tied together.
-	int App::on_execute()
+	int App::execute()
 	{
 		// Handle initialization failures
-		if (on_init() == false)
+		if (init() == false)
 		{
 			return -1;
 		}
@@ -57,9 +57,8 @@ namespace ZJVL
 			// 	};
 			// }
 
-			on_event();
-			on_update();
-			on_render();
+			update();
+			render();
 
 			framecount++;
 			if(timer.get_duration() >= 1000) {
@@ -75,14 +74,38 @@ namespace ZJVL
 			dt_start_time = dt_end_time;
 		}
 
-		on_cleanup();
+		cleanup();
 		return 0;
 	}
 
-	// Call any methods which will check for events here
-	void App::on_event()
+	bool App::init()
 	{
-		m_window.poll_event();
+		m_renderer.init();
+		m_window_subject = m_window.add_observer(this);
+		return m_window.init();
+	}
+
+	// This is where any post processing gameplay updates may happen.
+	// Note that this is called after the event handlers have been called,
+	// and is the final step before updates to do any kind of processing.
+	void App::update()
+	{
+		m_window.poll_events();
+		// current_scene.player.angle += m_window.mouse_x * M_PI / 360;
+	}
+
+	void App::render()
+	{
+		m_renderer.set_scene(current_scene);
+		Core::FrameBuffer *framebuffer = m_renderer.render();
+		m_window.draw(static_cast<void *>(framebuffer->img.data()), framebuffer->w * 4);
+	}
+
+	void App::cleanup()
+	{
+		m_renderer.cleanup();
+		m_window.remove_observer(m_window_subject);
+		m_window.cleanup();
 	}
 
 	// This is where all events are handled at the application level.
@@ -102,51 +125,21 @@ namespace ZJVL
 			case Core::Key::ESC:
 				break;
 			case Core::Key::W:
-				current_scene.player.x += cos(current_scene.player.angle) * 0.1;
-				current_scene.player.y += sin(current_scene.player.angle) * 0.1;
+				// current_scene.player.x += cos(current_scene.player.angle) * 0.1;
+				// current_scene.player.y += sin(current_scene.player.angle) * 0.1;
 				break;
 			case Core::Key::A:
-				current_scene.player.y += 0.1;
+				// current_scene.player.y += 0.1;
 				break;
 			case Core::Key::S:
-				current_scene.player.x -= cos(current_scene.player.angle) * 0.1;
-				current_scene.player.y -= sin(current_scene.player.angle) * 0.1;
+				// current_scene.player.x -= cos(current_scene.player.angle) * 0.1;
+				// current_scene.player.y -= sin(current_scene.player.angle) * 0.1;
 				break;
 			case Core::Key::D:
-				current_scene.player.x -= 0.1;
+				// current_scene.player.x -= 0.1;
 				break;
 			}
 			break;
 		}
-	}
-
-	// This is where any post processing gameplay updates may happen.
-	// Note that this is called after the event handlers have been called,
-	// and is the final step before updates to do any kind of processing.
-	void App::on_update()
-	{
-		m_window.get_mouse();
-		current_scene.player.angle += m_window.mouse_x * M_PI / 360;
-	}
-
-	bool App::on_init()
-	{
-		m_renderer.init();
-		m_window_subject = m_window.add_observer(this);
-		return m_window.init();
-	}
-
-	void App::on_render()
-	{
-		m_renderer.set_scene(current_scene);
-		Core::FrameBuffer *framebuffer = m_renderer.render();
-		m_window.draw(static_cast<void *>(framebuffer->img.data()), framebuffer->w * 4);
-	}
-
-	void App::on_cleanup()
-	{
-		m_renderer.cleanup();
-		m_window.remove_observer(m_window_subject);
-		m_window.cleanup();
 	}
 }

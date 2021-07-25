@@ -2,12 +2,12 @@
 #define ZJVL_CORE_RENDERER_H
 
 #include <vector>
+#include "core/scene/scene.h"
 #include "core/scene/splash.h"
 #include "core/scene/map.h"
 #include "framebuffer.h"
 #include "textures.h"
 #include "core/scene/entity.h"
-#include "core/scene/scene.h"
 
 namespace ZJVL
 {

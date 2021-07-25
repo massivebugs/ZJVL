@@ -12,11 +12,6 @@ namespace ZJVL
 		Scene::Scene(){};
 		Scene::Scene(Map map, Entity player, std::vector<Entity> entities) : map(map), player(player), entities(entities) {};
 
-		bool Scene::is_activated()
-		{
-			return m_activated;
-		}
-
 		void Scene::load_splash(Splash splash_image)
 		{
 			this->splash_images.push_back(splash_image);

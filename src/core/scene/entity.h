@@ -20,11 +20,11 @@ namespace ZJVL
 			std::size_t texture_index;
 			size_t w, h;
 			float dist;
+
 			bool operator<(const Entity &s) const;
-			// void on_load(){};
-			// void on_update(){};
-			// void on_cleanup(){};
-			void on_notify(Core::Event &e) override {};
+			virtual void on_notify(Core::Event &e) override{};
+
+			void update(std::uint32_t dt);
 		};
 	}
 }
