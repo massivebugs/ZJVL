@@ -4,6 +4,7 @@
 #include "map.h"
 #include "splash.h"
 #include "entity.h"
+#include "player.h"
 
 namespace ZJVL
 {
@@ -13,7 +14,7 @@ namespace ZJVL
 		{
 		public:
 			Scene();
-			Scene(Map map, Entity player, std::vector<Entity> entities);
+			Scene(Map map, Player player, std::vector<Entity> entities);
 
 			bool init();
 			void load();
@@ -25,7 +26,7 @@ namespace ZJVL
 			void sort_entities();
 
 			Map map;
-			Entity player;
+			Player player;
 			std::vector<Entity> entities;
 			std::vector<Splash> splash_images;
 

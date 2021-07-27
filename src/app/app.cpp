@@ -36,11 +36,12 @@ namespace ZJVL
 
 		// Set up the game here
 		std::vector<Core::Entity> entities = std::vector<Core::Entity>{{3.523, 3.812, 2}, {1.834, 8.765, 0}, {5.323, 5.365, 1}, {4.123, 10.265, 2}};
-		Core::Entity player{3.456, 2.345, 1.523, M_PI / 3.f};
+		Core::Player player{3.456, 2.345, 1.523, M_PI / 3.f};
 		Core::Map map;
 		Core::Scene scene{map, player, entities};
 		scene.load_splash(Core::Splash{"assets/splash_zjvl.png", 3000});
 		current_scene = scene;
+		m_window.input_manager.add_observer(&current_scene.player);
 
 		Framework::Timer timer;
 		int framecount = 0;
@@ -61,7 +62,8 @@ namespace ZJVL
 			render();
 
 			framecount++;
-			if(timer.get_duration() >= 1000) {
+			if (timer.get_duration() >= 1000)
+			{
 				m_fps = framecount;
 				std::cout << "FPS: " << m_fps << std::endl;
 				framecount = 0;
@@ -73,6 +75,7 @@ namespace ZJVL
 			m_dt = dt_end_time - dt_start_time;
 			dt_start_time = dt_end_time;
 		}
+		m_window.input_manager.remove_observer(&current_scene.player);
 
 		cleanup();
 		return 0;
@@ -81,7 +84,8 @@ namespace ZJVL
 	bool App::init()
 	{
 		m_renderer.init();
-		m_window_subject = m_window.add_observer(this);
+		m_window.add_observer(this);
+		m_window.input_manager.add_observer(this);
 		return m_window.init();
 	}
 
@@ -90,8 +94,7 @@ namespace ZJVL
 	// and is the final step before updates to do any kind of processing.
 	void App::update()
 	{
-		m_window.poll_events();
-		// current_scene.player.angle += m_window.mouse_x * M_PI / 360;
+		m_window.update();
 	}
 
 	void App::render()
@@ -104,7 +107,7 @@ namespace ZJVL
 	void App::cleanup()
 	{
 		m_renderer.cleanup();
-		m_window.remove_observer(m_window_subject);
+		m_window.remove_observer(this);
 		m_window.cleanup();
 	}
 
@@ -117,29 +120,31 @@ namespace ZJVL
 		case Core::EventType::WINDOW_QUIT:
 			m_running = false;
 			break;
-		case Core::EventType::KEYDOWN:
-			switch (static_cast<Core::KeyDownEvent &>(e).get_key())
-			{
-			case Core::Key::ENTER:
-				break;
-			case Core::Key::ESC:
-				break;
-			case Core::Key::W:
-				// current_scene.player.x += cos(current_scene.player.angle) * 0.1;
-				// current_scene.player.y += sin(current_scene.player.angle) * 0.1;
-				break;
-			case Core::Key::A:
-				// current_scene.player.y += 0.1;
-				break;
-			case Core::Key::S:
-				// current_scene.player.x -= cos(current_scene.player.angle) * 0.1;
-				// current_scene.player.y -= sin(current_scene.player.angle) * 0.1;
-				break;
-			case Core::Key::D:
-				// current_scene.player.x -= 0.1;
-				break;
-			}
-			break;
+		// case Core::EventType::KEYDOWN:
+		// 	switch (static_cast<Core::KeyDownEvent &>(e).get_key())
+		// 	{
+		// 	case Core::Key::ENTER:
+		// 		break;
+		// 	case Core::Key::ESC:
+		// 		break;
+		// 	case Core::Key::W:
+		// 		current_scene.player.x += cos(current_scene.player.angle) * 0.1;
+		// 		current_scene.player.y += sin(current_scene.player.angle) * 0.1;
+		// 		break;
+		// 	case Core::Key::A:
+		// 		current_scene.player.y += 0.1;
+		// 		break;
+		// 	case Core::Key::S:
+		// 		current_scene.player.x -= cos(current_scene.player.angle) * 0.1;
+		// 		current_scene.player.y -= sin(current_scene.player.angle) * 0.1;
+		// 		break;
+		// 	case Core::Key::D:
+		// 		current_scene.player.x -= 0.1;
+		// 		break;
+		// 	}
+		// 	break;
+		// case Core::EventType::MOUSEMOVE:
+		// 	current_scene.player.angle += static_cast<Core::MouseMoveEvent &>(e).x * M_PI / 360;
 		}
 	}
 }

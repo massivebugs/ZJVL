@@ -1,6 +1,7 @@
 #ifndef ZJVL_CORE_EVENT_SUBJECT_CPP
 #define ZJVL_CORE_EVENT_SUBJECT_CPP
 #include <vector>
+#include <algorithm>
 #include "observer.h"
 
 namespace ZJVL
@@ -11,15 +12,19 @@ namespace ZJVL
 		{
 		public:
 			virtual ~Subject(){};
-			std::size_t add_observer(Observer *observer)
+			void add_observer(Observer *observer)
 			{
+				// TODO: Check for duplicates
 				m_observers.push_back(observer);
-				return m_observers.size() - 1;
 			}
 
-			void remove_observer(std::size_t pos)
+			void remove_observer(Observer *observer)
 			{
-				m_observers.erase(m_observers.begin() + pos);
+				auto idx = std::find(m_observers.begin(), m_observers.end(), observer);
+				if (idx != m_observers.end())
+				{
+					m_observers.erase(idx);
+				}
 			}
 
 		protected:

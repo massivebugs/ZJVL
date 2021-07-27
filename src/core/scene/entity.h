@@ -14,6 +14,7 @@ namespace ZJVL
 			Entity();
 			Entity(float x, float y, std::size_t texture_index);
 			Entity(float x, float y, float angle, float fov);
+			~Entity(){};
 			float x, y;
 			float angle;
 			float fov;

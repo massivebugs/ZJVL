@@ -13,13 +13,13 @@ namespace ZJVL
 		class MouseMoveEvent : public MouseEvent
 		{
 		public:
-			MouseMoveEvent(int x, int y) : mouse_x(x), mouse_y(y){};
+			MouseMoveEvent(int x, int y) : x(x), y(y){};
 			EventType get_type() const override
 			{
 				return EventType::MOUSEMOVE;
 			}
-			const int mouse_x;
-			const int mouse_y;
+			const int x;
+			const int y;
 		};
 	}
 }

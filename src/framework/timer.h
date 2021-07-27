@@ -16,23 +16,25 @@ namespace ZJVL
 			{
 				reset_duration();
 			};
-			uint32_t get_time()
+
+			std::uint32_t get_time()
 			{
 				return SDL_GetTicks();
 			};
-			uint32_t get_duration()
+
+			std::uint32_t get_duration()
 			{
 
 				return get_time() - m_duration_start;
 			};
+
 			void reset_duration()
 			{
-
 				m_duration_start = get_time();
 			};
 
 		private:
-			uint32_t m_duration_start;
+			std::uint32_t m_duration_start;
 		};
 	}
 }

@@ -6,7 +6,8 @@
 #include <memory>
 #include <unordered_map>
 #include "core/event/subject.h"
-#include <core/event/events/key_event.h>
+#include "core/event/events/key_event.h"
+#include "input.h"
 
 namespace ZJVL
 {
@@ -16,17 +17,19 @@ namespace ZJVL
 		{
 		public:
 			Window(const char *name, int w, int h);
+			Input input_manager;
+
 			bool init();
-			bool draw(void *buffer, int row_bytes);
-
-			bool flash_image(const char *img_path, uint32_t ms);
+			void update();
 			void cleanup();
-			void poll_events();
 
+			bool draw(void *buffer, int row_bytes);
+			bool flash_image(const char *img_path, uint32_t ms);
+
+			int m_mouse_x, m_mouse_y;
 		private:
 			const char *m_name;
 			int m_width, m_height;
-			int m_mouse_x, m_mouse_y;
 
 			SDL_Window *m_window;
 			SDL_Renderer *m_renderer;

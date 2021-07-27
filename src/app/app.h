@@ -35,9 +35,6 @@ namespace ZJVL
 		void render();
 
 		void cleanup();
-
-		// Subject index
-		std::size_t m_window_subject;
 	};
 }
 

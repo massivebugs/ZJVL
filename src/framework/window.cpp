@@ -113,7 +113,7 @@ namespace ZJVL
 			return true;
 		}
 
-		void Window::poll_events()
+		void Window::update()
 		{
 			while (SDL_PollEvent(&m_event))
 			{
@@ -122,21 +122,24 @@ namespace ZJVL
 					Core::WindowCloseEvent e;
 					notify(e);
 				}
-				else if (m_event.type == SDL_KEYDOWN)
-				{
-					SDL_Keycode keycode = m_event.key.keysym.sym;
-					if (m_keymap.find(keycode) != m_keymap.end())
-					{
-						Core::KeyDownEvent e(m_keymap[keycode]);
-						notify(e);
-					}
-				}
+				// else if (m_event.type == SDL_KEYDOWN)
+				// {
+				// 	SDL_Keycode keycode = m_event.key.keysym.sym;
+				// 	if (m_keymap.find(keycode) != m_keymap.end())
+				// 	{
+				// 		Core::KeyDownEvent e(m_keymap[keycode]);
+				// 		notify(e);
+				// 	}
+				// }
+				input_manager.on_event(m_event);
 			}
-			SDL_GetRelativeMouseState(&m_mouse_x, &m_mouse_y);
-			if(m_mouse_x != 0 || m_mouse_y != 0) {
-				Core::MouseMoveEvent e(m_mouse_x, m_mouse_y);
-				notify(e);
-			}
+			// We only need to update mouse once per tick
+			input_manager.update_mouse();
+			// SDL_GetRelativeMouseState(&m_mouse_x, &m_mouse_y);
+			// if(m_mouse_x != 0 || m_mouse_y != 0) {
+			// 	Core::MouseMoveEvent e(m_mouse_x, m_mouse_y);
+			// 	notify(e);
+			// }
 		}
 
 		void Window::cleanup()
