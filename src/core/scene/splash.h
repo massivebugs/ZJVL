@@ -1,7 +1,6 @@
 #ifndef ZJVL_CORE_SPLASH_H
 #define ZJVL_CORE_SPLASH_H
-
-#include <cstdint>
+#include "all.h"
 
 namespace ZJVL
 {
@@ -10,7 +9,7 @@ namespace ZJVL
 		struct Splash
 		{
 			const char *img_path;
-			uint32_t display_ms;
+			std::uint32_t display_ms;
 		};
 
 	}

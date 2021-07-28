@@ -1,3 +1,4 @@
+#include "all.h"
 #include "entity.h"
 
 namespace ZJVL

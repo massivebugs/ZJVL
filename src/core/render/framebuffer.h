@@ -1,9 +1,7 @@
 #ifndef ZJVL_CORE_FRAMEBUFFER_H
 #define ZJVL_CORE_FRAMEBUFFER_H
 
-#include <cstdint>
-#include <vector>
-
+#include "all.h"
 namespace ZJVL
 {
    namespace Core

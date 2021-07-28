@@ -1,11 +1,4 @@
-#include <cstdint>
-#include <cassert>
-#include <math.h>
-#include <iomanip>
-#include <cassert>
-
-#include <iostream>
-#include <vector>
+#include "all.h"
 #include "renderer.h"
 #include "core/scene/splash.h"
 #include "core/scene/scene.h"

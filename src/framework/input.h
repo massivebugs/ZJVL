@@ -1,8 +1,8 @@
 #ifndef ZJVL_FRAMEWORK_INPUT_H
 #define ZJVL_FRAMEWORK_INPUT_H
 
+#include "all.h"
 #include <SDL2/SDL.h>
-#include <unordered_map>
 #include "core/event/subject.h"
 #include "core/event/events/key_event.h"
 #include "core/event/events/mouse_event.h"

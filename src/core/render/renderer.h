@@ -1,7 +1,7 @@
 #ifndef ZJVL_CORE_RENDERER_H
 #define ZJVL_CORE_RENDERER_H
 
-#include <vector>
+#include "all.h"
 #include "core/scene/scene.h"
 #include "core/scene/splash.h"
 #include "core/scene/map.h"

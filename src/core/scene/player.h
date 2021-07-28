@@ -1,8 +1,7 @@
 #ifndef ZJVL_CORE_SCENE_PLAYER_H
 #define ZJVL_CORE_SCENE_PLAYER_H
 
-#include <cstdint>
-#include <math.h>
+#include "all.h"
 #include "entity.h"
 #include "core/event/observer.h"
 #include "core/event/events/key_event.h"

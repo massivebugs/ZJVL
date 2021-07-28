@@ -1,6 +1,4 @@
-#include <cstdint>
-#include <cassert>
-
+#include "all.h"
 #include "map.h"
 
 namespace ZJVL

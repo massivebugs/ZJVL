@@ -1,4 +1,4 @@
-#include <vector>
+#include "all.h"
 #include "app/app.h"
 
 // Create the app instance and call run() to execute the game loop.

@@ -1,8 +1,7 @@
 #ifndef ZJVL_FRAMEWORK_UTILS_H
 #define ZJVL_FRAMEWORK_UTILS_H
-#include <cstdint>
-#include <vector>
 
+#include "all.h"
 namespace ZJVL
 {
 	namespace Framework

@@ -1,4 +1,4 @@
-#include <iostream>
+#include "all.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "window.h"
@@ -62,7 +62,7 @@ namespace ZJVL
 			}
 
 			// Initialize SDL renderer
-			m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED);
+			m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 			SDL_SetRenderDrawColor(m_renderer, 0x00, 0x00, 0x00, 0xFF);
 			SDL_UpdateWindowSurface(m_window);
 

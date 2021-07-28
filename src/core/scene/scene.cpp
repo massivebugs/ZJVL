@@ -1,5 +1,4 @@
-#include <vector>
-#include <cmath>
+#include "all.h"
 #include "scene.h"
 #include "map.h"
 #include "splash.h"

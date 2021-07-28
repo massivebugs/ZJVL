@@ -1,10 +1,8 @@
 #ifndef ZJVL_FRAMEWORK_WINDOW_H
 #define ZJVL_FRAMEWORK_WINDOW_H
+#include "all.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <cstdint>
-#include <memory>
-#include <unordered_map>
 #include "core/event/subject.h"
 #include "core/event/events/key_event.h"
 #include "input.h"
@@ -24,7 +22,7 @@ namespace ZJVL
 			void cleanup();
 
 			bool draw(void *buffer, int row_bytes);
-			bool flash_image(const char *img_path, uint32_t ms);
+			bool flash_image(const char *img_path, std::uint32_t ms);
 
 			int m_mouse_x, m_mouse_y;
 		private:

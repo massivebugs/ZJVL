@@ -1,7 +1,4 @@
-#include <iostream>
-#include <vector>
-#include <cstdint>
-#include <cassert>
+#include "all.h"
 #include "textures.h"
 #include "framework/utils.h"
 

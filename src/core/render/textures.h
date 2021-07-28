@@ -1,12 +1,9 @@
 #ifndef ZJVL_CORE_TEXTURES_H
 #define ZJVL_CORE_TEXTURES_H
 
+#include "all.h"
 // https://www.learncpp.com/cpp-tutorial/returning-values-by-value-reference-and-address/
 // https://stackoverflow.com/questions/8610350/implications-of-using-an-ampersand-before-a-function-name-in-c
-
-#include <cstdint>
-#include <vector>
-#include <string>
 
 namespace ZJVL
 {

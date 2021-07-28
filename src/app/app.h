@@ -1,6 +1,7 @@
 #ifndef ZJVL_CORE_APP_H
 #define ZJVL_CORE_APP_H
 
+#include "all.h"
 #include "framework/window.h"
 #include "framework/timer.h"
 #include "core/render/renderer.h"

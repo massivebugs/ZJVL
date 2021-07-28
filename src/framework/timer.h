@@ -1,8 +1,7 @@
 #ifndef ZJVL_FRAMEWORK_TIMER_H
 #define ZJVL_FRAMEWORK_TIMER_H
 
-#include <cstdint>
-#include <iostream>
+#include "all.h"
 #include <SDL2/SDL.h>
 
 namespace ZJVL

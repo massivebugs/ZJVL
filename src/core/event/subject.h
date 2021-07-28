@@ -1,7 +1,7 @@
 #ifndef ZJVL_CORE_EVENT_SUBJECT_CPP
 #define ZJVL_CORE_EVENT_SUBJECT_CPP
-#include <vector>
-#include <algorithm>
+
+#include "all.h"
 #include "observer.h"
 
 namespace ZJVL

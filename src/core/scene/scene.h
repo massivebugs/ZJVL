@@ -1,6 +1,6 @@
 #ifndef ZJVL_CORE_SCENE_H
 #define ZJVL_CORE_SCENE_H
-#include <vector>
+#include "all.h"
 #include "map.h"
 #include "splash.h"
 #include "entity.h"
@@ -15,6 +15,7 @@ namespace ZJVL
 		public:
 			Scene();
 			Scene(Map map, Player player, std::vector<Entity> entities);
+			virtual ~Scene(){};
 
 			bool init();
 			void load();

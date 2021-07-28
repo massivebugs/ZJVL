@@ -1,6 +1,4 @@
-#include <iostream>
-#include <math.h>
-#include <memory>
+#include "all.h"
 #include "app.h"
 #include "core/scene/scene.h"
 #include "core/render/framebuffer.h"

@@ -1,8 +1,6 @@
 #ifndef ZJVL_CORE_MAP_H
 #define ZJVL_CORE_MAP_H
-
-#include <cstdint>
-
+#include "all.h"
 namespace ZJVL
 {
     namespace Core

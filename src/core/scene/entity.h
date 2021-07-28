@@ -1,7 +1,7 @@
 #ifndef ZJVL_CORE_ENTITY_H
 #define ZJVL_CORE_ENTITY_H
 
-#include <cstdint>
+#include "all.h"
 #include "core/event/observer.h"
 
 namespace ZJVL
