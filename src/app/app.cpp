@@ -118,31 +118,6 @@ namespace ZJVL
 		case Core::EventType::WINDOW_QUIT:
 			m_running = false;
 			break;
-		// case Core::EventType::KEYDOWN:
-		// 	switch (static_cast<Core::KeyDownEvent &>(e).get_key())
-		// 	{
-		// 	case Core::Key::ENTER:
-		// 		break;
-		// 	case Core::Key::ESC:
-		// 		break;
-		// 	case Core::Key::W:
-		// 		current_scene.player.x += cos(current_scene.player.angle) * 0.1;
-		// 		current_scene.player.y += sin(current_scene.player.angle) * 0.1;
-		// 		break;
-		// 	case Core::Key::A:
-		// 		current_scene.player.y += 0.1;
-		// 		break;
-		// 	case Core::Key::S:
-		// 		current_scene.player.x -= cos(current_scene.player.angle) * 0.1;
-		// 		current_scene.player.y -= sin(current_scene.player.angle) * 0.1;
-		// 		break;
-		// 	case Core::Key::D:
-		// 		current_scene.player.x -= 0.1;
-		// 		break;
-		// 	}
-		// 	break;
-		// case Core::EventType::MOUSEMOVE:
-		// 	current_scene.player.angle += static_cast<Core::MouseMoveEvent &>(e).x * M_PI / 360;
 		}
 	}
 }
