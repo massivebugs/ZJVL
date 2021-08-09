@@ -41,21 +41,12 @@ namespace ZJVL
 		current_scene = scene;
 		m_window.input_manager.add_observer(&current_scene.player);
 
-		Framework::Timer timer;
+		Core::Timer timer;
 		int framecount = 0;
 		std::uint32_t dt_start_time = timer.get_time();
 		std::uint32_t dt_end_time = 0;
 		while (m_running)
 		{
-			// if (!current_scene.is_activated())
-			// {
-			// 	// Loop over and display the splash images
-			// 	for (Core::Splash &splash_image : current_scene.splash_images)
-			// 	{
-			// 		m_window.flash_image(splash_image.img_path, splash_image.display_ms);
-			// 	};
-			// }
-
 			update();
 			render();
 

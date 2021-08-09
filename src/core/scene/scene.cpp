@@ -9,7 +9,12 @@ namespace ZJVL
 	namespace Core
 	{
 		Scene::Scene(){};
-		Scene::Scene(Map map, Player player, std::vector<Entity> entities) : map(map), player(player), entities(entities) {};
+		Scene::Scene(Map map, Player player, std::vector<Entity> entities) : map(map), player(player), entities(entities){};
+
+		void Scene::load(){};
+		void Scene::unload(){};
+		void Scene::update(std::uint32_t dt){};
+		void Scene::render(){};
 
 		void Scene::load_splash(Splash splash_image)
 		{

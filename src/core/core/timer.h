@@ -1,12 +1,12 @@
-#ifndef ZJVL_FRAMEWORK_TIMER_H
-#define ZJVL_FRAMEWORK_TIMER_H
+#ifndef ZJVL_CORE_TIMER_H
+#define ZJVL_CORE_TIMER_H
 
 #include "all.h"
 #include <SDL2/SDL.h>
 
 namespace ZJVL
 {
-	namespace Framework
+	namespace Core
 	{
 		class Timer
 		{

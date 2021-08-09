@@ -14,14 +14,18 @@ namespace ZJVL
 			{
 				m_curr_scene->update(dt);
 			};
-			void render()
-			{
-				// m_curr_scene->render();
+
+			void render(){
+			    m_curr_scene->render();
 			};
-			void change_to(std::shared_ptr<Scene> new_scene)
+
+			template <typename T>
+			void change_to(std::shared_ptr<T> scene)
 			{
-				m_curr_scene->unload();
-				m_curr_scene = new_scene;
+				if (m_curr_scene != nullptr)
+					m_curr_scene->unload();
+
+				m_curr_scene = std::static_pointer_cast<Scene>(scene);
 				m_curr_scene->load();
 			};
 

@@ -9,6 +9,7 @@
 				"-g", // more debug info
 				"${workspaceFolder}\\src\\*.cpp",
 				"${workspaceFolder}\\src\\app\\*.cpp",
+				"${workspaceFolder}\\src\\core\\core\\*.cpp",
 				"${workspaceFolder}\\src\\core\\render\\*.cpp",
 				"${workspaceFolder}\\src\\core\\scene\\*.cpp",
 				"${workspaceFolder}\\src\\framework\\*.cpp",

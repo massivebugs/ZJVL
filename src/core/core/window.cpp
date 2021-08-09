@@ -3,22 +3,12 @@
 #include <SDL2/SDL_image.h>
 #include "window.h"
 #include "core/event/events/window_event.h"
-#include "core/event/events/key_event.h"
-#include "core/event/events/mouse_event.h"
 
 namespace ZJVL
 {
-	namespace Framework
+	namespace Core
 	{
-		Window::Window(const char *name, int w, int h) : m_keymap{
-								     {SDLK_KP_ENTER, Core::Key::ENTER},
-								     {SDLK_ESCAPE, Core::Key::ESC},
-								     {SDLK_w, Core::Key::W},
-								     {SDLK_a, Core::Key::A},
-								     {SDLK_s, Core::Key::S},
-								     {SDLK_d, Core::Key::D},
-								 }
-
+		Window::Window(const char *name, int w, int h)
 		{
 			m_name = name;
 			m_width = w;
@@ -42,9 +32,6 @@ namespace ZJVL
 				std::cout << "Failed to initialize SDL_image. SDL ERROR: " << SDL_GetError() << std::endl;
 				return false;
 			}
-
-			// Additional SDL configurations
-			SDL_SetRelativeMouseMode(SDL_TRUE);
 
 			// Initialize SDL window
 			m_window = SDL_CreateWindow(
@@ -70,6 +57,7 @@ namespace ZJVL
 			// https: //stackoverflow.com/questions/21007329/what-is-an-sdl-renderer
 			// ABGR might be faster than RGBA
 			m_texture = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, m_width, m_height);
+			input_manager.init();
 			return true;
 		}
 
@@ -119,7 +107,7 @@ namespace ZJVL
 			{
 				if (m_event.type == SDL_QUIT)
 				{
-					Core::WindowCloseEvent e;
+					WindowCloseEvent e;
 					notify(e);
 				}
 				input_manager.on_event(m_event);

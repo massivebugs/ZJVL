@@ -2,8 +2,8 @@
 #define ZJVL_CORE_APP_H
 
 #include "all.h"
-#include "framework/window.h"
-#include "framework/timer.h"
+#include "core/core/window.h"
+#include "core/core/timer.h"
 #include "core/render/renderer.h"
 #include "core/scene/scene.h"
 #include "core/event/observer.h"
@@ -24,7 +24,7 @@ namespace ZJVL
 		std::uint32_t m_dt;
 		std::uint32_t m_fps;
 
-		Framework::Window m_window;
+		Core::Window m_window;
 		Core::Renderer m_renderer;
 
 		int execute();
