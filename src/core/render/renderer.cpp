@@ -7,6 +7,7 @@ namespace ZJVL
 {
 	namespace Core
 	{
+		Renderer::Renderer() : framebuffer{1024, 512} {};
 		Renderer::Renderer(int w, int h) : framebuffer{w, h} {}
 
 		bool Renderer::init()

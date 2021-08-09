@@ -8,15 +8,10 @@ namespace ZJVL
 {
 	namespace Core
 	{
-		Window::Window(const char *name, int w, int h)
-		{
-			m_name = name;
-			m_width = w;
-			m_height = h;
+		Window::Window() : m_name("Game"), m_width(1024), m_height(512){};
 
-			m_window = nullptr;
-			m_renderer = nullptr;
-			m_texture = nullptr;
+		Window::Window(const char *name, int w, int h) : m_name(name), m_width(w), m_height(h), m_window(nullptr), m_renderer(nullptr), m_texture(nullptr)
+		{
 		}
 
 		bool Window::init()

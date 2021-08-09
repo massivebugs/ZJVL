@@ -2,14 +2,30 @@
 #include "app.h"
 #include "core/scene/scene.h"
 #include "core/render/framebuffer.h"
+#include "core/core/image.h"
 
 namespace ZJVL
 {
+	// App *App::instance()
+	// {
+	// 	static App *instance = new App();
+	// 	return instance;
+	// }
+
+	App::App()
+	    : m_app_name("testgame"),
+	      m_dt(0),
+	      m_fps(0),
+	      m_running(false)
+	{
+		std::cout << "Creating App instance!!!" << std::endl;
+	}
+
 	App::App(const char *app_name, int win_w, int win_h)
 	    : m_app_name(app_name),
 	      m_dt(0),
 	      m_fps(0),
-	      m_running(true),
+	      m_running(false),
 	      m_window(app_name, win_w, win_h),
 	      m_renderer(win_w, win_h)
 	{
@@ -18,6 +34,8 @@ namespace ZJVL
 	// Begins game loop execution
 	int App::run()
 	{
+		if (!m_running)
+			m_running = true;
 		return execute();
 	}
 
@@ -31,6 +49,9 @@ namespace ZJVL
 		{
 			return -1;
 		}
+
+		std::shared_ptr<Core::Image> image = m_asset_cache.get<Core::Image>("assets/splash_zjvl.png");
+		std::shared_ptr<Core::Image> image2 = m_asset_cache.get<Core::Image>("assets/splash_zjvl.png");
 
 		// Set up the game here
 		std::vector<Core::Entity> entities = std::vector<Core::Entity>{{3.523, 3.812, 2}, {1.834, 8.765, 0}, {5.323, 5.365, 1}, {4.123, 10.265, 2}};
@@ -54,7 +75,7 @@ namespace ZJVL
 			if (timer.get_duration() >= 1000)
 			{
 				m_fps = framecount;
-				std::cout << "FPS: " << m_fps << std::endl;
+				// std::cout << "FPS: " << m_fps << std::endl;
 				framecount = 0;
 				timer.reset_duration();
 			}

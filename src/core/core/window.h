@@ -13,6 +13,7 @@ namespace ZJVL
 		class Window : public Subject
 		{
 		public:
+			Window();
 			Window(const char *name, int w, int h);
 			Input input_manager;
 

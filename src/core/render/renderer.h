@@ -16,6 +16,7 @@ namespace ZJVL
 		class Renderer
 		{
 		public:
+			Renderer();
 			Renderer(int w, int h);
 
 			bool init();

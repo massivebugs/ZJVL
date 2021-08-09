@@ -8,16 +8,21 @@
 #include "core/scene/scene.h"
 #include "core/event/observer.h"
 #include "core/event/event.h"
+#include "core/core/asset_cache.h"
 
 namespace ZJVL
 {
 	class App : public Core::Observer
 	{
 	public:
+		// static App *instance();
+		App();
 		App(const char *app_name, int win_w, int win_h);
 		int run();
 		Core::Scene current_scene;
-		void on_notify(Core::Event& e) override;
+		void on_notify(Core::Event &e) override;
+		SDL_Renderer *renderer;
+
 	private:
 		const char *m_app_name;
 		bool m_running;
@@ -26,6 +31,8 @@ namespace ZJVL
 
 		Core::Window m_window;
 		Core::Renderer m_renderer;
+
+		Core::AssetCache m_asset_cache;
 
 		int execute();
 
