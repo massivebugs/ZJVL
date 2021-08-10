@@ -7,6 +7,10 @@
 class SplashScene : public ZJVL::Core::Scene
 {
 public:
+	SplashScene() {
+		std::cout << "Creating Splash Scene" << std::endl;
+	}
+
 	void load() override
 	{
 		std::cout << "Loading Splash Scene" << std::endl;

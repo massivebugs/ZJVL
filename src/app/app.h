@@ -24,6 +24,7 @@ namespace ZJVL
 		Core::AssetCache asset_cache;
 		// Core::Scene current_scene;
 		// void on_notify(Core::Event &e) override;
+		SDL_Renderer *m_renderer;
 
 	private:
 		App();
@@ -38,7 +39,6 @@ namespace ZJVL
 		// Core::Renderer m_renderer;
 
 		SDL_Window *m_window;
-		SDL_Renderer *m_renderer;
 		Core::Input m_input;
 		SDL_Event m_event;
 

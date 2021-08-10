@@ -8,6 +8,7 @@
 #include "core/event/subject.h"
 #include "core/event/events/window_event.h"
 #include "scenes/splash_scene.h"
+#include "scenes/game_scene.h"
 #include "core/core/texture.h"
 
 namespace ZJVL
@@ -78,7 +79,9 @@ namespace ZJVL
 		auto splash_scene = std::make_shared<SplashScene>();
 		splash_scene->texture = std::make_shared<Core::TextureX>("assets/splash_zjvl.png", m_renderer);
 		splash_scene->display_ms = 1000;
-		scene_manager.change_to(splash_scene);
+
+		auto game_scene = std::make_shared<GameScene>();
+		scene_manager.change_to(game_scene);
 
 		Core::Timer timer;
 		int framecount = 0;
@@ -152,6 +155,7 @@ namespace ZJVL
 		SDL_UpdateWindowSurface(m_window);
 
 		m_input.init();
+		scene_manager.init(m_renderer);
 		return true;
 
 		// m_window.add_observer(this);
