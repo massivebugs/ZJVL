@@ -2,6 +2,7 @@
 #define ZJVL_CORE_SCENE_SCENEMANAGER_H
 #include "all.h"
 #include "scene.h"
+#include <SDL2/SDL.h>
 
 namespace ZJVL
 {
@@ -10,26 +11,43 @@ namespace ZJVL
 		class SceneManager
 		{
 		public:
+			void init(SDL_Renderer *renderer)
+			{
+				m_renderer = renderer;
+			}
+
 			void update(std::uint32_t dt)
 			{
 				m_curr_scene->update(dt);
 			};
 
-			void render(){
-			    m_curr_scene->render();
+			void render()
+			{
+				m_curr_scene->render(m_renderer);
 			};
 
-			template <typename T>
-			void change_to(std::shared_ptr<T> scene)
+			// template <typename T>
+			void change_to(std::shared_ptr<Scene> scene)
 			{
 				if (m_curr_scene != nullptr)
 					m_curr_scene->unload();
 
-				m_curr_scene = std::static_pointer_cast<Scene>(scene);
+				m_curr_scene = scene;
 				m_curr_scene->load();
 			};
 
+			// template <typename T>
+			// void change_to(std::shared_ptr<T> scene)
+			// {
+			// 	if (m_curr_scene != nullptr)
+			// 		m_curr_scene->unload();
+
+			// 	m_curr_scene = std::static_pointer_cast<Scene>(scene);
+			// 	m_curr_scene->load();
+			// };
+
 		private:
+			SDL_Renderer *m_renderer;
 			std::shared_ptr<Scene> m_curr_scene;
 		};
 	}

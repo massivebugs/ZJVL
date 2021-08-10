@@ -5,7 +5,7 @@
 // Arguments and the return statement are required for compatibility with SDL
 int main(int argc, char *argv[])
 {
-	ZJVL::App *app = new ZJVL::App("Test game", 1024, 512);
+	ZJVL::App *app = ZJVL::App::instance();
 	int code = app->run();
 	delete app;
 	return code;

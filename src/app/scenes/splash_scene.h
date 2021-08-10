@@ -2,26 +2,44 @@
 #include <SDL2/SDL.h>
 #include "core/scene/scene.h"
 #include "core/scene/splash.h"
+#include "core/core/texture.h"
 
 class SplashScene : public ZJVL::Core::Scene
 {
 public:
-	SplashScene(SDL_Renderer &renderer) : ZJVL::Core::Scene(renderer){};
+	void load() override
+	{
+		std::cout << "Loading Splash Scene" << std::endl;
+		left_ms = 0;
+		showing = false;
+	};
 
-	virtual void load()
+	void unload() override
 	{
 		std::cout << "Loading Splash Scene" << std::endl;
 	};
 
-	virtual void unload()
+	void update(std::uint32_t dt) override
 	{
-		std::cout << "Loading Splash Scene" << std::endl;
+		left_ms -= dt;
+		if (left_ms <= 0)
+		{
+			showing = false;
+			// TODO: Switch
+		}
 	};
 
-	virtual void update(std::uint32_t dt){};
+	void render(SDL_Renderer *renderer) override
+	{
+		std::cout << "Rendering Splash Scene" << std::endl;
+		SDL_RenderCopy(renderer, texture->data, NULL, NULL);
 
-	virtual void render() {}
+		// TODO: not a solution yet but
+		// SDL_Delay(display_ms);
+	}
 
-	std::shared_ptr<ZJVL::Core::Splash> splash;
+	std::shared_ptr<ZJVL::Core::TextureX> texture;
+	bool showing;
 	std::uint32_t display_ms;
+	std::uint32_t left_ms;
 };

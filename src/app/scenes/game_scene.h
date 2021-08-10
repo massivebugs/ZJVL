@@ -4,31 +4,31 @@
 #include "core/scene/map.h"
 #include "core/scene/player.h"
 #include "core/scene/entity.h"
+#include "core/core/texture.h"
 
 class GameScene : public ZJVL::Core::Scene
 {
 public:
-	GameScene(SDL_Renderer &renderer) : ZJVL::Core::Scene(renderer){};
 
-	virtual void load()
+	void load() override
 	{
 		std::cout << "Loading Game Scene" << std::endl;
 	};
 
-	virtual void unload()
+	void unload() override
 	{
 		std::cout << "Loading Game Scene" << std::endl;
 	};
 
-	virtual void update(std::uint32_t dt)
+	void update(std::uint32_t dt) override
 	{
 		sort_entities(*entities);
 	};
 
-	virtual void render() {}
+	void render(SDL_Renderer *renderer) override {}
 
 public:
-	SDL_Texture *texture;
+	std::shared_ptr<ZJVL::Core::TextureX> texture;
 	std::shared_ptr<ZJVL::Core::Map> map;
 	std::shared_ptr<ZJVL::Core::Player> player;
 	std::shared_ptr<std::vector<ZJVL::Core::Entity>> entities;
