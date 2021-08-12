@@ -3,7 +3,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "scene/scene.h"
-// #include "render/framebuffer.h"
 #include "core/image.h"
 #include "event/subject.h"
 #include "event/events/window_event.h"
@@ -67,11 +66,11 @@ namespace ZJVL
 		std::shared_ptr<Core::Image> image2 = asset_cache.get<Core::Image>("assets/splash_zjvl.png");
 
 		// Set up the game here
-		// std::vector<Core::Entity> entities = std::vector<Core::Entity>{{3.523, 3.812, 2}, {1.834, 8.765, 0}, {5.323, 5.365, 1}, {4.123, 10.265, 2}};
-		// Core::Player player{3.456, 2.345, 1.523, M_PI / 3.f};
-		// Core::Map map;
-		// Core::Scene scene{map, player, entities};
-		// scene.load_splash(Core::Splash{"assets/splash_zjvl.png", 3000});
+		// std::vector<Scene::Entity> entities = std::vector<Scene::Entity>{{3.523, 3.812, 2}, {1.834, 8.765, 0}, {5.323, 5.365, 1}, {4.123, 10.265, 2}};
+		// Scene::Player player{3.456, 2.345, 1.523, M_PI / 3.f};
+		// Scene::Map map;
+		// Scene::Scene scene{map, player, entities};
+		// scene.load_splash(Scene::Splash{"assets/splash_zjvl.png", 3000});
 		// current_scene = scene;
 		// m_input.add_observer(&current_scene.player);
 		// Core::TextureX splash_tex = Core::TextureX("assets/splash_zjvl.png", m_renderer);
@@ -114,9 +113,6 @@ namespace ZJVL
 
 	bool App::init()
 	{
-
-		// m_renderer.init();
-
 		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
 		{
 			std::cout << "Failed to initialize SDL. SDL ERROR: " << SDL_GetError() << std::endl;
@@ -156,11 +152,8 @@ namespace ZJVL
 
 		m_input.init();
 		scene_manager.init(m_renderer);
-		return true;
 
-		// m_window.add_observer(this);
-		// m_window.input_manager.add_observer(this);
-		// return m_window.init();
+		return true;
 	}
 
 	// This is where any post processing gameplay updates may happen.
@@ -168,54 +161,33 @@ namespace ZJVL
 	// and is the final step before updates to do any kind of processing.
 	void App::update()
 	{
-		// m_window.update();
 		while (SDL_PollEvent(&m_event))
 		{
 			if (m_event.type == SDL_QUIT)
 			{
-				Core::WindowCloseEvent e;
+				Event::WindowCloseEvent e;
 				notify(e);
 				m_running = false;
 				break;
 			}
 			m_input.on_event(m_event);
 		}
-		// We only need to update mouse once per tick
 		m_input.update_mouse();
 		scene_manager.update(m_dt);
 	}
 
 	void App::render()
 	{
-
 		SDL_RenderClear(m_renderer);
 		scene_manager.render();
 		SDL_RenderPresent(m_renderer);
-		// m_renderer.set_scene(current_scene);
-		// Core::FrameBuffer *framebuffer = m_renderer.render();
-		// m_window.draw(static_cast<void *>(framebuffer->img.data()), framebuffer->w * 4);
 	}
 
 	void App::cleanup()
 	{
-		// m_renderer.cleanup();
-		// m_window.remove_observer(this);
-		// m_window.cleanup();
 		SDL_DestroyRenderer(m_renderer);
 		SDL_DestroyWindow(m_window);
 		IMG_Quit();
 		SDL_Quit();
 	}
-
-	// // This is where all events are handled at the application level.
-	// // For Scene, Entity specific events, use their own respective member functions.
-	// void App::on_notify(Core::Event &e)
-	// {
-	// 	switch (e.get_type())
-	// 	{
-	// 	case Core::EventType::WINDOW_QUIT:
-	// 		m_running = false;
-	// 		break;
-	// 	}
-	// }
 }

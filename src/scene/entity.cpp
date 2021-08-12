@@ -3,7 +3,7 @@
 
 namespace ZJVL
 {
-	namespace Core
+	namespace Scene
 	{
 		Entity::Entity(){};
 		Entity::Entity(float x, float y, std::size_t texture_index)

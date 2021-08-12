@@ -12,15 +12,15 @@
 
 namespace ZJVL
 {
-	class App : public Core::Subject
+	class App : public Event::Subject
 	{
 	public:
 		static App *instance();
 		int run();
-		Core::SceneManager scene_manager;
+		Scene::SceneManager scene_manager;
 
 		Core::AssetCache asset_cache;
-		// Core::Scene current_scene;
+		// Scene::Scene current_scene;
 		// void on_notify(Core::Event &e) override;
 		SDL_Renderer *m_renderer;
 		Core::Input m_input;

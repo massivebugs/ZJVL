@@ -6,9 +6,9 @@
 
 namespace ZJVL
 {
-	namespace Core
+	namespace Scene
 	{
-		class Entity : public Observer
+		class Entity : public Event::Observer
 		{
 		public:
 			Entity();
@@ -23,7 +23,7 @@ namespace ZJVL
 			float dist;
 
 			bool operator<(const Entity &s) const;
-			virtual void on_notify(Core::Event &e) override{};
+			virtual void on_notify(Event::Event &e) override{};
 
 			void update(std::uint32_t dt);
 		};

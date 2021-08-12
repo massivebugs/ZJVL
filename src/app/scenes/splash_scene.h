@@ -4,7 +4,7 @@
 #include "scene/splash.h"
 #include "core/texture.h"
 
-class SplashScene : public ZJVL::Core::Scene
+class SplashScene : public ZJVL::Scene::Scene
 {
 public:
 	SplashScene() {

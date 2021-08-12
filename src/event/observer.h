@@ -5,7 +5,7 @@
 
 namespace ZJVL
 {
-	namespace Core
+	namespace Event
 	{
 		class Observer
 		{

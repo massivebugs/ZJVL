@@ -3,7 +3,7 @@
 #include "all.h"
 namespace ZJVL
 {
-    namespace Core
+    namespace Scene
     {
         struct Map
         {

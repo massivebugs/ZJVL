@@ -6,7 +6,7 @@
 
 namespace ZJVL
 {
-	namespace Core
+	namespace Scene
 	{
 		class SceneManager
 		{
@@ -26,7 +26,6 @@ namespace ZJVL
 				m_curr_scene->render(m_renderer);
 			};
 
-			// template <typename T>
 			void change_to(std::shared_ptr<Scene> scene)
 			{
 				if (m_curr_scene != nullptr)
@@ -35,16 +34,6 @@ namespace ZJVL
 				m_curr_scene = scene;
 				m_curr_scene->load();
 			};
-
-			// template <typename T>
-			// void change_to(std::shared_ptr<T> scene)
-			// {
-			// 	if (m_curr_scene != nullptr)
-			// 		m_curr_scene->unload();
-
-			// 	m_curr_scene = std::static_pointer_cast<Scene>(scene);
-			// 	m_curr_scene->load();
-			// };
 
 		private:
 			SDL_Renderer *m_renderer;

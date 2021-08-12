@@ -9,7 +9,7 @@
 #include "render/framebuffer.h"
 #include "app/app.h"
 
-class GameScene : public ZJVL::Core::Scene
+class GameScene : public ZJVL::Scene::Scene
 {
 public:
 	void load() override
@@ -36,13 +36,13 @@ public:
 
 public:
 	// std::shared_ptr<ZJVL::Core::TextureX> texture;
-	// std::shared_ptr<ZJVL::Core::Map> map;
-	// std::shared_ptr<ZJVL::Core::Player> player;
-	// std::shared_ptr<std::vector<ZJVL::Core::Entity>> entities;
+	// std::shared_ptr<ZJVL::Scene::Map> map;
+	// std::shared_ptr<ZJVL::Scene::Player> player;
+	// std::shared_ptr<std::vector<ZJVL::Scene::Entity>> entities;
 	ZJVL::Core::TextureX texture = ZJVL::Core::TextureX(1024, 512, ZJVL::App::instance()->m_renderer);
-	ZJVL::Core::Map map;
-	ZJVL::Core::Player player{3.456, 2.345, 1.523, M_PI / 3.f};
-	std::vector<ZJVL::Core::Entity> entities =  std::vector<ZJVL::Core::Entity>{{3.523, 3.812, 2}, {1.834, 8.765, 0}, {5.323, 5.365, 1}, {4.123, 10.265, 2}};
+	ZJVL::Scene::Map map;
+	ZJVL::Scene::Player player{3.456, 2.345, 1.523, M_PI / 3.f};
+	std::vector<ZJVL::Scene::Entity> entities =  std::vector<ZJVL::Scene::Entity>{{3.523, 3.812, 2}, {1.834, 8.765, 0}, {5.323, 5.365, 1}, {4.123, 10.265, 2}};
 	ZJVL::Core::Texture wall_tex = ZJVL::Core::Texture("assets/walltext.png");
 	ZJVL::Core::Texture entities_tex = ZJVL::Core::Texture("assets/monsters.png");
 	ZJVL::Core::FrameBuffer framebuffer{1025, 512};
@@ -51,7 +51,7 @@ public:
 	std::vector<float> depth_buffer;
 
 private:
-	void sort_entities(std::vector<ZJVL::Core::Entity> &to_sort)
+	void sort_entities(std::vector<ZJVL::Scene::Entity> &to_sort)
 	{
 		// Merge sort entities just for practice
 		if (to_sort.size() == 1)
@@ -60,11 +60,11 @@ private:
 		std::size_t half_idx = std::ceil((float)to_sort.size() / 2);
 
 		// The iterator pointing to the half element of the vector
-		std::vector<ZJVL::Core::Entity>::iterator half_iter = to_sort.end() - (to_sort.size() - half_idx);
+		std::vector<ZJVL::Scene::Entity>::iterator half_iter = to_sort.end() - (to_sort.size() - half_idx);
 
 		// Iterators in C++ by The Cherno https://www.youtube.com/watch?v=SgcHcbQ0RCQ
-		std::vector<ZJVL::Core::Entity> l_half(to_sort.begin(), half_iter);
-		std::vector<ZJVL::Core::Entity> r_half(half_iter, to_sort.end());
+		std::vector<ZJVL::Scene::Entity> l_half(to_sort.begin(), half_iter);
+		std::vector<ZJVL::Scene::Entity> r_half(half_iter, to_sort.end());
 
 		sort_entities(l_half);
 		sort_entities(r_half);
@@ -72,7 +72,7 @@ private:
 		merge(l_half, r_half, to_sort);
 	}
 
-	void merge(std::vector<ZJVL::Core::Entity> &l_vect, std::vector<ZJVL::Core::Entity> &r_vect, std::vector<ZJVL::Core::Entity> &merged)
+	void merge(std::vector<ZJVL::Scene::Entity> &l_vect, std::vector<ZJVL::Scene::Entity> &r_vect, std::vector<ZJVL::Scene::Entity> &merged)
 	{
 		std::size_t merged_idx = 0;
 		std::size_t l_size = l_vect.size();
@@ -134,7 +134,7 @@ private:
 		}
 	}
 
-	void draw_entity(ZJVL::Core::Entity &entity)
+	void draw_entity(ZJVL::Scene::Entity &entity)
 	{
 		// https://www.youtube.com/watch?v=BJ0-3kERCwc
 		// https://www.youtube.com/watch?v=MHoFqRyeP3o の2:52を見てみるとちょっとわかるかも

@@ -11,16 +11,16 @@ namespace ZJVL
 {
 	namespace Core
 	{
-		class Input : public Subject
+		class Input : public Event::Subject
 		{
 		public:
 			Input() : m_keymap{
-				      {SDLK_KP_ENTER, Key::ENTER},
-				      {SDLK_ESCAPE, Key::ESC},
-				      {SDLK_w, Key::W},
-				      {SDLK_a, Key::A},
-				      {SDLK_s, Key::S},
-				      {SDLK_d, Key::D},
+				      {SDLK_KP_ENTER, Event::Key::ENTER},
+				      {SDLK_ESCAPE, Event::Key::ESC},
+				      {SDLK_w, Event::Key::W},
+				      {SDLK_a, Event::Key::A},
+				      {SDLK_s, Event::Key::S},
+				      {SDLK_d, Event::Key::D},
 				  } {};
 
 			void init()
@@ -36,7 +36,7 @@ namespace ZJVL
 					SDL_Keycode keycode = e.key.keysym.sym;
 					if (m_keymap.find(keycode) != m_keymap.end())
 					{
-						KeyDownEvent e(m_keymap[keycode]);
+						Event::KeyDownEvent e(m_keymap[keycode]);
 						notify(e);
 					}
 				}
@@ -47,14 +47,14 @@ namespace ZJVL
 				SDL_GetRelativeMouseState(&m_mouse_x, &m_mouse_y);
 				if (m_mouse_x != 0 || m_mouse_y != 0)
 				{
-					MouseMoveEvent e(m_mouse_x, m_mouse_y);
+					Event::MouseMoveEvent e(m_mouse_x, m_mouse_y);
 					notify(e);
 				}
 			}
 
 		private:
 			int m_mouse_x, m_mouse_y;
-			std::unordered_map<SDL_Keycode, Key> m_keymap;
+			std::unordered_map<SDL_Keycode, Event::Key> m_keymap;
 		};
 	}
 }

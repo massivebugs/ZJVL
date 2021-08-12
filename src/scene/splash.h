@@ -5,7 +5,7 @@
 
 namespace ZJVL
 {
-	namespace Core
+	namespace Scene
 	{
 		struct Splash
 		{

@@ -5,9 +5,9 @@
 
 namespace ZJVL
 {
-	namespace Core
+	namespace Scene
 	{
-		class Camera : public Observer
+		class Camera : public Core::Observer
 		{
 		public:
 			Camera() : angle(0), fov(3.14159 / 3.f){};
