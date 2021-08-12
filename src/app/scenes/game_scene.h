@@ -1,12 +1,12 @@
 #include "all.h"
 #include <SDL2/SDL.h>
-#include "core/scene/scene.h"
-#include "core/scene/map.h"
-#include "core/scene/player.h"
-#include "core/scene/entity.h"
-#include "core/core/texture.h"
-#include "core/render/textures.h"
-#include "core/render/framebuffer.h"
+#include "scene/scene.h"
+#include "scene/map.h"
+#include "scene/player.h"
+#include "scene/entity.h"
+#include "core/texture.h"
+#include "render/textures.h"
+#include "render/framebuffer.h"
 #include "app/app.h"
 
 class GameScene : public ZJVL::Core::Scene
@@ -15,6 +15,7 @@ public:
 	void load() override
 	{
 		std::cout << "Loading Game Scene" << std::endl;
+		ZJVL::App::instance()->m_input.add_observer(&player);
 	};
 
 	void unload() override

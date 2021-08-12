@@ -3,9 +3,9 @@
 
 #include "all.h"
 #include <SDL2/SDL.h>
-#include "core/event/subject.h"
-#include "core/event/events/key_event.h"
-#include "core/event/events/mouse_event.h"
+#include "event/subject.h"
+#include "event/events/key_event.h"
+#include "event/events/mouse_event.h"
 
 namespace ZJVL
 {

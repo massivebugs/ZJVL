@@ -2,7 +2,7 @@
 #define ZJVL_CORE_ENTITY_H
 
 #include "all.h"
-#include "core/event/observer.h"
+#include "event/observer.h"
 
 namespace ZJVL
 {

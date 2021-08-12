@@ -1,8 +1,8 @@
 #include "all.h"
 #include <SDL2/SDL.h>
-#include "core/scene/scene.h"
-#include "core/scene/splash.h"
-#include "core/core/texture.h"
+#include "scene/scene.h"
+#include "scene/splash.h"
+#include "core/texture.h"
 
 class SplashScene : public ZJVL::Core::Scene
 {

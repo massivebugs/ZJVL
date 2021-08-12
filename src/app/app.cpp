@@ -2,14 +2,14 @@
 #include "app.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include "core/scene/scene.h"
-// #include "core/render/framebuffer.h"
-#include "core/core/image.h"
-#include "core/event/subject.h"
-#include "core/event/events/window_event.h"
+#include "scene/scene.h"
+// #include "render/framebuffer.h"
+#include "core/image.h"
+#include "event/subject.h"
+#include "event/events/window_event.h"
 #include "scenes/splash_scene.h"
 #include "scenes/game_scene.h"
-#include "core/core/texture.h"
+#include "core/texture.h"
 
 namespace ZJVL
 {
@@ -96,7 +96,7 @@ namespace ZJVL
 			if (timer.get_duration() >= 1000)
 			{
 				m_fps = framecount;
-				// std::cout << "FPS: " << m_fps << std::endl;
+				std::cout << "FPS: " << m_fps << std::endl;
 				framecount = 0;
 				timer.reset_duration();
 			}

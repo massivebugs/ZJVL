@@ -2,15 +2,13 @@
 #define ZJVL_CORE_APP_H
 
 #include "all.h"
-#include "core/core/window.h"
-#include "core/core/timer.h"
-// #include "core/render/renderer.h"
-#include "core/scene/scene.h"
-#include "core/event/observer.h"
-#include "core/event/event.h"
-#include "core/core/asset_cache.h"
-#include "core/core/input.h"
-#include "core/scene/scene_manager.h"
+#include "core/timer.h"
+#include "scene/scene.h"
+#include "event/observer.h"
+#include "event/event.h"
+#include "core/asset_cache.h"
+#include "core/input.h"
+#include "scene/scene_manager.h"
 
 namespace ZJVL
 {
@@ -25,6 +23,7 @@ namespace ZJVL
 		// Core::Scene current_scene;
 		// void on_notify(Core::Event &e) override;
 		SDL_Renderer *m_renderer;
+		Core::Input m_input;
 
 	private:
 		App();
@@ -39,7 +38,6 @@ namespace ZJVL
 		// Core::Renderer m_renderer;
 
 		SDL_Window *m_window;
-		Core::Input m_input;
 		SDL_Event m_event;
 
 		int execute();

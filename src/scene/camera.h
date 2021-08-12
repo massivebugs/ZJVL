@@ -1,7 +1,7 @@
 #ifndef ZJVL_CORE_SCENE_CAMERA_H
 #define ZJVL_CORE_SCENE_CAMERA_H
-#include "core/event/observer.h"
-#include "core/event/events/mouse_event.h"
+#include "event/observer.h"
+#include "event/events/mouse_event.h"
 
 namespace ZJVL
 {

@@ -3,9 +3,9 @@
 
 #include "all.h"
 #include "entity.h"
-#include "core/event/observer.h"
-#include "core/event/events/key_event.h"
-#include "core/event/events/mouse_event.h"
+#include "event/observer.h"
+#include "event/events/key_event.h"
+#include "event/events/mouse_event.h"
 
 namespace ZJVL
 {
