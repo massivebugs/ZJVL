@@ -1,5 +1,5 @@
-#ifndef ZJVL__EVENT_MOUSE_EVENT_H
-#define ZJVL__EVENT_MOUSE_EVENT_H
+#ifndef ZJVL_EVENT_MOUSE_EVENT_H
+#define ZJVL_EVENT_MOUSE_EVENT_H
 #include "../event.h"
 
 namespace ZJVL

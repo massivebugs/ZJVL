@@ -1,5 +1,5 @@
-#ifndef ZJVL__EVENT_SUBJECT_CPP
-#define ZJVL__EVENT_SUBJECT_CPP
+#ifndef ZJVL_EVENT_SUBJECT_CPP
+#define ZJVL_EVENT_SUBJECT_CPP
 
 #include "all.h"
 #include "observer.h"

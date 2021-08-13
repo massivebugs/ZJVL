@@ -6,6 +6,7 @@ namespace ZJVL
 	namespace Scene
 	{
 		Entity::Entity(){};
+
 		Entity::Entity(float x, float y, std::size_t texture_index)
 		    : x(x), y(y), texture_index(texture_index){};
 

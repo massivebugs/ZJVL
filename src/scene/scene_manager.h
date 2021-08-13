@@ -1,8 +1,9 @@
 #ifndef ZJVL_SCENE_SCENE_SCENEMANAGER_H
 #define ZJVL_SCENE_SCENE_SCENEMANAGER_H
+
 #include "all.h"
-#include "scene.h"
 #include <SDL2/SDL.h>
+#include "scene.h"
 
 namespace ZJVL
 {

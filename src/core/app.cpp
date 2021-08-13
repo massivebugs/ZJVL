@@ -4,7 +4,6 @@
 #include <SDL2/SDL_image.h>
 #include "scene/scene.h"
 #include "asset/image.h"
-#include "event/subject.h"
 #include "event/events/window_event.h"
 #include "scene/splash_scene.h"
 #include "scene/game_scene.h"
@@ -28,9 +27,9 @@ namespace ZJVL
 		      m_fps(0),
 		      m_running(false),
 		      m_window(nullptr),
-		      m_renderer(nullptr)
+		      renderer(nullptr)
 		{
-			std::cout << "Creating App instance!!!" << std::endl;
+			std::cout << "Creating App instance" << std::endl;
 		}
 
 		App::App(const char *app_name, int win_w, int win_h)
@@ -41,8 +40,9 @@ namespace ZJVL
 		      m_fps(0),
 		      m_running(false),
 		      m_window(nullptr),
-		      m_renderer(nullptr)
+		      renderer(nullptr)
 		{
+			std::cout << "Creating App instance" << std::endl;
 		}
 
 		// Begins game loop execution
@@ -67,18 +67,9 @@ namespace ZJVL
 			std::shared_ptr<Asset::Image> image = asset_cache.get<Asset::Image>("assets/splash_zjvl.png");
 			std::shared_ptr<Asset::Image> image2 = asset_cache.get<Asset::Image>("assets/splash_zjvl.png");
 
-			// Set up the game here for now
-			// std::vector<Scene::Entity> entities = std::vector<Scene::Entity>{{3.523, 3.812, 2}, {1.834, 8.765, 0}, {5.323, 5.365, 1}, {4.123, 10.265, 2}};
-			// Scene::Player player{3.456, 2.345, 1.523, M_PI / 3.f};
-			// Scene::Map map;
-			// Scene::Scene scene{map, player, entities};
-			// scene.load_splash(Scene::Splash{"assets/splash_zjvl.png", 3000});
-			// current_scene = scene;
-			// m_input.add_observer(&current_scene.player);
-			// TextureX splash_tex = TextureX("assets/splash_zjvl.png", m_renderer);
-			// auto splash = std::make_shared<SplashScene>(splash_tex, 5000);
+			// TODO: Move game logic to somewhere else
 			auto splash_scene = std::make_shared<Scene::SplashScene>();
-			splash_scene->texture = std::make_shared<Asset::Texture>("assets/splash_zjvl.png", m_renderer);
+			splash_scene->texture = std::make_shared<Asset::Texture>("assets/splash_zjvl.png", renderer);
 			splash_scene->display_ms = 1000;
 
 			auto game_scene = std::make_shared<Scene::GameScene>();
@@ -107,7 +98,6 @@ namespace ZJVL
 				m_dt = dt_end_time - dt_start_time;
 				dt_start_time = dt_end_time;
 			}
-			// m_input.remove_observer(&current_scene.player);
 
 			cleanup();
 			return 0;
@@ -127,7 +117,6 @@ namespace ZJVL
 				return false;
 			}
 
-			// Initialize SDL window
 			m_window = SDL_CreateWindow(
 			    m_app_name,
 			    SDL_WINDOWPOS_CENTERED,
@@ -142,25 +131,21 @@ namespace ZJVL
 				return false;
 			}
 
-			// Initialize SDL renderer
-			m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-			if (m_renderer == nullptr)
+			renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+			if (renderer == nullptr)
 			{
 				std::cout << "Failed to create SDL Renderer. SDL_ERROR: " << SDL_GetError() << std::endl;
 				return false;
 			}
-			SDL_SetRenderDrawColor(m_renderer, 0x00, 0x00, 0x00, 0xFF);
+			SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
 			SDL_UpdateWindowSurface(m_window);
 
-			m_input.init();
-			scene_manager.init(m_renderer);
+			input_system.init();
+			scene_manager.init(renderer);
 
 			return true;
 		}
 
-		// This is where any post processing gameplay updates may happen.
-		// Note that this is called after the event handlers have been called,
-		// and is the final step before updates to do any kind of processing.
 		void App::update()
 		{
 			while (SDL_PollEvent(&m_event))
@@ -172,22 +157,22 @@ namespace ZJVL
 					m_running = false;
 					break;
 				}
-				m_input.on_event(m_event);
+				input_system.on_event(m_event);
 			}
-			m_input.update_mouse();
+			input_system.update_mouse();
 			scene_manager.update(m_dt);
 		}
 
 		void App::render()
 		{
-			SDL_RenderClear(m_renderer);
+			SDL_RenderClear(renderer);
 			scene_manager.render();
-			SDL_RenderPresent(m_renderer);
+			SDL_RenderPresent(renderer);
 		}
 
 		void App::cleanup()
 		{
-			SDL_DestroyRenderer(m_renderer);
+			SDL_DestroyRenderer(renderer);
 			SDL_DestroyWindow(m_window);
 			IMG_Quit();
 			SDL_Quit();

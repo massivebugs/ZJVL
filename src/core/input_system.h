@@ -11,10 +11,10 @@ namespace ZJVL
 {
 	namespace Core
 	{
-		class Input : public Event::Subject
+		class InputSystem : public Event::Subject
 		{
 		public:
-			Input() : m_keymap{
+			InputSystem() : m_keymap{
 				      {SDLK_KP_ENTER, Event::Key::ENTER},
 				      {SDLK_ESCAPE, Event::Key::ESC},
 				      {SDLK_w, Event::Key::W},

@@ -1,5 +1,5 @@
-#ifndef ZJVL__EVENT_OBSERVER_H
-#define ZJVL__EVENT_OBSERVER_H
+#ifndef ZJVL_EVENT_OBSERVER_H
+#define ZJVL_EVENT_OBSERVER_H
 
 #include "event.h"
 

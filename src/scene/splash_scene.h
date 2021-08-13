@@ -1,3 +1,6 @@
+#ifndef ZJVL_SCENE_SPLASHSCENE_H
+#define ZJVL_SCENE_SPLASHSCENE_H
+
 #include "all.h"
 #include <SDL2/SDL.h>
 #include "scene/scene.h"
@@ -47,3 +50,5 @@ namespace ZJVL
 		};
 	}
 }
+
+#endif

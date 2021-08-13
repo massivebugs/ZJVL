@@ -3,10 +3,7 @@
 
 #include "all.h"
 #include "asset.h"
-#include "image.h"
-#include "texture.h"
 
-// TODO: Use a string as set id, so you can reuse it
 namespace ZJVL
 {
 	namespace Asset

@@ -15,13 +15,11 @@ namespace ZJVL
 		public:
 			Texture(int w, int h, SDL_Renderer *renderer)
 			{
-				std::cout << "LOADING TEX" << std::endl;
 				data = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, w, h);
 			}
 
 			Texture(std::string path, SDL_Renderer *renderer)
 			{
-				std::cout << "LOADING TEX" << std::endl;
 				SDL_Surface *temp = nullptr;
 
 				temp = IMG_Load(path.c_str());
@@ -42,11 +40,11 @@ namespace ZJVL
 
 			~Texture()
 			{
-				std::cout << "DESTROYING TEX" << std::endl;
 				SDL_DestroyTexture(data);
 			}
 
 			void lock() {
+				// TODO: Change
 				void* temp_pixels;
 				// TODO: Error handling
 				SDL_LockTexture(data, NULL, &temp_pixels, &pitch);

@@ -15,7 +15,6 @@ namespace ZJVL
 		public:
 			Image(std::string path)
 			{
-				std::cout << "LOADING IMAGE" << std::endl;
 				SDL_Surface *surface = nullptr;
 				SDL_Surface *formatted_surface = nullptr;
 
@@ -44,10 +43,7 @@ namespace ZJVL
 				SDL_FreeSurface(formatted_surface);
 			}
 
-			~Image()
-			{
-				std::cout << "REMOVING IMAGE" << std::endl;
-			}
+			~Image(){}
 
 			std::vector<std::uint32_t> data;
 			std::size_t w, h;

@@ -1,5 +1,5 @@
-#ifndef ZJVL__EVENT_EVENT_H
-#define ZJVL__EVENT_EVENT_H
+#ifndef ZJVL_EVENT_EVENT_H
+#define ZJVL_EVENT_EVENT_H
 
 namespace ZJVL
 {

@@ -2,13 +2,11 @@
 #define ZJVL_CORE_APP_H
 
 #include "all.h"
-#include "core/timer.h"
-#include "scene/scene.h"
-#include "event/observer.h"
-#include "event/event.h"
+#include "event/subject.h"
 #include "asset/asset_cache.h"
-#include "core/input.h"
+#include "core/input_system.h"
 #include "scene/scene_manager.h"
+#include "core/timer.h"
 
 namespace ZJVL
 {
@@ -18,21 +16,23 @@ namespace ZJVL
 		{
 		public:
 			static App *instance();
-			int run();
-			Scene::SceneManager scene_manager;
 
+			int run();
+
+			Scene::SceneManager scene_manager;
 			Asset::AssetCache asset_cache;
-			// Scene::Scene current_scene;
-			// void on_notify(Event &e) override;
-			SDL_Renderer *m_renderer;
-			Input m_input;
+			InputSystem input_system;
+
+			SDL_Renderer *renderer;
 
 		private:
 			App();
 			App(const char *app_name, int win_w, int win_h);
+
 			const char *m_app_name;
 			int m_win_w, m_win_h;
 			bool m_running;
+
 			std::uint32_t m_dt;
 			std::uint32_t m_fps;
 

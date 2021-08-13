@@ -1,13 +1,16 @@
+#ifndef ZJVL_SCENE_GAMESCENE_H
+#define ZJVL_SCENE_GAMESCENE_H
+
 #include "all.h"
 #include <SDL2/SDL.h>
-#include "scene/scene.h"
-#include "scene/map.h"
-#include "scene/player.h"
-#include "scene/entity.h"
+#include "core/app.h"
+#include "scene.h"
+#include "map.h"
+#include "player.h"
+#include "entity.h"
+#include "framebuffer.h"
 #include "asset/texture.h"
 #include "asset/sprite_sheet.h"
-#include "framebuffer.h"
-#include "core/app.h"
 
 namespace ZJVL
 {
@@ -19,33 +22,28 @@ namespace ZJVL
 			void load() override
 			{
 				std::cout << "Loading Game Scene" << std::endl;
-				Core::App::instance()->m_input.add_observer(&player);
+				Core::App::instance()->input_system.add_observer(&player);
 			};
 
 			void unload() override
 			{
 				std::cout << "Loading Game Scene" << std::endl;
+				Core::App::instance()->input_system.remove_observer(&player);
 			};
 
-			void update(std::uint32_t dt) override{
-			    // sort_entities(entities);
-			};
+			void update(std::uint32_t dt) override{};
 
 			void render(SDL_Renderer *renderer) override
 			{
 				texture.lock();
 				render();
-				// Is faster than setting texture pixels directly
 				SDL_UpdateTexture(texture.data, NULL, static_cast<void *>(framebuffer.img.data()), framebuffer.w * 4);
 				SDL_RenderCopy(renderer, texture.data, NULL, NULL);
 			}
 
 		public:
-			// std::shared_ptr<ZJVL::Asset::TextureX> texture;
-			// std::shared_ptr<ZJVL::Scene::Map> map;
-			// std::shared_ptr<ZJVL::Scene::Player> player;
-			// std::shared_ptr<std::vector<ZJVL::Entity>> entities;
-			Asset::Texture texture = Asset::Texture(1024, 512, Core::App::instance()->m_renderer);
+			// TODO:
+			Asset::Texture texture = Asset::Texture(1024, 512, Core::App::instance()->renderer);
 			Map map;
 			Player player{3.456, 2.345, 1.523, M_PI / 3.f};
 			std::vector<Entity> entities = std::vector<Entity>{{3.523, 3.812, 2}, {1.834, 8.765, 0}, {5.323, 5.365, 1}, {4.123, 10.265, 2}};
@@ -68,7 +66,6 @@ namespace ZJVL
 				// The iterator pointing to the half element of the vector
 				std::vector<Entity>::iterator half_iter = to_sort.end() - (to_sort.size() - half_idx);
 
-				// Iterators in C++ by The Cherno https://www.youtube.com/watch?v=SgcHcbQ0RCQ
 				std::vector<Entity> l_half(to_sort.begin(), half_iter);
 				std::vector<Entity> r_half(half_iter, to_sort.end());
 
@@ -101,7 +98,6 @@ namespace ZJVL
 						continue;
 					}
 
-					// compare and add the smaller size to merged
 					if (l_vect[l_idx] < r_vect[r_idx])
 					{
 						merged[merged_idx] = l_vect[l_idx];
@@ -117,7 +113,6 @@ namespace ZJVL
 
 			void draw_map()
 			{
-				// Render the map
 				for (std::size_t row = 0; row < map.h; row++)
 				{
 					for (std::size_t col = 0; col < map.w; col++)
@@ -134,7 +129,7 @@ namespace ZJVL
 						std::size_t texture_index = map.get(row, col);
 						assert(texture_index < wall_tex.count);
 
-						// The color is taken from the upper left pixel of the texture for the map
+						// Upper left pixel color 
 						draw_rectangle(rect_x, rect_y, rect_w, rect_h, wall_tex.get(0, 0, texture_index));
 					}
 				}
@@ -211,7 +206,7 @@ namespace ZJVL
 						set_pixel(pix_x, pix_y, pack_color(160, 160, 160));
 						// std::cout << view_x << ':' << view_y << std::endl;
 
-						// ray is touching a wall
+						// Ray is touching a wall
 						if (map.is_empty(view_y, view_x) == false)
 						{
 							// Store the depth of the map
@@ -255,9 +250,10 @@ namespace ZJVL
 				}
 			}
 
+			// Referenced https://github.com/ssloy/tinyraycaster
+			// TODO: Switch to DDA Algorithm for casting rays
 			void render()
 			{
-
 				// Clear and reset framebuffer image to white
 				clear(pack_color(255, 255, 255));
 
@@ -321,7 +317,6 @@ namespace ZJVL
 
 			void clear(const std::uint32_t color)
 			{
-				// vector initialization
 				// Create a vector of size window_w * window_h with color.
 				framebuffer.img = std::vector<std::uint32_t>(framebuffer.w * framebuffer.h, color);
 			}
@@ -339,3 +334,5 @@ namespace ZJVL
 		};
 	}
 }
+
+#endif
