@@ -3,7 +3,7 @@
 
 namespace ZJVL
 {
-	namespace Core
+	namespace Asset
 	{
 		class Asset
 		{

@@ -8,7 +8,7 @@
 
 namespace ZJVL
 {
-	namespace Core
+	namespace Asset
 	{
 		class TextureX : public Asset
 		{

@@ -9,7 +9,7 @@
 // TODO: Use a string as set id, so you can reuse it
 namespace ZJVL
 {
-	namespace Core
+	namespace Asset
 	{
 		class AssetCache
 		{
