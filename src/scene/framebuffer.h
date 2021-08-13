@@ -1,10 +1,10 @@
-#ifndef ZJVL_CORE_FRAMEBUFFER_H
-#define ZJVL_CORE_FRAMEBUFFER_H
+#ifndef ZJVL_SCENE_FRAMEBUFFER_H
+#define ZJVL_SCENE_FRAMEBUFFER_H
 
 #include "all.h"
 namespace ZJVL
 {
-   namespace Core
+   namespace Scene
    {
       struct FrameBuffer
       {

@@ -1,5 +1,5 @@
-#ifndef ZJVL_CORE_ENTITY_H
-#define ZJVL_CORE_ENTITY_H
+#ifndef ZJVL_SCENE_ENTITY_H
+#define ZJVL_SCENE_ENTITY_H
 
 #include "all.h"
 #include "event/observer.h"

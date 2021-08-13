@@ -1,5 +1,5 @@
-#ifndef ZJVL_CORE_IMAGE_H
-#define ZJVL_CORE_IMAGE_H
+#ifndef ZJVL_ASSET_IMAGE_H
+#define ZJVL_ASSET_IMAGE_H
 
 #include "all.h"
 #include "asset.h"

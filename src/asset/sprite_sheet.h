@@ -1,5 +1,5 @@
-#ifndef ZJVL_CORE_SPRITESHEET_H
-#define ZJVL_CORE_SPRITESHEET_H
+#ifndef ZJVL_ASSET_SPRITESHEET_H
+#define ZJVL_ASSET_SPRITESHEET_H
 
 #include "all.h"
 #include "asset.h"

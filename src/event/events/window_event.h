@@ -1,5 +1,5 @@
-#ifndef ZJVL_CORE_EVENT_WINDOW_EVENT_H
-#define ZJVL_CORE_EVENT_WINDOW_EVENT_H
+#ifndef ZJVL__EVENT_WINDOW_EVENT_H
+#define ZJVL__EVENT_WINDOW_EVENT_H
 #include "../event.h"
 
 namespace ZJVL

@@ -1,5 +1,5 @@
-#ifndef ZJVL_CORE_ASSET_CACHE_H
-#define ZJVL_CORE_ASSET_CACHE_H
+#ifndef ZJVL_ASSET_ASSET_CACHE_H
+#define ZJVL_ASSET_ASSET_CACHE_H
 
 #include "all.h"
 #include "asset.h"

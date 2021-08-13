@@ -1,5 +1,5 @@
-#ifndef ZJVL_CORE_MAP_H
-#define ZJVL_CORE_MAP_H
+#ifndef ZJVL_SCENE_MAP_H
+#define ZJVL_SCENE_MAP_H
 #include "all.h"
 namespace ZJVL
 {

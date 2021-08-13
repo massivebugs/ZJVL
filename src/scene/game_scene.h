@@ -6,7 +6,7 @@
 #include "scene/entity.h"
 #include "asset/texture.h"
 #include "asset/sprite_sheet.h"
-#include "render/framebuffer.h"
+#include "framebuffer.h"
 #include "core/app.h"
 
 namespace ZJVL
@@ -33,7 +33,9 @@ namespace ZJVL
 
 			void render(SDL_Renderer *renderer) override
 			{
+				texture.lock();
 				render();
+				// Is faster than setting texture pixels directly
 				SDL_UpdateTexture(texture.data, NULL, static_cast<void *>(framebuffer.img.data()), framebuffer.w * 4);
 				SDL_RenderCopy(renderer, texture.data, NULL, NULL);
 			}
@@ -43,13 +45,13 @@ namespace ZJVL
 			// std::shared_ptr<ZJVL::Scene::Map> map;
 			// std::shared_ptr<ZJVL::Scene::Player> player;
 			// std::shared_ptr<std::vector<ZJVL::Entity>> entities;
-			Asset::TextureX texture = Asset::TextureX(1024, 512, Core::App::instance()->m_renderer);
+			Asset::Texture texture = Asset::Texture(1024, 512, Core::App::instance()->m_renderer);
 			Map map;
 			Player player{3.456, 2.345, 1.523, M_PI / 3.f};
 			std::vector<Entity> entities = std::vector<Entity>{{3.523, 3.812, 2}, {1.834, 8.765, 0}, {5.323, 5.365, 1}, {4.123, 10.265, 2}};
 			Asset::SpriteSheet wall_tex = Asset::SpriteSheet("assets/walltext.png");
 			Asset::SpriteSheet entities_tex = Asset::SpriteSheet("assets/monsters.png");
-			Core::FrameBuffer framebuffer{1025, 512};
+			FrameBuffer framebuffer{1025, 512};
 			std::size_t rect_w;
 			std::size_t rect_h;
 			std::vector<float> depth_buffer;

@@ -1,5 +1,5 @@
-#ifndef ZJVL_CORE_TEXTURE_H
-#define ZJVL_CORE_TEXTURE_H
+#ifndef ZJVL_ASSET_TEXTURE_H
+#define ZJVL_ASSET_TEXTURE_H
 
 #include "all.h"
 #include "asset.h"
@@ -10,16 +10,16 @@ namespace ZJVL
 {
 	namespace Asset
 	{
-		class TextureX : public Asset
+		class Texture : public Asset
 		{
 		public:
-			TextureX(int w, int h, SDL_Renderer *renderer)
+			Texture(int w, int h, SDL_Renderer *renderer)
 			{
 				std::cout << "LOADING TEX" << std::endl;
 				data = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, w, h);
 			}
 
-			TextureX(std::string path, SDL_Renderer *renderer)
+			Texture(std::string path, SDL_Renderer *renderer)
 			{
 				std::cout << "LOADING TEX" << std::endl;
 				SDL_Surface *temp = nullptr;
@@ -40,13 +40,28 @@ namespace ZJVL
 				SDL_FreeSurface(temp);
 			}
 
-			~TextureX()
+			~Texture()
 			{
 				std::cout << "DESTROYING TEX" << std::endl;
 				SDL_DestroyTexture(data);
 			}
 
+			void lock() {
+				void* temp_pixels;
+				// TODO: Error handling
+				SDL_LockTexture(data, NULL, &temp_pixels, &pitch);
+				pixels = (std::uint32_t *) temp_pixels;
+			}
+
+			void unlock() {
+				SDL_UnlockTexture(data);
+				pixels = nullptr;
+				pitch = 0;
+			}
+
 			SDL_Texture *data = nullptr;
+			std::uint32_t *pixels;
+			int pitch;
 		};
 	}
 }

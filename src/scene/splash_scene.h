@@ -18,8 +18,7 @@ namespace ZJVL
 			void load() override
 			{
 				std::cout << "Loading Splash Scene" << std::endl;
-				left_ms = 0;
-				showing = false;
+				shown_ms = 0;
 			};
 
 			void unload() override
@@ -29,10 +28,9 @@ namespace ZJVL
 
 			void update(std::uint32_t dt) override
 			{
-				left_ms -= dt;
-				if (left_ms <= 0)
+				shown_ms += dt;
+				if (shown_ms >= display_ms)
 				{
-					showing = false;
 					// TODO: Switch
 				}
 			};
@@ -43,10 +41,9 @@ namespace ZJVL
 				SDL_RenderCopy(renderer, texture->data, NULL, NULL);
 			}
 
-			std::shared_ptr<Asset::TextureX> texture;
-			bool showing;
+			std::shared_ptr<Asset::Texture> texture;
 			std::uint32_t display_ms;
-			std::uint32_t left_ms;
+			std::uint32_t shown_ms;
 		};
 	}
 }

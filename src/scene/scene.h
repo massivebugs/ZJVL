@@ -1,5 +1,5 @@
-#ifndef ZJVL_CORE_SCENE_H
-#define ZJVL_CORE_SCENE_H
+#ifndef ZJVL_SCENE_SCENE_H
+#define ZJVL_SCENE_SCENE_H
 #include "all.h"
 #include <SDL2/SDL.h>
 

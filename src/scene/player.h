@@ -1,5 +1,5 @@
-#ifndef ZJVL_CORE_SCENE_PLAYER_H
-#define ZJVL_CORE_SCENE_PLAYER_H
+#ifndef ZJVL_SCENE_SCENE_PLAYER_H
+#define ZJVL_SCENE_SCENE_PLAYER_H
 
 #include "all.h"
 #include "entity.h"

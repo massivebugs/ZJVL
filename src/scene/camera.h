@@ -1,5 +1,5 @@
-#ifndef ZJVL_CORE_SCENE_CAMERA_H
-#define ZJVL_CORE_SCENE_CAMERA_H
+#ifndef ZJVL_SCENE_SCENE_CAMERA_H
+#define ZJVL_SCENE_SCENE_CAMERA_H
 #include "event/observer.h"
 #include "event/events/mouse_event.h"
 

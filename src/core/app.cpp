@@ -67,7 +67,7 @@ namespace ZJVL
 			std::shared_ptr<Asset::Image> image = asset_cache.get<Asset::Image>("assets/splash_zjvl.png");
 			std::shared_ptr<Asset::Image> image2 = asset_cache.get<Asset::Image>("assets/splash_zjvl.png");
 
-			// Set up the game here
+			// Set up the game here for now
 			// std::vector<Scene::Entity> entities = std::vector<Scene::Entity>{{3.523, 3.812, 2}, {1.834, 8.765, 0}, {5.323, 5.365, 1}, {4.123, 10.265, 2}};
 			// Scene::Player player{3.456, 2.345, 1.523, M_PI / 3.f};
 			// Scene::Map map;
@@ -78,7 +78,7 @@ namespace ZJVL
 			// TextureX splash_tex = TextureX("assets/splash_zjvl.png", m_renderer);
 			// auto splash = std::make_shared<SplashScene>(splash_tex, 5000);
 			auto splash_scene = std::make_shared<Scene::SplashScene>();
-			splash_scene->texture = std::make_shared<Asset::TextureX>("assets/splash_zjvl.png", m_renderer);
+			splash_scene->texture = std::make_shared<Asset::Texture>("assets/splash_zjvl.png", m_renderer);
 			splash_scene->display_ms = 1000;
 
 			auto game_scene = std::make_shared<Scene::GameScene>();
@@ -134,7 +134,7 @@ namespace ZJVL
 			    SDL_WINDOWPOS_CENTERED,
 			    m_win_w,
 			    m_win_h,
-			    SDL_WINDOW_SHOWN);
+			    SDL_WINDOW_FULLSCREEN_DESKTOP);
 
 			if (m_window == nullptr)
 			{

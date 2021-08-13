@@ -1,5 +1,5 @@
-#ifndef ZJVL_CORE_ASSET_H
-#define ZJVL_CORE_ASSET_H
+#ifndef ZJVL_ASSET_ASSET_H
+#define ZJVL_ASSET_ASSET_H
 
 namespace ZJVL
 {
