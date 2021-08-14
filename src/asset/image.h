@@ -38,14 +38,14 @@ namespace ZJVL
 				w = formatted_surface->w;
 				h = formatted_surface->h;
 				uint32_t *pixels = static_cast<uint32_t *>(formatted_surface->pixels);
-				data = std::vector<std::uint32_t>(pixels, pixels + w * h);
+				buffer = std::vector<std::uint32_t>(pixels, pixels + w * h);
 
 				SDL_FreeSurface(formatted_surface);
 			}
 
 			~Image(){}
 
-			std::vector<std::uint32_t> data;
+			std::vector<std::uint32_t> buffer;
 			std::size_t w, h;
 		};
 	}

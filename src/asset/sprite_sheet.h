@@ -42,7 +42,7 @@ namespace ZJVL
 			std::uint32_t &get(const std::size_t row, const std::size_t col, const std::size_t index)
 			{
 				assert(row < size && col < size && index < count);
-				return image.data[col + (index * size) + (row * image.w)];
+				return image.buffer[col + (index * size) + (row * image.w)];
 			}
 
 			Image image;

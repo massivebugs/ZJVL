@@ -8,7 +8,6 @@
 #include "map.h"
 #include "player.h"
 #include "entity.h"
-#include "framebuffer.h"
 #include "asset/texture.h"
 #include "asset/sprite_sheet.h"
 
@@ -35,21 +34,20 @@ namespace ZJVL
 
 			void render(SDL_Renderer *renderer) override
 			{
-				texture.lock();
-				render();
-				SDL_UpdateTexture(texture.data, NULL, static_cast<void *>(framebuffer.img.data()), framebuffer.w * 4);
+				render_raycast();
+				SDL_UpdateTexture(texture.data, NULL, static_cast<void *>(pixel_buffer.data()), texture.w * 4);
 				SDL_RenderCopy(renderer, texture.data, NULL, NULL);
 			}
 
 		public:
 			// TODO:
-			Asset::Texture texture = Asset::Texture(1024, 512, Core::App::instance()->renderer);
+			Asset::Texture texture = Asset::Texture(Core::App::instance()->window_w, Core::App::instance()->window_h);
 			Map map;
 			Player player{3.456, 2.345, 1.523, M_PI / 3.f};
 			std::vector<Entity> entities = std::vector<Entity>{{3.523, 3.812, 2}, {1.834, 8.765, 0}, {5.323, 5.365, 1}, {4.123, 10.265, 2}};
 			Asset::SpriteSheet wall_tex = Asset::SpriteSheet("assets/walltext.png");
 			Asset::SpriteSheet entities_tex = Asset::SpriteSheet("assets/monsters.png");
-			FrameBuffer framebuffer{1025, 512};
+			std::vector<std::uint32_t> pixel_buffer;
 			std::size_t rect_w;
 			std::size_t rect_h;
 			std::vector<float> depth_buffer;
@@ -129,7 +127,7 @@ namespace ZJVL
 						std::size_t texture_index = map.get(row, col);
 						assert(texture_index < wall_tex.count);
 
-						// Upper left pixel color 
+						// Upper left pixel color
 						draw_rectangle(rect_x, rect_y, rect_w, rect_h, wall_tex.get(0, 0, texture_index));
 					}
 				}
@@ -149,15 +147,15 @@ namespace ZJVL
 				while (entity_dir - player.angle < -M_PI)
 					entity_dir += 2 * M_PI;
 
-				size_t entity_size = std::min(1000, static_cast<int>(framebuffer.h / entity.dist));
+				size_t entity_size = std::min(1000, static_cast<int>(texture.h / entity.dist));
 
 				// Kind of like when drawing the wall. Gets the upper left coordinates of the entity to draw
-				int w_offset = (entity_dir - player.angle) * (framebuffer.w / 2) / (player.fov) + (framebuffer.w / 2) / 2 - entity_size / 2;
-				int h_offset = (framebuffer.h / 2) - (entity_size / 2);
+				int w_offset = (entity_dir - player.angle) * (texture.w / 2) / (player.fov) + (texture.w / 2) / 2 - entity_size / 2;
+				int h_offset = (texture.h / 2) - (entity_size / 2);
 
 				for (size_t i = 0; i < entity_size; i++)
 				{
-					if (w_offset + int(i) < 0 || w_offset + i >= framebuffer.w / 2)
+					if (w_offset + int(i) < 0 || w_offset + i >= texture.w / 2)
 						continue;
 
 					// Don't draw the entity if it is behind a wall
@@ -172,7 +170,7 @@ namespace ZJVL
 						if (is_transparent_pixel(column[curr_height]))
 							continue;
 
-						set_pixel(framebuffer.w / 2 + w_offset + i, (framebuffer.h / 2) - (entity_size / 2) + curr_height, column[curr_height]);
+						set_pixel(texture.w / 2 + w_offset + i, (texture.h / 2) - (entity_size / 2) + curr_height, column[curr_height]);
 					}
 				}
 			}
@@ -180,11 +178,11 @@ namespace ZJVL
 			void cast_ray()
 			{
 				// window_w so we can render the whole screen width
-				for (std::size_t i = 0; i < framebuffer.w / 2; i++)
+				for (std::size_t i = 0; i < texture.w / 2; i++)
 				{
 					// fov * i / float(window_w / 2) increasingly gives higher value until it reaches 100% of fov, so that we can actually rotate the ray
 					// curr_angle is the current viewing point, directly ahead. fov / 2 is setting the current view to render to be the left peripheral
-					float curr_angle = player.angle - player.fov / 2 + player.fov * i / float(framebuffer.w / 2);
+					float curr_angle = player.angle - player.fov / 2 + player.fov * i / float(texture.w / 2);
 					// std::cout << player.angle << std::endl;
 
 					// soh cah toa
@@ -215,7 +213,7 @@ namespace ZJVL
 							// http://www.permadi.com/tutorial/raycast/rayc4.html
 							// float bb = (h * cos(curr_angle - player.angle));
 							// Wall_height is too big...?
-							std::size_t wall_height = framebuffer.h / (h * cos(curr_angle - player.angle));
+							std::size_t wall_height = texture.h / (h * cos(curr_angle - player.angle));
 							std::size_t texture_index = map.get(view_y, view_x);
 
 							// Count texture pixels
@@ -241,8 +239,8 @@ namespace ZJVL
 
 							for (int curr_height = 0; curr_height < column.size(); curr_height++)
 							{
-								// std::size_t aa = (framebuffer.h / 2) - (wall_height / 2) + curr_height;
-								set_pixel(framebuffer.w / 2 + i, (framebuffer.h / 2) - (wall_height / 2) + curr_height, column[curr_height]);
+								// std::size_t aa = (texture.h / 2) - (wall_height / 2) + curr_height;
+								set_pixel(texture.w / 2 + i, (texture.h / 2) - (wall_height / 2) + curr_height, column[curr_height]);
 							}
 							break;
 						}
@@ -252,17 +250,17 @@ namespace ZJVL
 
 			// Referenced https://github.com/ssloy/tinyraycaster
 			// TODO: Switch to DDA Algorithm for casting rays
-			void render()
+			void render_raycast()
 			{
 				// Clear and reset framebuffer image to white
 				clear(pack_color(255, 255, 255));
 
 				// Size of blocks on the map (wall, etc)
-				rect_w = (framebuffer.w / 2) / map.w;
-				rect_h = framebuffer.h / map.h;
+				rect_w = (texture.w / 2) / map.w;
+				rect_h = texture.h / map.h;
 
 				// Depth map of the walls
-				depth_buffer = std::vector<float>(framebuffer.w / 2, 1e3);
+				depth_buffer = std::vector<float>(texture.w / 2, 1e3);
 
 				draw_map();
 
@@ -291,8 +289,8 @@ namespace ZJVL
 
 			void set_pixel(const std::size_t x, const std::size_t y, const std::uint32_t color)
 			{
-				if (framebuffer.img.size() == framebuffer.w * framebuffer.h && x < framebuffer.w && y < framebuffer.h)
-					framebuffer.img[x + y * framebuffer.w] = color;
+				if (pixel_buffer.size() == texture.w * texture.h && x < texture.w && y < texture.h)
+					pixel_buffer[x + y * texture.w] = color;
 			}
 
 			void draw_rectangle(const std::size_t rect_x, const std::size_t rect_y, const std::size_t rect_w, const std::size_t rect_h, const std::uint32_t color)
@@ -309,7 +307,7 @@ namespace ZJVL
 						std::size_t y = rect_y + curr_h;
 
 						// Draw only what fits - do we need this?
-						if (x < framebuffer.w && y < framebuffer.h)
+						if (x < texture.w && y < texture.h)
 							set_pixel(x, y, color);
 					}
 				}
@@ -318,7 +316,7 @@ namespace ZJVL
 			void clear(const std::uint32_t color)
 			{
 				// Create a vector of size window_w * window_h with color.
-				framebuffer.img = std::vector<std::uint32_t>(framebuffer.w * framebuffer.h, color);
+				pixel_buffer = std::vector<std::uint32_t>(texture.w * texture.h, color);
 			}
 
 			bool is_transparent_pixel(const uint32_t &color)

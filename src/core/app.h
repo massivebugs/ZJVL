@@ -16,32 +16,26 @@ namespace ZJVL
 		{
 		public:
 			static App *instance();
-
+			bool init();
 			int run();
 
 			Scene::SceneManager scene_manager;
 			Asset::AssetCache asset_cache;
 			InputSystem input_system;
-
 			SDL_Renderer *renderer;
+
+			const char *name;
+			int window_w, window_h;
 
 		private:
 			App();
-			App(const char *app_name, int win_w, int win_h);
 
-			const char *m_app_name;
-			int m_win_w, m_win_h;
 			bool m_running;
-
 			std::uint32_t m_dt;
 			std::uint32_t m_fps;
 
 			SDL_Window *m_window;
 			SDL_Event m_event;
-
-			int execute();
-
-			bool init();
 
 			void update();
 

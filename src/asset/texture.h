@@ -5,6 +5,7 @@
 #include "asset.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include "core/app.h"
 
 namespace ZJVL
 {
@@ -13,29 +14,28 @@ namespace ZJVL
 		class Texture : public Asset
 		{
 		public:
-			Texture(int w, int h, SDL_Renderer *renderer)
+			Texture(int w, int h) : w(w), h(h)
 			{
-				data = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, w, h);
+				data = SDL_CreateTexture(Core::App::instance()->renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, w, h);
+
+				if (data == nullptr)
+				{
+					std::cout << "Failed to load texture data . SDL_ERROR: " << SDL_GetError() << std::endl;
+					return;
+				}
 			}
 
-			Texture(std::string path, SDL_Renderer *renderer)
+			Texture(std::string path)
 			{
-				SDL_Surface *temp = nullptr;
+				data = IMG_LoadTexture(Core::App::instance()->renderer, path.c_str());
 
-				temp = IMG_Load(path.c_str());
-
-				if (temp == nullptr)
+				if (data == nullptr)
 				{
 					std::cout << "Failed to load texture data . SDL_ERROR: " << SDL_GetError() << std::endl;
 					return;
 				}
 
-				data = SDL_CreateTextureFromSurface(renderer, temp);
-
-				if (data == nullptr)
-					std::cout << "Failed to load texture data . SDL_ERROR: " << SDL_GetError() << std::endl;
-
-				SDL_FreeSurface(temp);
+				SDL_QueryTexture(data, nullptr, nullptr, &w, &h);
 			}
 
 			~Texture()
@@ -43,21 +43,26 @@ namespace ZJVL
 				SDL_DestroyTexture(data);
 			}
 
-			void lock() {
+			void lock()
+			{
 				// TODO: Change
-				void* temp_pixels;
+				void *temp_pixels;
 				// TODO: Error handling
 				SDL_LockTexture(data, NULL, &temp_pixels, &pitch);
-				pixels = (std::uint32_t *) temp_pixels;
+				pixels = (std::uint32_t *)temp_pixels;
 			}
 
-			void unlock() {
+			void unlock()
+			{
 				SDL_UnlockTexture(data);
 				pixels = nullptr;
 				pitch = 0;
 			}
 
 			SDL_Texture *data = nullptr;
+			int w, h;
+
+			// Probably unused
 			std::uint32_t *pixels;
 			int pitch;
 		};
