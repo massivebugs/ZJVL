@@ -18,6 +18,11 @@ namespace ZJVL
 		class GameScene : public Scene
 		{
 		public:
+			GameScene()
+			{
+				std::cout << "Creating Game Scene" << std::endl;
+			}
+
 			void load() override
 			{
 				std::cout << "Loading Game Scene" << std::endl;

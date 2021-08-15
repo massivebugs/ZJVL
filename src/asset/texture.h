@@ -43,6 +43,16 @@ namespace ZJVL
 				SDL_DestroyTexture(data);
 			}
 
+			void set_blending(SDL_BlendMode blending = SDL_BLENDMODE_BLEND)
+			{
+				SDL_SetTextureBlendMode(data, blending);
+			};
+
+			void set_alpha(std::uint8_t a)
+			{
+				SDL_SetTextureAlphaMod(data, a);
+			}
+
 			void lock()
 			{
 				// TODO: Change

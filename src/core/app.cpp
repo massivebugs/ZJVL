@@ -35,7 +35,7 @@ namespace ZJVL
 				return false;
 			}
 
-			if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
+			if (!(IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG) & (IMG_INIT_JPG | IMG_INIT_PNG)))
 			{
 				std::cout << "Failed to initialize SDL_image. SDL ERROR: " << SDL_GetError() << std::endl;
 				return false;
@@ -47,7 +47,8 @@ namespace ZJVL
 			    SDL_WINDOWPOS_CENTERED,
 			    window_w,
 			    window_h,
-			    SDL_WINDOW_FULLSCREEN_DESKTOP);
+			    0 & SDL_WINDOW_FULLSCREEN_DESKTOP);
+			// TODO: Create settings for full screens
 
 			if (m_window == nullptr)
 			{

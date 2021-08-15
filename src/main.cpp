@@ -10,8 +10,8 @@ int main(int argc, char *argv[])
 {
 	ZJVL::Core::App *app = ZJVL::Core::App::instance();
 	app->name = "Test Game";
-	app->window_w = 1920;
-	app->window_h = 1080;
+	app->window_w = 1024;
+	app->window_h = 512;
 
 	// The application return code
 	int code = 0;
@@ -19,12 +19,22 @@ int main(int argc, char *argv[])
 	if (app->init())
 	{
 		// ========= Game logic ========= //
-		// auto splash_scene = std::make_shared<ZJVL::Scene::SplashScene>();
-		// splash_scene->texture = app->asset_cache.get<ZJVL::Asset::Texture>("assets/splash_zjvl.png");
-		// splash_scene->display_ms = 1000;
 
+		// Splash Scene
+		auto splash_scene = std::make_shared<ZJVL::Scene::SplashScene>();
+		splash_scene->texture = app->asset_cache.get<ZJVL::Asset::Texture>("assets/first_splash.jpg");
+		splash_scene->display_ms = 3000;
+		splash_scene->next_scene_id = "game";
+		splash_scene->set_fading(500, 500);
+
+		// Game Scene
 		auto game_scene = std::make_shared<ZJVL::Scene::GameScene>();
-		app->scene_manager.change_to(game_scene);
+
+		// Register to Scene Manger
+		app->scene_manager.add("splash", splash_scene);
+		app->scene_manager.add("game", game_scene);
+
+		app->scene_manager.show("splash");
 
 		code = app->run();
 	} else {
