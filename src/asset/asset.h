@@ -3,14 +3,11 @@
 
 namespace ZJVL
 {
-	namespace Asset
+	class Asset
 	{
-		class Asset
-		{
-		public:
-			virtual ~Asset() = default;
-		};
-	}
+	public:
+		virtual ~Asset() = default;
+	};
 }
 
 #endif

@@ -10,40 +10,37 @@
 
 namespace ZJVL
 {
-	namespace Core
+	class App : public Subject
 	{
-		class App : public Event::Subject
-		{
-		public:
-			static App *instance();
-			bool init();
-			int run();
+	public:
+		static App *instance();
+		bool init();
+		int run();
 
-			Scene::SceneManager scene_manager;
-			Asset::AssetCache asset_cache;
-			InputSystem input_system;
-			SDL_Renderer *renderer;
+		SceneManager scene_manager;
+		AssetCache asset_cache;
+		InputSystem input_system;
+		SDL_Renderer *renderer;
 
-			const char *name;
-			int window_w, window_h;
+		const char *name;
+		int window_w, window_h;
 
-		private:
-			App();
+	private:
+		App();
 
-			bool m_running;
-			std::uint32_t m_dt;
-			std::uint32_t m_fps;
+		bool m_running;
+		std::uint32_t m_dt;
+		std::uint32_t m_fps;
 
-			SDL_Window *m_window;
-			SDL_Event m_event;
+		SDL_Window *m_window;
+		SDL_Event m_event;
 
-			void update();
+		void update();
 
-			void render();
+		void render();
 
-			void cleanup();
-		};
-	}
+		void cleanup();
+	};
 }
 
 #endif

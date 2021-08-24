@@ -3,7 +3,5 @@ main.exe.stackdump
 bin/debug/*.exe
 bin/debug/assets
 bin/release/*.exe
-assets/splash_zjvl.png
-installing_sdl2.txt
+bin/release/assets
 notes
-project_notes

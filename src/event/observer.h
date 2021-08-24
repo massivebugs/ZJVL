@@ -5,15 +5,12 @@
 
 namespace ZJVL
 {
-	namespace Event
+	class Observer
 	{
-		class Observer
-		{
-		public:
-			virtual ~Observer(){};
-			virtual void on_notify(Event &e) = 0;
-		};
-	}
+	public:
+		virtual ~Observer(){};
+		virtual void on_notify(Event &e) = 0;
+	};
 }
 
 #endif

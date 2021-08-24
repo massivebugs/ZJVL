@@ -6,36 +6,33 @@
 
 namespace ZJVL
 {
-	namespace Core
+	class Timer
 	{
-		class Timer
+	public:
+		Timer()
 		{
-		public:
-			Timer()
-			{
-				reset_duration();
-			};
-
-			std::uint32_t get_time()
-			{
-				return SDL_GetTicks();
-			};
-
-			std::uint32_t get_duration()
-			{
-
-				return get_time() - m_duration_start;
-			};
-
-			void reset_duration()
-			{
-				m_duration_start = get_time();
-			};
-
-		private:
-			std::uint32_t m_duration_start;
+			reset_duration();
 		};
-	}
+
+		std::uint32_t get_time()
+		{
+			return SDL_GetTicks();
+		};
+
+		std::uint32_t get_duration()
+		{
+
+			return get_time() - m_duration_start;
+		};
+
+		void reset_duration()
+		{
+			m_duration_start = get_time();
+		};
+
+	private:
+		std::uint32_t m_duration_start;
+	};
 }
 
 #endif

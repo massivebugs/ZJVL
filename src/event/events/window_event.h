@@ -4,17 +4,16 @@
 
 namespace ZJVL
 {
-	namespace Event
+	class WindowEvent : public Event
 	{
-		class WindowEvent: public Event {
-		};
+	};
 
-		class WindowCloseEvent: public WindowEvent {
-			EventType get_type() const override
-			{
-				return EventType::WINDOW_QUIT;
-			}
-		};
-	}
+	class WindowCloseEvent : public WindowEvent
+	{
+		EventType get_type() const override
+		{
+			return EventType::WINDOW_QUIT;
+		}
+	};
 }
 #endif

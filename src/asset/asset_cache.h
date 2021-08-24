@@ -6,39 +6,37 @@
 
 namespace ZJVL
 {
-	namespace Asset
+	class AssetCache
 	{
-		class AssetCache
+	public:
+		template <typename T>
+		std::shared_ptr<T> get(std::string path)
 		{
-		public:
-			template <typename T>
-			std::shared_ptr<T> get(std::string path)
+			std::shared_ptr<T> asset;
+
+			if (!has(path))
 			{
-				std::shared_ptr<T> asset;
+				asset = std::make_shared<T>(path);
+				m_assets[path] = asset;
+			}
 
-				if (!has(path)) {
-					asset = std::make_shared<T>(path);
-					m_assets[path] = asset;
-				}
-
-				return asset;
-			};
-
-			bool has(std::string path)
-			{
-				return (m_assets.find(path) == m_assets.end()) == false;
-			};
-
-			void remove(std::string path)
-			{
-				if (has(path))
-					m_assets.erase(path);
-			};
-
-		private:
-			std::unordered_map<std::string, std::shared_ptr<Asset>> m_assets;
+			return asset;
 		};
-	}
+
+		bool has(std::string path)
+		{
+			return (m_assets.find(path) == m_assets.end()) == false;
+		};
+
+		void remove(std::string path)
+		{
+			if (has(path))
+				m_assets.erase(path);
+		};
+
+	private:
+		std::unordered_map<std::string, std::shared_ptr<Asset>> m_assets;
+	};
 }
 
 #endif
