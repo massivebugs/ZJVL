@@ -1,5 +1,6 @@
 main.exe.stackdump
 *.code-workspace
+assets/*
 bin/debug/*.exe
 bin/debug/assets
 bin/release/*.exe

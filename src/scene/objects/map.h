@@ -14,10 +14,11 @@ namespace ZJVL
     class Map : public GameObject
     {
     public:
-        Map(std::string name, Vec2 vec2, std::size_t w, std::size_t h, std::string sprite_sheet);
+        Map(std::string name, std::string sprite_sheet, Vec2 pos, std::size_t w, std::size_t h);
 
         bool create() override;
         virtual void update(std::uint32_t dt) override;
+        // TODO: Render to texture
         virtual void render(SDL_Renderer *renderer) override;
         void destroy() override;
         void on_notify(Event &e) override;

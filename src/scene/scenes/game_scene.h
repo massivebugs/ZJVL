@@ -48,10 +48,9 @@ namespace ZJVL
 	public:
 		// TODO:
 		Texture texture = Texture(App::instance()->window_w, App::instance()->window_h);
-		Map map = Map("Test Map", Vec2(), 16, 16, "assets/walltext.png");
+		Map map = Map("Test Map", "assets/walltext.png", Vec2(), 16, 16);
 		Player player{3.456, 2.345, 1.523, M_PI / 3.f};
-		std::vector<Entity> entities = std::vector<Entity>{{3.523, 3.812, 2}, {1.834, 8.765, 0}, {5.323, 5.365, 1}, {4.123, 10.265, 2}};
-		// Asset::SpriteSheet wall_tex = Asset::SpriteSheet("assets/walltext.png");
+		std::vector<Entity> entities = std::vector<Entity>{{3.523, 3.812, 0}, {1.834, 8.765, 0}, {5.323, 5.365, 0}, {4.123, 10.265, 0}};
 		SpriteSheet entities_tex = SpriteSheet("assets/monsters.png");
 		std::vector<std::uint32_t> pixel_buffer;
 		std::size_t rect_w;

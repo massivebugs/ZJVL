@@ -11,13 +11,11 @@ namespace ZJVL
 	class GameObject : public Observer
 	{
 	public:
-		GameObject(Vec2 vec2, std::size_t w, std::size_t h)
-		    : vec2(vec2),
-		      w(w),
-		      h(h){};
+		GameObject() : w(0), h(0){};
+		GameObject(Vec2 pos, std::size_t w, std::size_t h) : pos(pos), w(w), h(h){};
 		virtual ~GameObject() = default;
 
-		Vec2 vec2;
+		Vec2 pos;
 		std::size_t w, h;
 
 		virtual bool create() = 0;

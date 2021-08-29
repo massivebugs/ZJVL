@@ -11,11 +11,11 @@ namespace ZJVL
 	class Actor : public GameObject
 	{
 	public:
-		Actor(Vec2 vec2);
+		Actor(Vec2 pos);
 		virtual ~Actor() = default;
 
 		float angle, fov;
-		std::size_t texture_index; // TODO: Change to Texture
+		std::size_t texture_index; // TODO: Change to Texture or Animation
 
 		virtual bool create() = 0;
 		virtual void update(std::uint32_t dt) = 0;

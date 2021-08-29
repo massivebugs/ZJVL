@@ -7,8 +7,8 @@
 
 namespace ZJVL
 {
-    Map::Map(std::string name, Vec2 vec2, std::size_t w, std::size_t h, std::string sprite_sheet)
-        : GameObject(vec2, w, h),
+    Map::Map(std::string name, std::string sprite_sheet, Vec2 pos, std::size_t w, std::size_t h)
+        : GameObject(pos, w, h),
           name(name),
           sprite_sheet_path(sprite_sheet){};
 
