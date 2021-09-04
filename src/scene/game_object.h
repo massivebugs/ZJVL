@@ -3,27 +3,29 @@
 
 #include "all.h"
 #include <SDL2/SDL.h>
-#include "event/observer.h"
 #include "core/vec2.h"
+#include "event/observer.h"
+#include "scene.h"
 
 namespace ZJVL
 {
 	class GameObject : public Observer
 	{
-	public:
+	protected:
 		GameObject() : w(0), h(0){};
-		GameObject(Vec2 pos, std::size_t w, std::size_t h) : pos(pos), w(w), h(h){};
+		GameObject(std::size_t w, std::size_t h, Vec2 pos) : pos(pos), w(w), h(h){};
+
+	public:
 		virtual ~GameObject() = default;
 
-		Vec2 pos;
-		std::size_t w, h;
-
-		virtual bool create() = 0;
+		virtual bool create(const Scene &scene) = 0;
 		virtual void update(std::uint32_t dt) = 0;
 		virtual void render(SDL_Renderer *renderer) = 0;
 		virtual void destroy() = 0;
-
 		virtual void on_notify(Event &e) = 0;
+
+		Vec2 pos;
+		std::size_t w, h;
 	};
 }
 

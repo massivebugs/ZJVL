@@ -1,38 +1,42 @@
-#ifndef ZJVL_SCENE_MAP_H
-#define ZJVL_SCENE_MAP_H
+#ifndef ZJVL_SCENE_GAMEMAP_H
+#define ZJVL_SCENE_GAMEMAP_H
 
 #include "all.h"
 #include <SDL2/SDL.h>
+#include "core/vec2.h"
+#include "scene/game_object.h"
+#include "scene/scene.h"
+#include "event/event.h"
 #include "asset/assets/sprite_sheet.h"
 #include "asset/assets/texture.h"
-#include "scene/game_object.h"
-#include "event/event.h"
-#include "core/vec2.h"
 
 namespace ZJVL
 {
-    class Map : public GameObject
+    class GameMap : public GameObject
     {
     public:
-        Map(std::string name, std::string sprite_sheet, Vec2 pos, std::size_t w, std::size_t h);
+        GameMap(std::string sprite_sheet);
 
-        bool create() override;
+        virtual bool create(const Scene& scene) override;
         virtual void update(std::uint32_t dt) override;
-        // TODO: Render to texture
         virtual void render(SDL_Renderer *renderer) override;
-        void destroy() override;
-        void on_notify(Event &e) override;
+        virtual void destroy() override;
+        virtual void on_notify(Event &e) override;
 
         int get_sprite_index(const std::size_t row, const std::size_t col);
 
         bool is_empty(const std::size_t row, const std::size_t col);
 
     public:
-        // TODO: For now, size of map, default is 16 for each
-        std::string name;
         std::string sprite_sheet_path;
         std::unique_ptr<SpriteSheet> wall_sprites;
         std::unique_ptr<Texture> texture;
+
+        // TODO
+        std::vector<std::uint8_t> properties;
+        std::vector<std::uint32_t> sprites;
+
+        bool toggled = true;
 
         const char map[16 * 16 + 1] = "0000222222220000"
                                       "1              0"
@@ -51,8 +55,6 @@ namespace ZJVL
                                       "0              0"
                                       "0002222222200000";
         std::size_t x_tiles = 16, y_tiles = 16;
-
-        bool show = true;
     };
 }
 

@@ -1,18 +1,17 @@
 #include "all.h"
-#include "map.h"
+#include "game_map.h"
 #include "scene/game_object.h"
+#include "scene/scene.h"
 #include "asset/assets/sprite_sheet.h"
 #include "event/event.h"
 #include "core/vec2.h"
 
 namespace ZJVL
 {
-    Map::Map(std::string name, std::string sprite_sheet, Vec2 pos, std::size_t w, std::size_t h)
-        : GameObject(pos, w, h),
-          name(name),
-          sprite_sheet_path(sprite_sheet){};
+    GameMap::GameMap(std::string sprite_sheet)
+        : sprite_sheet_path(sprite_sheet){};
 
-    bool Map::create()
+    bool GameMap::create(const Scene& scene)
     {
         assert(sizeof(map) == x_tiles * y_tiles + 1); // + 1 for null terminated string
         wall_sprites = std::make_unique<SpriteSheet>(sprite_sheet_path);
@@ -27,9 +26,9 @@ namespace ZJVL
         return true;
     };
 
-    void Map::update(std::uint32_t dt){};
+    void GameMap::update(std::uint32_t dt){};
 
-    void Map::render(SDL_Renderer *renderer)
+    void GameMap::render(SDL_Renderer *renderer)
     {
         // std::size_t rect_w = w / x_tiles;
         // std::size_t rect_h = h / y_tiles;
@@ -56,24 +55,24 @@ namespace ZJVL
         // }
     };
 
-    void Map::destroy()
+    void GameMap::destroy()
     {
         wall_sprites.reset();
         texture.reset();
     };
 
-    void Map::on_notify(Event &e)
+    void GameMap::on_notify(Event &e)
     {
         // Show like a pin on a map or smth
     }
 
-    int Map::get_sprite_index(const std::size_t row, const std::size_t col)
+    int GameMap::get_sprite_index(const std::size_t row, const std::size_t col)
     {
         assert(row < y_tiles && col < x_tiles && sizeof(map) == x_tiles * y_tiles + 1);
         return map[col + row * x_tiles] - '0';
     }
 
-    bool Map::is_empty(const std::size_t row, const std::size_t col)
+    bool GameMap::is_empty(const std::size_t row, const std::size_t col)
     {
         assert(row < h && col < x_tiles && sizeof(map) == x_tiles * y_tiles + 1);
         return map[col + row * x_tiles] == ' ';

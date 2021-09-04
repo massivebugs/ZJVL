@@ -5,7 +5,7 @@
 #include <SDL2/SDL.h>
 #include "core/app.h"
 #include "scene/scene.h"
-#include "scene/objects/map.h"
+#include "scene/objects/game_map.h"
 #include "scene/objects/player.h"
 #include "scene/entity.h"
 #include "asset/assets/texture.h"
@@ -17,7 +17,7 @@ namespace ZJVL
 	class GameScene : public Scene
 	{
 	public:
-		GameScene()
+		GameScene(std::shared_ptr<GameMap> map) : map(map)
 		{
 			std::cout << "Creating Game Scene" << std::endl;
 		}
@@ -26,14 +26,14 @@ namespace ZJVL
 		{
 			std::cout << "Loading Game Scene" << std::endl;
 			App::instance()->input_system.add_observer(&player);
-			map.create();
+			map->create(*this);
 		}
 
 		void unload() override
 		{
 			std::cout << "Loading Game Scene" << std::endl;
 			App::instance()->input_system.remove_observer(&player);
-			map.destroy();
+			map->destroy();
 		}
 
 		void update(std::uint32_t dt) override {}
@@ -48,7 +48,7 @@ namespace ZJVL
 	public:
 		// TODO:
 		Texture texture = Texture(App::instance()->window_w, App::instance()->window_h);
-		Map map = Map("Test Map", "assets/walltext.png", Vec2(), 16, 16);
+		std::shared_ptr<GameMap> map;
 		Player player{3.456, 2.345, 1.523, M_PI / 3.f};
 		std::vector<Entity> entities = std::vector<Entity>{{3.523, 3.812, 0}, {1.834, 8.765, 0}, {5.323, 5.365, 0}, {4.123, 10.265, 0}};
 		SpriteSheet entities_tex = SpriteSheet("assets/monsters.png");
@@ -116,12 +116,12 @@ namespace ZJVL
 
 		void draw_map()
 		{
-			for (std::size_t row = 0; row < map.y_tiles; row++)
+			for (std::size_t row = 0; row < map->y_tiles; row++)
 			{
-				for (std::size_t col = 0; col < map.x_tiles; col++)
+				for (std::size_t col = 0; col < map->x_tiles; col++)
 				{
 					// Do nothing with empty spaces on the map
-					if (map.is_empty(row, col))
+					if (map->is_empty(row, col))
 						continue;
 
 					// position of the part we are drawing
@@ -129,11 +129,11 @@ namespace ZJVL
 					std::size_t rect_y = row * rect_h;
 					std::size_t rect_x = col * rect_w;
 
-					std::size_t texture_index = map.get_sprite_index(row, col);
-					assert(texture_index < map.wall_sprites->count);
+					std::size_t texture_index = map->get_sprite_index(row, col);
+					assert(texture_index < map->wall_sprites->count);
 
 					// Upper left pixel color
-					draw_rectangle(rect_x, rect_y, rect_w, rect_h, map.wall_sprites->get(0, 0, texture_index));
+					draw_rectangle(rect_x, rect_y, rect_w, rect_h, map->wall_sprites->get(0, 0, texture_index));
 				}
 			}
 		}
@@ -210,7 +210,7 @@ namespace ZJVL
 					// std::cout << view_x << ':' << view_y << std::endl;
 
 					// Ray is touching a wall
-					if (map.is_empty(view_y, view_x) == false)
+					if (map->is_empty(view_y, view_x) == false)
 					{
 						// Store the depth of the map
 						depth_buffer[i] = h;
@@ -219,7 +219,7 @@ namespace ZJVL
 						// float bb = (h * cos(curr_angle - player.angle));
 						// Wall_height is too big...?
 						std::size_t wall_height = texture.h / (h * cos(curr_angle - player.angle));
-						std::size_t texture_index = map.get_sprite_index(view_y, view_x);
+						std::size_t texture_index = map->get_sprite_index(view_y, view_x);
 
 						// Count texture pixels
 						float hit;
@@ -236,11 +236,11 @@ namespace ZJVL
 							hit = view_y - (int)view_y;
 						}
 						// The current column of the texture we need to extract pixels from
-						int texture_col = map.wall_sprites->size * hit;
+						int texture_col = map->wall_sprites->size * hit;
 
-						assert(texture_col < map.wall_sprites->size);
+						assert(texture_col < map->wall_sprites->size);
 
-						std::vector<uint32_t> column = map.wall_sprites->get_scaled_column(texture_index, texture_col, wall_height);
+						std::vector<uint32_t> column = map->wall_sprites->get_scaled_column(texture_index, texture_col, wall_height);
 
 						for (int curr_height = 0; curr_height < column.size(); curr_height++)
 						{
@@ -261,8 +261,8 @@ namespace ZJVL
 			clear(pack_color(255, 255, 255));
 
 			// Size of blocks on the map (wall, etc)
-			rect_w = (texture.w / 2) / map.x_tiles;
-			rect_h = texture.h / map.y_tiles;
+			rect_w = (texture.w / 2) / map->x_tiles;
+			rect_h = texture.h / map->y_tiles;
 
 			// Depth map of the walls
 			depth_buffer = std::vector<float>(texture.w / 2, 1e3);
