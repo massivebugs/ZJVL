@@ -13,10 +13,7 @@ namespace ZJVL
 	}
 
 	App::App()
-	    : name("ZJVL"),
-	      window_w(1920),
-	      window_h(1080),
-	      m_dt(0),
+	    : m_dt(0),
 	      m_fps(0),
 	      m_running(false),
 	      m_window(nullptr),
@@ -25,8 +22,12 @@ namespace ZJVL
 		std::cout << "Creating App instance" << std::endl;
 	}
 
-	bool App::init()
+	bool App::init(const std::string &name, int window_w, int window_h)
 	{
+		this->name = name;
+		this->window_w = window_w;
+		this->window_h = window_h;
+
 		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
 		{
 			std::cout << "Failed to initialize SDL. SDL ERROR: " << SDL_GetError() << std::endl;
@@ -40,7 +41,7 @@ namespace ZJVL
 		}
 
 		m_window = SDL_CreateWindow(
-		    name,
+		    name.c_str(),
 		    SDL_WINDOWPOS_CENTERED,
 		    SDL_WINDOWPOS_CENTERED,
 		    window_w,
@@ -64,7 +65,7 @@ namespace ZJVL
 		SDL_UpdateWindowSurface(m_window);
 
 		input_system.init();
-		scene_manager.init(renderer);
+		scene_manager.init(renderer, window_w, window_h);
 
 		return true;
 	}

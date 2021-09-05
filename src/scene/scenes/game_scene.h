@@ -17,7 +17,9 @@ namespace ZJVL
 	class GameScene : public Scene
 	{
 	public:
-		GameScene(std::shared_ptr<GameMap> map) : map(map)
+		GameScene(std::shared_ptr<GameMap> map)
+		    : texture(Texture(App::instance()->window_w, App::instance()->window_h)),
+		      map(map)
 		{
 			std::cout << "Creating Game Scene" << std::endl;
 		}
@@ -47,7 +49,7 @@ namespace ZJVL
 
 	public:
 		// TODO:
-		Texture texture = Texture(App::instance()->window_w, App::instance()->window_h);
+		Texture texture;
 		std::shared_ptr<GameMap> map;
 		Player player{3.456, 2.345, 1.523, M_PI / 3.f};
 		std::vector<Entity> entities = std::vector<Entity>{{3.523, 3.812, 0}, {1.834, 8.765, 0}, {5.323, 5.365, 0}, {4.123, 10.265, 0}};

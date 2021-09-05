@@ -10,7 +10,7 @@ namespace ZJVL
 	class SceneManager
 	{
 	public:
-		void init(SDL_Renderer *renderer)
+		void init(SDL_Renderer *renderer, int window_w, int window_h)
 		{
 			m_renderer = renderer;
 		}

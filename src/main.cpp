@@ -4,21 +4,17 @@
 #include "scene/scenes/splash_scene.h"
 #include "scene/scenes/game_scene.h"
 #include "scene/objects/game_map.h"
-#include "asset/assets/texture.h"
 
 // Create the app instance, init() and call run() to execute the game loop.
 // Arguments and the return statement are required for compatibility with SDL
 int main(int argc, char *argv[])
 {
 	ZJVL::App *app = ZJVL::App::instance();
-	app->name = "ZJVL Raycaster";
-	app->window_w = 1024;
-	app->window_h = 512;
 
 	// The application return code
 	int code = 0;
 
-	if (app->init())
+	if (app->init("ZJVL Raycaster", 1024, 512))
 	{
 		// ========= Game logic ========= //
 

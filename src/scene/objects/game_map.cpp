@@ -21,7 +21,7 @@ namespace ZJVL
             return false;
         }
 
-        texture = std::make_unique<Texture>(x_tiles, y_tiles);
+        // texture = std::make_unique<Texture>(x_tiles, y_tiles);
 
         return true;
     };
@@ -58,7 +58,7 @@ namespace ZJVL
     void GameMap::destroy()
     {
         wall_sprites.reset();
-        texture.reset();
+        // texture.reset();
     };
 
     void GameMap::on_notify(Event &e)

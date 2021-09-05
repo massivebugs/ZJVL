@@ -8,7 +8,7 @@
 #include "scene/scene.h"
 #include "event/event.h"
 #include "asset/assets/sprite_sheet.h"
-#include "asset/assets/texture.h"
+// #include "asset/assets/texture.h"
 
 namespace ZJVL
 {
@@ -30,13 +30,13 @@ namespace ZJVL
     public:
         std::string sprite_sheet_path;
         std::unique_ptr<SpriteSheet> wall_sprites;
-        std::unique_ptr<Texture> texture;
+        // std::unique_ptr<Texture> texture;
 
         // TODO
-        std::vector<std::uint8_t> properties;
-        std::vector<std::uint32_t> sprites;
+        // std::vector<std::uint8_t> properties;
+        // std::vector<std::uint32_t> sprites;
 
-        bool toggled = true;
+        // bool toggled = true;
 
         const char map[16 * 16 + 1] = "0000222222220000"
                                       "1              0"

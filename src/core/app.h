@@ -14,7 +14,7 @@ namespace ZJVL
 	{
 	public:
 		static App *instance();
-		bool init();
+		bool init(const std::string &name = "ZJVL", int window_w = 1920, int window_h = 1080);
 		int run();
 
 		SceneManager scene_manager;
@@ -22,7 +22,7 @@ namespace ZJVL
 		InputSystem input_system;
 		SDL_Renderer *renderer;
 
-		const char *name;
+		std::string name;
 		int window_w, window_h;
 
 	private:

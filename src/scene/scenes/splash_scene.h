@@ -35,31 +35,11 @@ namespace ZJVL
 		{
 			m_shown_ms += dt;
 
-			if (m_fade)
-			{
-				// Fade in
-				if (m_shown_ms < m_fade_in_ms)
-				{
-					texture.set_alpha(255 * ((float)m_shown_ms / m_fade_in_ms));
-				}
-
-				// Fade out
-				else if (display_ms - m_shown_ms < m_fade_out_ms)
-				{
-					texture.set_alpha(255 * ((float)(display_ms - m_shown_ms) / m_fade_out_ms));
-				}
-
-				else
-				{
-					texture.set_alpha(m_shown_ms <= display_ms ? 255 : 0);
-				}
-			}
+			fade(dt);
 
 			// Switch to next scene on timeout
 			if (m_shown_ms >= display_ms && next_scene_id.empty() == false)
-			{
 				App::instance()->scene_manager.show(next_scene_id);
-			}
 		}
 
 		void render(SDL_Renderer *renderer) override
@@ -82,10 +62,34 @@ namespace ZJVL
 		std::string next_scene_id;
 
 	private:
-		bool m_fade = false;
 		std::uint32_t m_shown_ms;
+
+		bool m_fade = false;
 		std::uint32_t m_fade_in_ms;
 		std::uint32_t m_fade_out_ms;
+
+		void fade(std::uint32_t dt)
+		{
+			if (m_fade)
+			{
+				// Fade in
+				if (m_shown_ms < m_fade_in_ms)
+				{
+					texture.set_alpha(255 * ((float)m_shown_ms / m_fade_in_ms));
+				}
+
+				// Fade out
+				else if (display_ms - m_shown_ms < m_fade_out_ms)
+				{
+					texture.set_alpha(255 * ((float)(display_ms - m_shown_ms) / m_fade_out_ms));
+				}
+
+				else
+				{
+					texture.set_alpha(m_shown_ms <= display_ms ? 255 : 0);
+				}
+			}
+		}
 	};
 }
 
