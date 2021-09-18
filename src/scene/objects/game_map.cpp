@@ -11,31 +11,22 @@ namespace ZJVL
     GameMap::GameMap(std::string sprite_sheet)
         : sprite_sheet_path(sprite_sheet){};
 
-    bool GameMap::create(const Scene& scene)
+    bool GameMap::create(const Scene &scene)
     {
-        assert(sizeof(map) == x_tiles * y_tiles + 1); // + 1 for null terminated string
+        assert(map_data.size() == w * h); // + 1 for null terminated string
         wall_sprites = std::make_unique<SpriteSheet>(sprite_sheet_path);
-
-        if (wall_sprites->buffer.empty())
-        {
-            return false;
-        }
-
-        // texture = std::make_unique<Texture>(x_tiles, y_tiles);
-
-        return true;
+        return !wall_sprites->buffer.empty();
     };
 
-    void GameMap::update(std::uint32_t dt){};
+    void GameMap::update(std::uint32_t dt){
+        // std::cout << "On Map Update: " << scene->texture.w << std::endl;
+    };
 
     void GameMap::render(SDL_Renderer *renderer)
     {
-        // std::size_t rect_w = w / x_tiles;
-        // std::size_t rect_h = h / y_tiles;
-
-        // for (std::size_t row = 0; row < y_tiles; row++)
+        // for (std::size_t row = 0; row < h; row++)
         // {
-        //     for (std::size_t col = 0; col < x_tiles; col++)
+        //     for (std::size_t col = 0; col < w; col++)
         //     {
         //         // Do nothing with empty spaces on the map
         //         if (is_empty(row, col))
@@ -58,7 +49,6 @@ namespace ZJVL
     void GameMap::destroy()
     {
         wall_sprites.reset();
-        // texture.reset();
     };
 
     void GameMap::on_notify(Event &e)
@@ -68,13 +58,13 @@ namespace ZJVL
 
     int GameMap::get_sprite_index(const std::size_t row, const std::size_t col)
     {
-        assert(row < y_tiles && col < x_tiles && sizeof(map) == x_tiles * y_tiles + 1);
-        return map[col + row * x_tiles] - '0';
+        assert(row < h && col < w);
+        return map_data[col + row * w] - '0';
     }
 
     bool GameMap::is_empty(const std::size_t row, const std::size_t col)
     {
-        assert(row < h && col < x_tiles && sizeof(map) == x_tiles * y_tiles + 1);
-        return map[col + row * x_tiles] == ' ';
+        assert(row < h && col < w);
+        return map_data[col + row * w] == ' ';
     }
 }

@@ -38,10 +38,13 @@ namespace ZJVL
 			map->destroy();
 		}
 
-		void update(std::uint32_t dt) override {}
+		void update(std::uint32_t dt) override {
+			map->update(dt);
+		}
 
 		void render(SDL_Renderer *renderer) override
 		{
+			// TODO: render map
 			draw();
 			SDL_UpdateTexture(texture.data, NULL, static_cast<void *>(pixel_buffer.data()), texture.w * 4);
 			SDL_RenderCopy(renderer, texture.data, NULL, NULL);
@@ -118,9 +121,9 @@ namespace ZJVL
 
 		void draw_map()
 		{
-			for (std::size_t row = 0; row < map->y_tiles; row++)
+			for (std::size_t row = 0; row < map->h; row++)
 			{
-				for (std::size_t col = 0; col < map->x_tiles; col++)
+				for (std::size_t col = 0; col < map->w; col++)
 				{
 					// Do nothing with empty spaces on the map
 					if (map->is_empty(row, col))
@@ -263,8 +266,8 @@ namespace ZJVL
 			clear(pack_color(255, 255, 255));
 
 			// Size of blocks on the map (wall, etc)
-			rect_w = (texture.w / 2) / map->x_tiles;
-			rect_h = texture.h / map->y_tiles;
+			rect_w = (texture.w / 2) / map->w;
+			rect_h = texture.h / map->h;
 
 			// Depth map of the walls
 			depth_buffer = std::vector<float>(texture.w / 2, 1e3);

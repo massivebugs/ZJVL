@@ -6,10 +6,11 @@
 #include "core/vec2.h"
 #include "scene/game_object.h"
 #include "scene/scene.h"
+#include "event/observer.h"
 
 namespace ZJVL
 {
-	class Actor : public GameObject
+	class Actor : public GameObject, public Observer
 	{
 	protected:
 		Actor(const std::string &name, std::size_t texture_index)
@@ -28,6 +29,8 @@ namespace ZJVL
 		virtual void on_notify(Event &e) = 0;
 
 		std::string name;
+		Vec2 pos;
+		std::size_t w, h;
 		float angle;
 		float fov;
 
