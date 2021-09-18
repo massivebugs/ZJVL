@@ -9,7 +9,7 @@
 
 namespace ZJVL
 {
-	class GameObject : public Observer
+	class GameObject
 	{
 	protected:
 		GameObject() : w(0), h(0){};
@@ -22,7 +22,6 @@ namespace ZJVL
 		virtual void update(std::uint32_t dt) = 0;
 		virtual void render(SDL_Renderer *renderer) = 0;
 		virtual void destroy() = 0;
-		virtual void on_notify(Event &e) = 0;
 
 		Vec2 pos;
 		std::size_t w, h;

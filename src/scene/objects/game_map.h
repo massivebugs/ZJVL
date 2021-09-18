@@ -12,7 +12,7 @@
 
 namespace ZJVL
 {
-    class GameMap : public GameObject
+    class GameMap : public GameObject, public Observer
     {
     public:
         GameMap(std::string sprite_sheet);
@@ -21,7 +21,7 @@ namespace ZJVL
         virtual void update(std::uint32_t dt) override;
         virtual void render(SDL_Renderer *renderer) override;
         virtual void destroy() override;
-        virtual void on_notify(Event &e) override;
+        virtual void on_notify(Event &e);
 
         int get_sprite_index(const std::size_t row, const std::size_t col);
 
