@@ -4,8 +4,8 @@
 #include "all.h"
 #include "scene/entity.h"
 #include "event/observer.h"
-#include "event/events/key_event.h"
-#include "event/events/mouse_event.h"
+#include "event/key_event.h"
+#include "event/mouse_event.h"
 
 namespace ZJVL
 {

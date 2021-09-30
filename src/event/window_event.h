@@ -1,6 +1,6 @@
 #ifndef ZJVL_EVENT_WINDOW_EVENT_H
 #define ZJVL_EVENT_WINDOW_EVENT_H
-#include "../event.h"
+#include "event.h"
 
 namespace ZJVL
 {
@@ -10,10 +10,7 @@ namespace ZJVL
 
 	class WindowCloseEvent : public WindowEvent
 	{
-		EventType get_type() const override
-		{
-			return EventType::WINDOW_QUIT;
-		}
+		EventType get_type() const override;
 	};
 }
 #endif

@@ -1,7 +1,7 @@
 #ifndef ZJVL_EVENT_KEY_EVENT_H
 #define ZJVL_EVENT_KEY_EVENT_H
 
-#include "../event.h"
+#include "event.h"
 
 namespace ZJVL
 {
@@ -85,16 +85,10 @@ namespace ZJVL
 	class KeyDownEvent : public KeyEvent
 	{
 	public:
-		KeyDownEvent(Key key) : m_key(key){};
-		EventType get_type() const override
-		{
-			return EventType::KEYDOWN;
-		}
+		KeyDownEvent(Key key);
 
-		Key get_key() const override
-		{
-			return m_key;
-		}
+		EventType get_type() const override;
+		Key get_key() const override;
 
 	private:
 		Key m_key;

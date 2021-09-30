@@ -1,6 +1,6 @@
 #ifndef ZJVL_EVENT_MOUSE_EVENT_H
 #define ZJVL_EVENT_MOUSE_EVENT_H
-#include "../event.h"
+#include "event.h"
 
 namespace ZJVL
 {
@@ -11,11 +11,8 @@ namespace ZJVL
 	class MouseMoveEvent : public MouseEvent
 	{
 	public:
-		MouseMoveEvent(int x, int y) : x(x), y(y){};
-		EventType get_type() const override
-		{
-			return EventType::MOUSEMOVE;
-		}
+		MouseMoveEvent(int x, int y);
+		EventType get_type() const override;
 		const int x;
 		const int y;
 	};

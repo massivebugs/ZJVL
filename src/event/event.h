@@ -14,19 +14,13 @@ namespace ZJVL
 	class Event
 	{
 	public:
-		virtual ~Event(){};
+		virtual ~Event() = default;
 
 		virtual EventType get_type() const = 0;
 
-		bool should_be_handled() const
-		{
-			return m_propagate;
-		};
+		bool should_be_handled() const;
 
-		void stop_propagation()
-		{
-			m_propagate = false;
-		};
+		void stop_propagation();
 
 	protected:
 		bool m_propagate = true;

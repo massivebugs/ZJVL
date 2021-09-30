@@ -7,7 +7,7 @@
 #include "scene/game_object.h"
 #include "scene/scene.h"
 #include "event/event.h"
-#include "asset/assets/sprite_sheet.h"
+#include "asset/sprite_sheet.h"
 
 namespace ZJVL
 {

@@ -22,7 +22,13 @@ namespace ZJVL
 
 		void render()
 		{
+			SDL_SetRenderTarget(m_renderer, m_curr_scene->texture.data);
+			SDL_RenderClear(m_renderer);
+
 			m_curr_scene->render(m_renderer);
+
+			SDL_SetRenderTarget(m_renderer, NULL);
+			SDL_RenderCopy(m_renderer, m_curr_scene->texture.data, NULL, NULL);
 		};
 
 		void add(std::string id, std::shared_ptr<Scene> scene)

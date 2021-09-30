@@ -2,7 +2,7 @@
 #include "app.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include "event/events/window_event.h"
+#include "event/window_event.h"
 
 namespace ZJVL
 {
