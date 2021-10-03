@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
 			'1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1',
 		};
 		auto game_scene = std::make_shared<ZJVL::GameScene>(map);
+		game_scene->set_fading(500, 500);
 
 		// Register to Scene Manger
 		app->scene_manager.add("splash", splash_scene);

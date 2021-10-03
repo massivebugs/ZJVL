@@ -4,6 +4,7 @@
 #include "all.h"
 #include <SDL2/SDL.h>
 #include "core/app.h"
+#include "scene/scene_manager.h"
 #include "scene/scene.h"
 #include "asset/texture.h"
 
@@ -22,20 +23,9 @@ namespace ZJVL
 
 		void render(SDL_Renderer *renderer) override;
 
-		void set_fading(std::uint32_t in_ms, std::uint32_t out_ms);
-
 		Texture splash_image;
 		std::uint32_t display_ms;
 		std::string next_scene_id;
-
-	private:
-		std::uint32_t m_shown_ms;
-
-		bool m_fade = false;
-		std::uint32_t m_fade_in_ms;
-		std::uint32_t m_fade_out_ms;
-
-		void fade(std::uint32_t dt);
 	};
 }
 

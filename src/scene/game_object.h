@@ -18,7 +18,7 @@ namespace ZJVL
 		virtual ~GameObject() = default;
 		virtual bool create(const Scene &scene) = 0;
 		virtual void update(const Scene &scene, std::uint32_t dt) = 0;
-		virtual void render(SDL_Renderer *renderer) = 0;
+		virtual void render(const Scene &scene, SDL_Renderer *renderer) = 0;
 		virtual void destroy() = 0;
 
 		float get_object_distance(const GameObject &other)

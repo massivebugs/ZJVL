@@ -18,7 +18,7 @@ namespace ZJVL
 
         virtual bool create(const Scene &scene) override;
         virtual void update(const Scene& scene, std::uint32_t dt) override;
-        virtual void render(SDL_Renderer *renderer) override;
+        virtual void render(const Scene &scene, SDL_Renderer *renderer) override;
         virtual void destroy() override;
         virtual void on_notify(Event &e) override;
 
@@ -32,9 +32,6 @@ namespace ZJVL
         std::string sprite_sheet_path;
         std::unique_ptr<SpriteSheet> wall_sprites;
         std::vector<char> map_data;
-
-    private:
-        Scene* scene;
 
         // TODO
         // std::vector<std::uint8_t> properties;

@@ -22,28 +22,33 @@ namespace ZJVL
         // std::cout << "On Map Update: " << scene->texture.w << std::endl;
     };
 
-    void GameMap::render(SDL_Renderer *renderer)
+    void GameMap::render(const Scene &scene, SDL_Renderer *renderer)
     {
-        // for (std::size_t row = 0; row < h; row++)
-        // {
-        //     for (std::size_t col = 0; col < w; col++)
-        //     {
-        //         // Do nothing with empty spaces on the map
-        //         if (is_empty(row, col))
-        //             continue;
+        // Size of blocks on the map (wall, etc)
+        std::size_t rect_w = (scene.texture.w / 2) / w;
+        std::size_t rect_h = scene.texture.h / h;
 
-        //         // position of the part we are drawing
-        //         // so it would draw rect_w * rect_h size rectangle on position i * j of the map
-        //         std::size_t rect_y = row * rect_h;
-        //         std::size_t rect_x = col * rect_w;
+        for (std::size_t row = 0; row < h; row++)
+        {
+            for (std::size_t col = 0; col < w; col++)
+            {
+                // Do nothing with empty spaces on the map
+                if (is_empty(row, col))
+                    continue;
 
-        //         std::size_t texture_index = get_sprite_index(row, col);
-        //         assert(texture_index < wall_sprites->count);
+                // position of the part we are drawing
+                // so it would draw rect_w * rect_h size rectangle on position i * j of the map
+                std::size_t rect_y = row * rect_h;
+                std::size_t rect_x = col * rect_w;
 
-        //         // Upper left pixel color
-        //         draw_rectangle(rect_x, rect_y, rect_w, rect_h, wall_sprites->get(0, 0, texture_index));
-        //     }
-        // }
+                std::size_t texture_index = get_sprite_index(row, col);
+                assert(texture_index < wall_sprites->count);
+
+                // TODO: Render directly to texture
+                // TODO: Set player location
+                // TODO: Set actors location
+            }
+        }
     };
 
     void GameMap::destroy()

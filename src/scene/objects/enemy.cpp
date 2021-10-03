@@ -9,7 +9,7 @@ namespace ZJVL
 
 	bool Enemy::create(const Scene &scene) { return true; };
 	void Enemy::update(const Scene &scene, std::uint32_t dt){};
-	void Enemy::render(SDL_Renderer *renderer){};
+	void Enemy::render(const Scene &scene, SDL_Renderer *renderer){};
 	void Enemy::destroy(){};
 	void Enemy::on_notify(Event &e){};
 }

@@ -18,7 +18,6 @@ namespace ZJVL
     void SplashScene::load()
     {
         std::cout << "Loading Splash Scene" << std::endl;
-        m_shown_ms = 0;
     }
 
     void SplashScene::unload()
@@ -28,10 +27,6 @@ namespace ZJVL
 
     void SplashScene::update(std::uint32_t dt)
     {
-        m_shown_ms += dt;
-
-        fade(dt);
-
         // Switch to next scene on timeout
         if (m_shown_ms >= display_ms && next_scene_id.empty() == false)
             App::instance()->scene_manager.show(next_scene_id);
@@ -42,36 +37,4 @@ namespace ZJVL
         SDL_RenderCopy(renderer, splash_image.data, NULL, NULL);
     }
 
-    void SplashScene::set_fading(std::uint32_t in_ms, std::uint32_t out_ms)
-    {
-        texture.set_blending();
-        texture.set_alpha(0);
-
-        m_fade = true;
-        m_fade_in_ms = in_ms;
-        m_fade_out_ms = out_ms;
-    }
-
-    void SplashScene::fade(std::uint32_t dt)
-    {
-        if (m_fade)
-        {
-            // Fade in
-            if (m_shown_ms < m_fade_in_ms)
-            {
-                texture.set_alpha(255 * ((float)m_shown_ms / m_fade_in_ms));
-            }
-
-            // Fade out
-            else if (display_ms - m_shown_ms < m_fade_out_ms)
-            {
-                texture.set_alpha(255 * ((float)(display_ms - m_shown_ms) / m_fade_out_ms));
-            }
-
-            else
-            {
-                texture.set_alpha(m_shown_ms <= display_ms ? 255 : 0);
-            }
-        }
-    }
 }

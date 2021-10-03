@@ -14,7 +14,7 @@ namespace ZJVL
 		Enemy(const Vec2 &pos, const std::string &texture_path);
 		virtual bool create(const Scene &scene) override;
 		virtual void update(const Scene &scene, std::uint32_t dt) override;
-		virtual void render(SDL_Renderer *renderer) override;
+		virtual void render(const Scene &scene, SDL_Renderer *renderer) override;
 		virtual void destroy() override;
 		virtual void on_notify(Event &e) override;
 	};

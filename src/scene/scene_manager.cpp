@@ -12,6 +12,7 @@ namespace ZJVL
 
 	void SceneManager::update(std::uint32_t dt)
 	{
+		m_curr_scene->m_shown_ms += dt;
 		m_curr_scene->update(dt);
 	};
 
@@ -20,6 +21,7 @@ namespace ZJVL
 		SDL_SetRenderTarget(m_renderer, m_curr_scene->texture.data);
 		SDL_RenderClear(m_renderer);
 
+		m_curr_scene->fade();
 		m_curr_scene->render(m_renderer);
 
 		SDL_SetRenderTarget(m_renderer, NULL);
@@ -43,6 +45,7 @@ namespace ZJVL
 
 			m_curr_scene = m_scenes[id];
 			m_curr_scene->load();
+			m_curr_scene->m_shown_ms = 0;
 		}
 	}
 

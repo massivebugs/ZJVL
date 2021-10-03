@@ -39,7 +39,8 @@ namespace ZJVL
 
 	void GameScene::render(SDL_Renderer *renderer)
 	{
-		// TODO: render map
+		// TODO: Render camera, actors
+		map->render(*this, renderer);
 		draw();
 		SDL_UpdateTexture(texture.data, NULL, static_cast<void *>(pixel_buffer.data()), texture.w * 4);
 	}
