@@ -4,6 +4,7 @@
 #include "scene/scenes/splash_scene.h"
 #include "scene/scenes/game_scene.h"
 #include "scene/objects/game_map.h"
+#include "scene/objects/enemy.h"
 
 // Create the app instance, init() and call run() to execute the game loop.
 // Arguments and the return statement are required for compatibility with SDL
@@ -50,6 +51,11 @@ int main(int argc, char *argv[])
 		app->scene_manager.add("splash", splash_scene);
 		app->scene_manager.add("game", game_scene);
 		app->scene_manager.show("splash");
+
+		// ZJVL::Enemy enemy = ZJVL::Enemy("assets/demon_1.png", ZJVL::Vec2(3.523, 3.812));
+		game_scene->actors.emplace_back(std::make_shared<ZJVL::Enemy>(ZJVL::Vec2(3.523, 3.812), "assets/monsters.png"));
+		game_scene->actors.emplace_back(std::make_shared<ZJVL::Enemy>(ZJVL::Vec2(1.834, 8.765), "assets/monsters.png"));
+		
 
 		code = app->run();
 	}

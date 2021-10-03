@@ -5,5 +5,6 @@
 
 namespace ZJVL
 {
-		Scene::Scene() : texture(App::instance()->window_w, App::instance()->window_h){};
+	Scene::Scene()
+		: texture(App::instance()->window_w, App::instance()->window_h){};
 }

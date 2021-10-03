@@ -12,14 +12,21 @@ namespace ZJVL
 	class GameObject
 	{
 	protected:
-		GameObject() = default;
+		GameObject(const Vec2 &pos = Vec2()) : pos(pos){};
 
 	public:
 		virtual ~GameObject() = default;
 		virtual bool create(const Scene &scene) = 0;
-		virtual void update(std::uint32_t dt) = 0;
+		virtual void update(const Scene &scene, std::uint32_t dt) = 0;
 		virtual void render(SDL_Renderer *renderer) = 0;
 		virtual void destroy() = 0;
+
+		float get_object_distance(const GameObject &other)
+		{
+			return (pos - other.pos).magnitude();
+		}
+
+		Vec2 pos;
 	};
 }
 

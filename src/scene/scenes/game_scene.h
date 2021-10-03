@@ -7,10 +7,11 @@
 #include "scene/scene.h"
 #include "scene/objects/game_map.h"
 #include "scene/objects/player.h"
-#include "scene/entity.h"
 #include "asset/texture.h"
 #include "asset/sprite_sheet.h"
 #include "core/vec2.h"
+#include "scene/actor.h"
+#include "scene/objects/enemy.h"
 
 namespace ZJVL
 {
@@ -30,8 +31,8 @@ namespace ZJVL
 	public:
 		// TODO:
 		std::shared_ptr<GameMap> map;
-		Player player{3.456, 2.345, 1.523, M_PI / 3.f};
-		std::vector<Entity> entities = std::vector<Entity>{{3.523, 3.812, 0}, {1.834, 8.765, 0}, {5.323, 5.365, 0}, {4.123, 10.265, 0}};
+		Player player = Player(Vec2(3.456, 2.345), "assets/monsters.png");
+		std::vector<std::shared_ptr<Actor>> actors;
 		SpriteSheet entities_tex = SpriteSheet("assets/monsters.png");
 		std::vector<std::uint32_t> pixel_buffer;
 		std::size_t rect_w;
@@ -39,13 +40,13 @@ namespace ZJVL
 		std::vector<float> depth_buffer;
 
 	private:
-		void sort_entities(std::vector<Entity> &to_sort);
+		void sort_actors(std::vector<std::shared_ptr<Actor>> &to_sort);
 
-		void merge(std::vector<Entity> &l_vect, std::vector<Entity> &r_vect, std::vector<Entity> &merged);
+		void merge(std::vector<std::shared_ptr<Actor>> &l_vect, std::vector<std::shared_ptr<Actor>> &r_vect, std::vector<std::shared_ptr<Actor>> &merged);
 
 		void draw_map();
 
-		void draw_entity(Entity &entity);
+		void draw_actor(std::shared_ptr<Actor> actor);
 
 		void cast_ray();
 

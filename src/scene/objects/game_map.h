@@ -16,8 +16,8 @@ namespace ZJVL
     public:
         GameMap(std::string sprite_sheet);
 
-        virtual bool create(const Scene& scene) override;
-        virtual void update(std::uint32_t dt) override;
+        virtual bool create(const Scene &scene) override;
+        virtual void update(const Scene& scene, std::uint32_t dt) override;
         virtual void render(SDL_Renderer *renderer) override;
         virtual void destroy() override;
         virtual void on_notify(Event &e) override;

@@ -49,8 +49,11 @@
 				"-s", // strip all debugging symbols
 				"-DNDEBUG",
 				"${workspaceFolder}\\src\\*.cpp",
+				"${workspaceFolder}\\src\\asset\\*.cpp",
 				"${workspaceFolder}\\src\\core\\*.cpp",
+				"${workspaceFolder}\\src\\event\\*.cpp",
 				"${workspaceFolder}\\src\\scene\\*.cpp",
+				"${workspaceFolder}\\src\\scene\\scenes\\*.cpp",
 				"${workspaceFolder}\\src\\scene\\objects\\*.cpp",
 				"-o",
 				"${workspaceFolder}\\bin\\release\\zjvl.exe",

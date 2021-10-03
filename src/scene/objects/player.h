@@ -2,19 +2,25 @@
 #define ZJVL_SCENE_SCENE_PLAYER_H
 
 #include "all.h"
-#include "scene/entity.h"
+#include "core/vec2.h"
+#include "scene/actor.h"
 #include "event/observer.h"
 #include "event/key_event.h"
 #include "event/mouse_event.h"
 
 namespace ZJVL
 {
-	class Player : public Entity
+	class Player : public Actor
 	{
 	public:
-		Player() = default;
-		Player(float x, float y, float angle, float fov) : Entity(x, y, angle, fov){};
-		// Camera camera;
+		Player(const Vec2 &pos, const std::string &texture_path)
+			: Actor(pos, texture_path){};
+
+		bool create(const Scene &scene) { return true; };
+		void update(const Scene &scene, std::uint32_t dt){};
+		void render(SDL_Renderer *renderer){};
+		void destroy(){};
+
 		virtual void on_notify(Event &e) override
 		{
 			switch (e.get_type())
@@ -27,18 +33,18 @@ namespace ZJVL
 				case Key::ESC:
 					break;
 				case Key::W:
-					x += std::cos(angle) * 0.1;
-					y += std::sin(angle) * 0.1;
+					pos.x += std::cos(angle) * 0.1;
+					pos.y += std::sin(angle) * 0.1;
 					break;
 				case Key::A:
-					y += 0.1;
+					pos.y += 0.1;
 					break;
 				case Key::S:
-					x -= std::cos(angle) * 0.1;
-					y -= std::sin(angle) * 0.1;
+					pos.x -= std::cos(angle) * 0.1;
+					pos.y -= std::sin(angle) * 0.1;
 					break;
 				case Key::D:
-					x -= 0.1;
+					pos.x -= 0.1;
 					break;
 				}
 				break;

@@ -10,57 +10,19 @@ namespace ZJVL
 	class SceneManager
 	{
 	public:
-		void init(SDL_Renderer *renderer, int window_w, int window_h)
-		{
-			m_renderer = renderer;
-		}
+		void init(SDL_Renderer *renderer, int window_w, int window_h);
 
-		void update(std::uint32_t dt)
-		{
-			m_curr_scene->update(dt);
-		};
+		void update(std::uint32_t dt);
 
-		void render()
-		{
-			SDL_SetRenderTarget(m_renderer, m_curr_scene->texture.data);
-			SDL_RenderClear(m_renderer);
+		void render();
 
-			m_curr_scene->render(m_renderer);
+		void add(std::string id, std::shared_ptr<Scene> scene);
 
-			SDL_SetRenderTarget(m_renderer, NULL);
-			SDL_RenderCopy(m_renderer, m_curr_scene->texture.data, NULL, NULL);
-		};
+		void show(std::string id);
 
-		void add(std::string id, std::shared_ptr<Scene> scene)
-		{
-			if (!has(id))
-			{
-				m_scenes[id] = scene;
-			}
-		}
+		bool has(std::string id);
 
-		void show(std::string id)
-		{
-			if (has(id))
-			{
-				if (m_curr_scene != nullptr)
-					m_curr_scene->unload();
-
-				m_curr_scene = m_scenes[id];
-				m_curr_scene->load();
-			}
-		}
-
-		bool has(std::string id)
-		{
-			return (m_scenes.find(id) == m_scenes.end()) == false;
-		};
-
-		void remove(std::string id)
-		{
-			if (has(id))
-				m_scenes.erase(id);
-		};
+		void remove(std::string id);
 
 	private:
 		SDL_Renderer *m_renderer;

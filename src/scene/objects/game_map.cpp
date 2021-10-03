@@ -18,7 +18,7 @@ namespace ZJVL
         return !wall_sprites->buffer.empty();
     };
 
-    void GameMap::update(std::uint32_t dt){
+    void GameMap::update(const Scene &scene, std::uint32_t dt){
         // std::cout << "On Map Update: " << scene->texture.w << std::endl;
     };
 
