@@ -28,11 +28,9 @@ namespace ZJVL
 		friend class SceneManager;
 
 		std::uint32_t m_shown_ms;
-		bool m_fade = false;
+		bool m_fade;
 		std::uint32_t m_fade_in_ms;
 		std::uint32_t m_fade_out_ms;
-
-		void fade();
 	};
 }
 #endif

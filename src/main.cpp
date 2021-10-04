@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 		// Register to Scene Manger
 		app->scene_manager.add("splash", splash_scene);
 		app->scene_manager.add("game", game_scene);
-		app->scene_manager.show("splash");
+		app->scene_manager.switch_to("splash");
 
 		// ZJVL::Enemy enemy = ZJVL::Enemy("assets/demon_1.png", ZJVL::Vec2(3.523, 3.812));
 		game_scene->actors.emplace_back(std::make_shared<ZJVL::Enemy>(ZJVL::Vec2(3.523, 3.812), "assets/monsters.png"));

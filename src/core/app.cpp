@@ -13,11 +13,11 @@ namespace ZJVL
 	}
 
 	App::App()
-	    : m_dt(0),
-	      m_fps(0),
-	      m_running(false),
-	      m_window(nullptr),
-	      renderer(nullptr)
+		: m_dt(0),
+		  m_fps(0),
+		  m_running(false),
+		  m_window(nullptr),
+		  renderer(nullptr)
 	{
 		std::cout << "Creating App instance" << std::endl;
 	}
@@ -41,12 +41,12 @@ namespace ZJVL
 		}
 
 		m_window = SDL_CreateWindow(
-		    name.c_str(),
-		    SDL_WINDOWPOS_CENTERED,
-		    SDL_WINDOWPOS_CENTERED,
-		    window_w,
-		    window_h,
-		    0 & SDL_WINDOW_FULLSCREEN_DESKTOP);
+			name.c_str(),
+			SDL_WINDOWPOS_CENTERED,
+			SDL_WINDOWPOS_CENTERED,
+			window_w,
+			window_h,
+			0 & SDL_WINDOW_FULLSCREEN_DESKTOP);
 		// TODO: Create settings for full screens
 
 		if (m_window == nullptr)
@@ -62,6 +62,7 @@ namespace ZJVL
 			return false;
 		}
 		SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
+		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 		SDL_UpdateWindowSurface(m_window);
 
 		input_system.init();

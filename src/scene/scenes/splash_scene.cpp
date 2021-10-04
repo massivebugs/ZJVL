@@ -29,7 +29,7 @@ namespace ZJVL
     {
         // Switch to next scene on timeout
         if (m_shown_ms >= display_ms && next_scene_id.empty() == false)
-            App::instance()->scene_manager.show(next_scene_id);
+            App::instance()->scene_manager.switch_to(next_scene_id);
     }
 
     void SplashScene::render(SDL_Renderer *renderer)

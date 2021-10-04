@@ -18,7 +18,7 @@ namespace ZJVL
 
 		void add(std::string id, std::shared_ptr<Scene> scene);
 
-		void show(std::string id);
+		void switch_to(std::string id, std::uint32_t delay = 0);
 
 		bool has(std::string id);
 
@@ -26,8 +26,13 @@ namespace ZJVL
 
 	private:
 		SDL_Renderer *m_renderer;
+		SDL_Rect m_fade_rect;
 		std::shared_ptr<Scene> m_curr_scene;
 		std::unordered_map<std::string, std::shared_ptr<Scene>> m_scenes;
+
+		bool m_switching;
+		std::string m_switch_scene_id;
+		std::int64_t m_switch_delay;
 	};
 }
 
