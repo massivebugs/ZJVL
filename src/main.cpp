@@ -1,6 +1,6 @@
 #include "all.h"
 #include "core/app.h"
-#include "core/vec2.h"
+#include "util/vec2.h"
 #include "scene/scenes/splash_scene.h"
 #include "scene/scenes/game_scene.h"
 #include "scene/objects/game_map.h"
