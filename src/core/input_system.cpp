@@ -12,6 +12,7 @@ namespace ZJVL
                         {SDLK_a, Key::A},
                         {SDLK_s, Key::S},
                         {SDLK_d, Key::D},
+                        {SDLK_m, Key::M}
                     } {};
 
     void InputSystem::init()

@@ -3,12 +3,12 @@
 #include <SDL2/SDL.h>
 #include "core/app.h"
 #include "scene/scene.h"
+#include "asset/texture.h"
 #include "scene/objects/game_map.h"
 #include "scene/objects/player.h"
-#include "scene/actor.h"
-#include "asset/texture.h"
 #include "asset/sprite_sheet.h"
-#include "core/vec2.h"
+#include "util/vec2.h"
+#include "util/algorithms.h"
 
 namespace ZJVL
 {
@@ -21,297 +21,269 @@ namespace ZJVL
 	void GameScene::load()
 	{
 		std::cout << "Loading Game Scene" << std::endl;
-		App::instance()->input_system.add_observer(&player);
+
+		// Create GameObjects 
+		for (auto object : objects) {
+			object->create(*this);
+		}
+		player->create(*this);
 		map->create(*this);
+
+		// Enable input system for GameObjects
+		App::instance()->input_system.add_observer(player);
+		App::instance()->input_system.add_observer(map);
 	}
 
 	void GameScene::unload()
 	{
-		std::cout << "Loading Game Scene" << std::endl;
-		App::instance()->input_system.remove_observer(&player);
+		std::cout << "Unloading Game Scene" << std::endl;
+
+		// Disable input system for GameObjects
+		App::instance()->input_system.remove_observer(player);
+		App::instance()->input_system.remove_observer(map);
+
+		// Destroy GameObjects 
+		for (auto object : objects) {
+			object->destroy();
+		}
 		map->destroy();
 	}
 
 	void GameScene::update(std::uint32_t dt)
 	{
+		// Update GameObjects
+		for (auto object : objects) {
+			object->update(*this, dt);
+		}
+		player->update(*this, dt);
 		map->update(*this, dt);
 	}
 
 	void GameScene::render(SDL_Renderer *renderer)
 	{
-		// TODO: Render camera, actors
+		merge_sort_objects(objects, player);
+
+		// Render GameObjects
+		for (auto object : objects) {
+			object->render(*this, renderer);
+		}
+		player->render(*this, renderer);
 		map->render(*this, renderer);
-		draw();
-		SDL_UpdateTexture(texture.data, NULL, static_cast<void *>(pixel_buffer.data()), texture.w * 4);
+
+		// SDL_UpdateTexture(texture.data, NULL, static_cast<void *>(pixel_buffer.data()), texture.w * 4);
 	}
 
-	void GameScene::sort_actors(std::vector<std::shared_ptr<Actor>> &to_sort)
-	{
-		// Merge sort entities just for practice
-		if (to_sort.size() == 1)
-			return;
+	// void GameScene::draw_map()
+	// {
+	// 	for (std::size_t row = 0; row < map->h; row++)
+	// 	{
+	// 		for (std::size_t col = 0; col < map->w; col++)
+	// 		{
+	// 			// Do nothing with empty spaces on the map
+	// 			if (map->is_empty(row, col))
+	// 				continue;
 
-		std::size_t half_idx = std::ceil((float)to_sort.size() / 2);
+	// 			// position of the part we are drawing
+	// 			// so it would draw rect_w * rect_h size rectangle on position i * j of the map
+	// 			std::size_t rect_y = row * rect_h;
+	// 			std::size_t rect_x = col * rect_w;
 
-		// The iterator pointing to the half element of the vector
-		std::vector<std::shared_ptr<Actor>>::iterator half_iter = to_sort.end() - (to_sort.size() - half_idx);
+	// 			std::size_t texture_index = map->get_sprite_index(row, col);
+	// 			assert(texture_index < map->wall_sprites->count);
 
-		std::vector<std::shared_ptr<Actor>> l_half(to_sort.begin(), half_iter);
-		std::vector<std::shared_ptr<Actor>> r_half(half_iter, to_sort.end());
+	// 			// Upper left pixel color
+	// 			draw_rectangle(rect_x, rect_y, rect_w, rect_h, map->wall_sprites->get(0, 0, texture_index));
+	// 		}
+	// 	}
+	// }
 
-		sort_actors(l_half);
-		sort_actors(r_half);
+	// void GameScene::draw_object(const std::shared_ptr<GameObject> &object)
+	// {
+	// 	// https://www.youtube.com/watch?v=BJ0-3kERCwc
+	// 	// https://www.youtube.com/watch?v=MHoFqRyeP3o の2:52を見てみるとちょっとわかるかも
+	// 	// https://boxbase.org/entries/2014/jun/23/why-radians/ Why we use radians
+	// 	// entity_dir is like the angle between the x axis and curr entity's location
+	// 	float entity_dir = atan2(object->pos.y - player.pos.y, object->pos.x - player.pos.x);
 
-		merge(l_half, r_half, to_sort);
-	}
+	// 	// TODO: Wtf is this?!
+	// 	while (entity_dir - player.angle > M_PI) // while entity in the oppsite+ direction
+	// 		entity_dir -= 2 * M_PI;				 // remove unncesessary periods from the relative direction
+	// 	while (entity_dir - player.angle < -M_PI)
+	// 		entity_dir += 2 * M_PI;
 
-	void GameScene::merge(std::vector<std::shared_ptr<Actor>> &l_vect, std::vector<std::shared_ptr<Actor>> &r_vect, std::vector<std::shared_ptr<Actor>> &merged)
-	{
-		std::size_t merged_idx = 0;
-		std::size_t l_size = l_vect.size();
-		std::size_t r_size = r_vect.size();
-		std::size_t l_idx = 0;
-		std::size_t r_idx = 0;
+	// 	size_t entity_size = std::min(1000, static_cast<int>(texture.h / object->get_object_distance(player)));
 
-		for (merged_idx; merged_idx < merged.size(); merged_idx++)
-		{
-			if (l_idx == l_size)
-			{
-				merged[merged_idx] = r_vect[r_idx];
-				r_idx++;
-				continue;
-			}
-			else if (r_idx == r_size)
-			{
-				merged[merged_idx] = l_vect[l_idx];
-				l_idx++;
-				continue;
-			}
+	// 	// Kind of like when drawing the wall. Gets the upper left coordinates of the entity to draw
+	// 	int w_offset = (entity_dir - player.angle) * (texture.w / 2) / (player.fov) + (texture.w / 2) / 2 - entity_size / 2;
+	// 	int h_offset = (texture.h / 2) - (entity_size / 2);
 
-			if (l_vect[l_idx]->get_object_distance(player) < r_vect[r_idx]->get_object_distance(player))
-			{
-				merged[merged_idx] = l_vect[l_idx];
-				l_idx++;
-			}
-			else
-			{
-				merged[merged_idx] = r_vect[r_idx];
-				r_idx++;
-			}
-		}
-	}
+	// 	for (size_t i = 0; i < entity_size; i++)
+	// 	{
+	// 		if (w_offset + int(i) < 0 || w_offset + i >= texture.w / 2)
+	// 			continue;
 
-	void GameScene::draw_map()
-	{
-		for (std::size_t row = 0; row < map->h; row++)
-		{
-			for (std::size_t col = 0; col < map->w; col++)
-			{
-				// Do nothing with empty spaces on the map
-				if (map->is_empty(row, col))
-					continue;
+	// 		// Don't draw the entity if it is behind a wall
+	// 		if (depth_buffer[w_offset + i] <= object->get_object_distance(player))
+	// 			continue;
 
-				// position of the part we are drawing
-				// so it would draw rect_w * rect_h size rectangle on position i * j of the map
-				std::size_t rect_y = row * rect_h;
-				std::size_t rect_x = col * rect_w;
+	// 		size_t entity_col = (float(entities_tex.size) / float(entity_size)) * i;
 
-				std::size_t texture_index = map->get_sprite_index(row, col);
-				assert(texture_index < map->wall_sprites->count);
+	// 		std::vector<uint32_t> column = object->texture.get_scaled_column(0, entity_col, entity_size);
+	// 		for (int curr_height = 0; curr_height < column.size(); curr_height++)
+	// 		{
+	// 			if (is_transparent_pixel(column[curr_height]))
+	// 				continue;
 
-				// Upper left pixel color
-				draw_rectangle(rect_x, rect_y, rect_w, rect_h, map->wall_sprites->get(0, 0, texture_index));
-			}
-		}
-	}
+	// 			set_pixel(texture.w / 2 + w_offset + i, (texture.h / 2) - (entity_size / 2) + curr_height, column[curr_height]);
+	// 		}
+	// 	}
+	// }
 
-	void GameScene::draw_actor(std::shared_ptr<Actor> actor)
-	{
-		// https://www.youtube.com/watch?v=BJ0-3kERCwc
-		// https://www.youtube.com/watch?v=MHoFqRyeP3o の2:52を見てみるとちょっとわかるかも
-		// https://boxbase.org/entries/2014/jun/23/why-radians/ Why we use radians
-		// entity_dir is like the angle between the x axis and curr entity's location
-		float entity_dir = atan2(actor->pos.y - player.pos.y, actor->pos.x - player.pos.x);
+	// void GameScene::cast_ray()
+	// {
+	// 	// window_w so we can render the whole screen width
+	// 	for (std::size_t i = 0; i < texture.w / 2; i++)
+	// 	{
+	// 		// fov * i / float(window_w / 2) increasingly gives higher value until it reaches 100% of fov, so that we can actually rotate the ray
+	// 		// curr_angle is the current viewing point, directly ahead. fov / 2 is setting the current view to render to be the left peripheral
+	// 		float curr_angle = player.angle - player.fov / 2 + player.fov * i / float(texture.w / 2);
+	// 		// std::cout << player.angle << std::endl;
 
-		// TODO: Wtf is this?!
-		while (entity_dir - player.angle > M_PI) // while entity in the oppsite+ direction
-			entity_dir -= 2 * M_PI;				 // remove unncesessary periods from the relative direction
-		while (entity_dir - player.angle < -M_PI)
-			entity_dir += 2 * M_PI;
+	// 		// soh cah toa
+	// 		// hypothenuse = h, adjacent = a, opposite = o
+	// 		// by setting an arbitrary hypotheneuse length, we can calculate the length of a && o using trig functions
+	// 		// https://www.quora.com/What-is-the-purpose-of-the-sin-cos-and-tan-functions
+	// 		// hypothenuse h, and the rate we are extending it h_step
+	// 		const float h_step = 0.01;
+	// 		for (float h = 0; h < 20; h += h_step)
+	// 		{
+	// 			// offset_x + h * a / h so we just get a!
+	// 			float view_x = player.pos.x + h * cos(curr_angle);
+	// 			float view_y = player.pos.y + h * sin(curr_angle);
 
-		size_t entity_size = std::min(1000, static_cast<int>(texture.h / actor->get_object_distance(player)));
+	// 			std::size_t pix_x = view_x * rect_w;
+	// 			std::size_t pix_y = view_y * rect_h;
 
-		// Kind of like when drawing the wall. Gets the upper left coordinates of the entity to draw
-		int w_offset = (entity_dir - player.angle) * (texture.w / 2) / (player.fov) + (texture.w / 2) / 2 - entity_size / 2;
-		int h_offset = (texture.h / 2) - (entity_size / 2);
+	// 			// This draws the visibility cone
+	// 			set_pixel(pix_x, pix_y, pack_color(160, 160, 160));
+	// 			// std::cout << view_x << ':' << view_y << std::endl;
 
-		for (size_t i = 0; i < entity_size; i++)
-		{
-			if (w_offset + int(i) < 0 || w_offset + i >= texture.w / 2)
-				continue;
+	// 			// Ray is touching a wall
+	// 			if (map->is_empty(view_y, view_x) == false)
+	// 			{
+	// 				// Store the depth of the map
+	// 				depth_buffer[i] = h;
 
-			// Don't draw the entity if it is behind a wall
-			if (depth_buffer[w_offset + i] <= actor->get_object_distance(player))
-				continue;
+	// 				// http://www.permadi.com/tutorial/raycast/rayc4.html
+	// 				// float bb = (h * cos(curr_angle - player.angle));
+	// 				// Wall_height is too big...?
+	// 				std::size_t wall_height = texture.h / (h * cos(curr_angle - player.angle));
+	// 				std::size_t texture_index = map->get_sprite_index(view_y, view_x);
 
-			size_t entity_col = (float(entities_tex.size) / float(entity_size)) * i;
+	// 				// Count texture pixels
+	// 				float hit;
+	// 				// Check if the position we are at is almost a whole number (6.01 etc due to hypotheneuse length offset)
+	// 				float offset = view_x - (int)view_x;
+	// 				if (offset < 1 - h_step && offset > h_step)
+	// 				{
+	// 					// We hit a wall on the x plane!
+	// 					hit = view_x - (int)view_x; // because view_x represents how many blocks
+	// 				}
+	// 				else
+	// 				{
+	// 					// We hit a wall on the y plane!
+	// 					hit = view_y - (int)view_y;
+	// 				}
+	// 				// The current column of the texture we need to extract pixels from
+	// 				int texture_col = map->wall_sprites->size * hit;
 
-			std::vector<uint32_t> column = actor->texture.get_scaled_column(0, entity_col, entity_size);
-			for (int curr_height = 0; curr_height < column.size(); curr_height++)
-			{
-				if (is_transparent_pixel(column[curr_height]))
-					continue;
+	// 				assert(texture_col < map->wall_sprites->size);
 
-				set_pixel(texture.w / 2 + w_offset + i, (texture.h / 2) - (entity_size / 2) + curr_height, column[curr_height]);
-			}
-		}
-	}
+	// 				std::vector<uint32_t> column = map->wall_sprites->get_scaled_column(texture_index, texture_col, wall_height);
 
-	void GameScene::cast_ray()
-	{
-		// window_w so we can render the whole screen width
-		for (std::size_t i = 0; i < texture.w / 2; i++)
-		{
-			// fov * i / float(window_w / 2) increasingly gives higher value until it reaches 100% of fov, so that we can actually rotate the ray
-			// curr_angle is the current viewing point, directly ahead. fov / 2 is setting the current view to render to be the left peripheral
-			float curr_angle = player.angle - player.fov / 2 + player.fov * i / float(texture.w / 2);
-			// std::cout << player.angle << std::endl;
+	// 				for (int curr_height = 0; curr_height < column.size(); curr_height++)
+	// 				{
+	// 					// std::size_t aa = (texture.h / 2) - (wall_height / 2) + curr_height;
+	// 					set_pixel(texture.w / 2 + i, (texture.h / 2) - (wall_height / 2) + curr_height, column[curr_height]);
+	// 				}
+	// 				break;
+	// 			}
+	// 		}
+	// 	}
+	// }
 
-			// soh cah toa
-			// hypothenuse = h, adjacent = a, opposite = o
-			// by setting an arbitrary hypotheneuse length, we can calculate the length of a && o using trig functions
-			// https://www.quora.com/What-is-the-purpose-of-the-sin-cos-and-tan-functions
-			// hypothenuse h, and the rate we are extending it h_step
-			const float h_step = 0.01;
-			for (float h = 0; h < 20; h += h_step)
-			{
-				// offset_x + h * a / h so we just get a!
-				float view_x = player.pos.x + h * cos(curr_angle);
-				float view_y = player.pos.y + h * sin(curr_angle);
+	// // Referenced https://github.com/ssloy/tinyraycaster
+	// // TODO: Switch to DDA Algorithm for casting rays
+	// void GameScene::draw()
+	// {
+	// 	// Clear and reset framebuffer image to white
+	// 	clear(pack_color(255, 255, 255));
 
-				std::size_t pix_x = view_x * rect_w;
-				std::size_t pix_y = view_y * rect_h;
+	// 	// Size of blocks on the map (wall, etc)
+	// 	rect_w = (texture.w / 2) / map->w;
+	// 	rect_h = texture.h / map->h;
 
-				// This draws the visibility cone
-				set_pixel(pix_x, pix_y, pack_color(160, 160, 160));
-				// std::cout << view_x << ':' << view_y << std::endl;
+	// 	// Depth map of the walls
+	// 	depth_buffer = std::vector<float>(texture.w / 2, 1e3);
 
-				// Ray is touching a wall
-				if (map->is_empty(view_y, view_x) == false)
-				{
-					// Store the depth of the map
-					depth_buffer[i] = h;
+	// 	draw_map();
 
-					// http://www.permadi.com/tutorial/raycast/rayc4.html
-					// float bb = (h * cos(curr_angle - player.angle));
-					// Wall_height is too big...?
-					std::size_t wall_height = texture.h / (h * cos(curr_angle - player.angle));
-					std::size_t texture_index = map->get_sprite_index(view_y, view_x);
+	// 	cast_ray();
 
-					// Count texture pixels
-					float hit;
-					// Check if the position we are at is almost a whole number (6.01 etc due to hypotheneuse length offset)
-					float offset = view_x - (int)view_x;
-					if (offset < 1 - h_step && offset > h_step)
-					{
-						// We hit a wall on the x plane!
-						hit = view_x - (int)view_x; // because view_x represents how many blocks
-					}
-					else
-					{
-						// We hit a wall on the y plane!
-						hit = view_y - (int)view_y;
-					}
-					// The current column of the texture we need to extract pixels from
-					int texture_col = map->wall_sprites->size * hit;
+	// 	// Show player position on the map
+	// 	draw_rectangle(player.pos.x * rect_w, player.pos.y * rect_h, 5, 5, pack_color(0, 255, 0));
 
-					assert(texture_col < map->wall_sprites->size);
+	// 	// Sort the entities by distance
+	// 	merge_sort_objects(actors, &player);
 
-					std::vector<uint32_t> column = map->wall_sprites->get_scaled_column(texture_index, texture_col, wall_height);
+	// 	// Show monsters positions on the map
+	// 	for (int i = 0; i < actors.size(); i++)
+	// 	{
+	// 		draw_rectangle(actors[i]->pos.x * rect_w, actors[i]->pos.y * rect_h, 5, 5, pack_color(255, 0, 0));
+	// 		draw_actor(actors[i]);
+	// 	}
+	// }
 
-					for (int curr_height = 0; curr_height < column.size(); curr_height++)
-					{
-						// std::size_t aa = (texture.h / 2) - (wall_height / 2) + curr_height;
-						set_pixel(texture.w / 2 + i, (texture.h / 2) - (wall_height / 2) + curr_height, column[curr_height]);
-					}
-					break;
-				}
-			}
-		}
-	}
+	// void GameScene::set_pixel(const std::size_t x, const std::size_t y, const std::uint32_t color)
+	// {
+	// 	if (pixel_buffer.size() == texture.w * texture.h && x < texture.w && y < texture.h)
+	// 		pixel_buffer[x + y * texture.w] = color;
+	// }
 
-	// Referenced https://github.com/ssloy/tinyraycaster
-	// TODO: Switch to DDA Algorithm for casting rays
-	void GameScene::draw()
-	{
-		// Clear and reset framebuffer image to white
-		clear(pack_color(255, 255, 255));
+	// void GameScene::draw_rectangle(const std::size_t rect_x, const std::size_t rect_y, const std::size_t rect_w, const std::size_t rect_h, const std::uint32_t color)
+	// {
+	// 	// assert(framebuffer.img.size() == w * h);
 
-		// Size of blocks on the map (wall, etc)
-		rect_w = (texture.w / 2) / map->w;
-		rect_h = texture.h / map->h;
+	// 	// Loop over rows and columns
+	// 	for (std::size_t curr_h = 0; curr_h < rect_h; curr_h++)
+	// 	{
+	// 		for (std::size_t curr_w = 0; curr_w < rect_w; curr_w++)
+	// 		{
+	// 			// Set the position of the pixel we will draw
+	// 			std::size_t x = rect_x + curr_w;
+	// 			std::size_t y = rect_y + curr_h;
 
-		// Depth map of the walls
-		depth_buffer = std::vector<float>(texture.w / 2, 1e3);
+	// 			// Draw only what fits - do we need this?
+	// 			if (x < texture.w && y < texture.h)
+	// 				set_pixel(x, y, color);
+	// 		}
+	// 	}
+	// }
 
-		draw_map();
+	// void GameScene::clear(const std::uint32_t color)
+	// {
+	// 	// Create a vector of size window_w * window_h with color.
+	// 	pixel_buffer = std::vector<std::uint32_t>(texture.w * texture.h, color);
+	// }
 
-		cast_ray();
+	// bool GameScene::is_transparent_pixel(const uint32_t &color)
+	// {
+	// 	std::uint8_t opacity = color >> 24 & 255;
+	// 	return opacity == 0;
+	// }
 
-		// Show player position on the map
-		draw_rectangle(player.pos.x * rect_w, player.pos.y * rect_h, 5, 5, pack_color(0, 255, 0));
-
-		// Sort the entities by distance
-		sort_actors(actors);
-
-		// Show monsters positions on the map
-		for (int i = 0; i < actors.size(); i++)
-		{
-			draw_rectangle(actors[i]->pos.x * rect_w, actors[i]->pos.y * rect_h, 5, 5, pack_color(255, 0, 0));
-			draw_actor(actors[i]);
-		}
-	}
-
-	void GameScene::set_pixel(const std::size_t x, const std::size_t y, const std::uint32_t color)
-	{
-		if (pixel_buffer.size() == texture.w * texture.h && x < texture.w && y < texture.h)
-			pixel_buffer[x + y * texture.w] = color;
-	}
-
-	void GameScene::draw_rectangle(const std::size_t rect_x, const std::size_t rect_y, const std::size_t rect_w, const std::size_t rect_h, const std::uint32_t color)
-	{
-		// assert(framebuffer.img.size() == w * h);
-
-		// Loop over rows and columns
-		for (std::size_t curr_h = 0; curr_h < rect_h; curr_h++)
-		{
-			for (std::size_t curr_w = 0; curr_w < rect_w; curr_w++)
-			{
-				// Set the position of the pixel we will draw
-				std::size_t x = rect_x + curr_w;
-				std::size_t y = rect_y + curr_h;
-
-				// Draw only what fits - do we need this?
-				if (x < texture.w && y < texture.h)
-					set_pixel(x, y, color);
-			}
-		}
-	}
-
-	void GameScene::clear(const std::uint32_t color)
-	{
-		// Create a vector of size window_w * window_h with color.
-		pixel_buffer = std::vector<std::uint32_t>(texture.w * texture.h, color);
-	}
-
-	bool GameScene::is_transparent_pixel(const uint32_t &color)
-	{
-		std::uint8_t opacity = color >> 24 & 255;
-		return opacity == 0;
-	}
-
-	uint32_t GameScene::pack_color(const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a)
-	{
-		return (a << 24) + (b << 16) + (g << 8) + r;
-	}
+	// uint32_t GameScene::pack_color(const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a)
+	// {
+	// 	return (a << 24) + (b << 16) + (g << 8) + r;
+	// }
 }

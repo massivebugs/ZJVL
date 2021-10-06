@@ -47,6 +47,7 @@ namespace ZJVL
 		if (m_curr_scene != nullptr)
 		{
 			SDL_SetRenderTarget(m_renderer, m_curr_scene->texture.data);
+			SDL_SetRenderDrawColor(m_renderer, 0x00, 0x00, 0x00, 0xFF);
 			SDL_RenderClear(m_renderer);
 			m_curr_scene->render(m_renderer);
 			SDL_SetRenderTarget(m_renderer, NULL);
@@ -59,14 +60,12 @@ namespace ZJVL
 					auto blend_rate = ((float)m_curr_scene->m_shown_ms / (float)m_curr_scene->m_fade_in_ms);
 					SDL_SetRenderDrawColor(m_renderer, 0x00, 0x00, 0x00, 255 - (255 * blend_rate));
 					SDL_RenderFillRect(m_renderer, &m_fade_rect);
-					SDL_SetRenderDrawColor(m_renderer, 0x00, 0x00, 0x00, 0xFF);
 				}
 				else if (m_switching && m_switch_delay > 0 && m_switch_delay <= m_curr_scene->m_fade_out_ms)
 				{
 					auto blend_rate = ((float)m_switch_delay / (float)m_curr_scene->m_fade_out_ms);
 					SDL_SetRenderDrawColor(m_renderer, 0x00, 0x00, 0x00, 255 - (255 * blend_rate));
 					SDL_RenderFillRect(m_renderer, &m_fade_rect);
-					SDL_SetRenderDrawColor(m_renderer, 0x00, 0x00, 0x00, 0xFF);
 				}
 			}
 		}

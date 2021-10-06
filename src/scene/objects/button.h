@@ -5,7 +5,7 @@
 // #include <SDL2/SDL.h>
 // #include "game_object.h"
 // #include "asset/texture.h"
-// #include "core/vec2.h"
+// #include "util/vec2.h"
 
 // namespace ZJVL
 // {

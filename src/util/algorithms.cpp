@@ -4,7 +4,7 @@
 
 namespace ZJVL
 {
-    void merge_sort_objects(std::vector<std::shared_ptr<GameObject>> &to_sort, GameObject *camera)
+    void merge_sort_objects(std::vector<std::shared_ptr<GameObject>> &to_sort, std::shared_ptr<GameObject> camera)
     {
         // Merge sort entities just for practice
         if (to_sort.size() == 1)
@@ -24,7 +24,7 @@ namespace ZJVL
         merge(l_half, r_half, to_sort, camera);
     }
 
-    void merge(std::vector<std::shared_ptr<GameObject>> &l_vect, std::vector<std::shared_ptr<GameObject>> &r_vect, std::vector<std::shared_ptr<GameObject>> &merged, GameObject *camera)
+    void merge(std::vector<std::shared_ptr<GameObject>> &l_vect, std::vector<std::shared_ptr<GameObject>> &r_vect, std::vector<std::shared_ptr<GameObject>> &merged, std::shared_ptr<GameObject> camera)
     {
         std::size_t merged_idx = 0;
         std::size_t l_size = l_vect.size();

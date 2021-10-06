@@ -10,12 +10,12 @@ namespace ZJVL
 	{
 	public:
 		virtual ~Subject() = default;
-		void add_observer(Observer *observer);
+		void add_observer(std::weak_ptr<Observer> observer);
 
-		void remove_observer(Observer *observer);
+		void remove_observer(std::weak_ptr<Observer> observer);
 
 	protected:
-		std::vector<Observer *> m_observers;
+		std::vector<std::weak_ptr<Observer>> m_observers;
 		void notify(Event &event);
 	};
 }

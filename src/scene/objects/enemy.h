@@ -4,7 +4,7 @@
 #include "all.h"
 #include <SDL2/SDL.h>
 #include "scene/actor.h"
-#include "core/vec2.h"
+#include "util/vec2.h"
 
 namespace ZJVL
 {

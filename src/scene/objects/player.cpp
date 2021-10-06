@@ -1,6 +1,6 @@
 #include "all.h"
 #include "player.h"
-#include "core/vec2.h"
+#include "util/vec2.h"
 #include "scene/actor.h"
 #include "event/observer.h"
 #include "event/key_event.h"

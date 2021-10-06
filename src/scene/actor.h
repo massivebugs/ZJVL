@@ -4,14 +4,14 @@
 #include "all.h"
 #include <SDL2/SDL.h>
 #include "scene/game_object.h"
-#include "core/vec2.h"
+#include "util/vec2.h"
 #include "scene/scene.h"
 #include "event/observer.h"
 #include "asset/sprite_sheet.h"
 
 namespace ZJVL
 {
-	class Actor : public GameObject, public Observer
+	class Actor : public GameObject
 	{
 	public:
 		virtual ~Actor() = default;

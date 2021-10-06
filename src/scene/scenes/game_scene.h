@@ -9,9 +9,7 @@
 #include "scene/objects/player.h"
 #include "asset/texture.h"
 #include "asset/sprite_sheet.h"
-#include "core/vec2.h"
-#include "scene/actor.h"
-#include "scene/objects/enemy.h"
+#include "util/vec2.h"
 
 namespace ZJVL
 {
@@ -31,38 +29,35 @@ namespace ZJVL
 	public:
 		// TODO:
 		std::shared_ptr<GameMap> map;
-		Player player = Player(Vec2(3.456, 2.345), "assets/monsters.png");
-		std::vector<std::shared_ptr<Actor>> actors;
+		std::shared_ptr<GameObject> player;
+		std::vector<std::shared_ptr<GameObject>> objects;
 		SpriteSheet entities_tex = SpriteSheet("assets/monsters.png");
-		std::vector<std::uint32_t> pixel_buffer;
-		std::size_t rect_w;
-		std::size_t rect_h;
-		std::vector<float> depth_buffer;
 
 	private:
-		void sort_actors(std::vector<std::shared_ptr<Actor>> &to_sort);
+		std::vector<std::uint32_t> pixel_buffer;
+		// std::size_t rect_w;
+		// std::size_t rect_h;
+		// std::vector<float> depth_buffer;
 
-		void merge(std::vector<std::shared_ptr<Actor>> &l_vect, std::vector<std::shared_ptr<Actor>> &r_vect, std::vector<std::shared_ptr<Actor>> &merged);
+		// void draw_map();
 
-		void draw_map();
+		// void draw_object(std::shared_ptr<GameObject> object);
 
-		void draw_actor(std::shared_ptr<Actor> actor);
-
-		void cast_ray();
+		// void cast_ray();
 
 		// Referenced https://github.com/ssloy/tinyraycaster
 		// TODO: Switch to DDA Algorithm for casting rays
-		void draw();
+		// void draw();
 
-		void set_pixel(const std::size_t x, const std::size_t y, const std::uint32_t color);
+		// void set_pixel(const std::size_t x, const std::size_t y, const std::uint32_t color);
 
-		void draw_rectangle(const std::size_t rect_x, const std::size_t rect_y, const std::size_t rect_w, const std::size_t rect_h, const std::uint32_t color);
+		// void draw_rectangle(const std::size_t rect_x, const std::size_t rect_y, const std::size_t rect_w, const std::size_t rect_h, const std::uint32_t color);
 
-		void clear(const std::uint32_t color);
+		// void clear(const std::uint32_t color);
 
-		bool is_transparent_pixel(const uint32_t &color);
+		// bool is_transparent_pixel(const uint32_t &color);
 
-		uint32_t pack_color(const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a = 0xFF);
+		// uint32_t pack_color(const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a = 0xFF);
 	};
 }
 

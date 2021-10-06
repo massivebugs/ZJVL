@@ -1,6 +1,6 @@
 #include "all.h"
 #include "enemy.h"
-#include "core/vec2.h"
+#include "util/vec2.h"
 
 namespace ZJVL
 {

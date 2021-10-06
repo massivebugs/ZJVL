@@ -25,8 +25,12 @@ int main(int argc, char *argv[])
 
 		// Game Scene
 		std::shared_ptr<ZJVL::GameMap> map = std::make_shared<ZJVL::GameMap>("assets/walltext.png");
-		map->w = 16;
-		map->h = 16;
+		map->x_tiles_count = 16;
+		map->y_tiles_count = 16;
+		map->w = 300;
+		map->h = 300;
+		map->pos.x = 50;
+		map->pos.y = 50;
 		map->map_data = {
 			'1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1',
 			'1',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','1',
@@ -45,7 +49,9 @@ int main(int argc, char *argv[])
 			'1',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','1',
 			'1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1',
 		};
+		std::shared_ptr<ZJVL::Player> player = std::make_shared<ZJVL::Player>(ZJVL::Vec2(3.456, 2.345), "assets/monsters.png");
 		auto game_scene = std::make_shared<ZJVL::GameScene>(map);
+		game_scene->player = player;
 		game_scene->set_fading(500, 500);
 
 		// Register to Scene Manger
@@ -54,8 +60,8 @@ int main(int argc, char *argv[])
 		app->scene_manager.switch_to("splash");
 
 		// ZJVL::Enemy enemy = ZJVL::Enemy("assets/demon_1.png", ZJVL::Vec2(3.523, 3.812));
-		game_scene->actors.emplace_back(std::make_shared<ZJVL::Enemy>(ZJVL::Vec2(3.523, 3.812), "assets/monsters.png"));
-		game_scene->actors.emplace_back(std::make_shared<ZJVL::Enemy>(ZJVL::Vec2(1.834, 8.765), "assets/monsters.png"));
+		game_scene->objects.emplace_back(std::make_shared<ZJVL::Enemy>(ZJVL::Vec2(3.523, 3.812), "assets/monsters.png"));
+		game_scene->objects.emplace_back(std::make_shared<ZJVL::Enemy>(ZJVL::Vec2(1.834, 8.765), "assets/monsters.png"));
 		
 
 		code = app->run();
