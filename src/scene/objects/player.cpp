@@ -2,7 +2,7 @@
 #include "player.h"
 #include "util/vec2.h"
 #include "scene/actor.h"
-#include "event/observer.h"
+#include "event/event.h"
 #include "event/key_event.h"
 #include "event/mouse_event.h"
 

@@ -29,7 +29,7 @@ namespace ZJVL
 
 				m_curr_scene = m_scenes[m_switch_scene_id];
 				m_curr_scene->load();
-				m_curr_scene->m_shown_ms = 0;
+				m_curr_scene->shown_ms = 0;
 
 				m_switching = false;
 			}
@@ -37,7 +37,7 @@ namespace ZJVL
 
 		if (m_curr_scene != nullptr)
 		{
-			m_curr_scene->m_shown_ms += dt;
+			m_curr_scene->shown_ms += dt;
 			m_curr_scene->update(dt);
 		}
 	};
@@ -55,9 +55,9 @@ namespace ZJVL
 
 			if (m_curr_scene->m_fade)
 			{
-				if (m_curr_scene->m_shown_ms < m_curr_scene->m_fade_in_ms)
+				if (m_curr_scene->shown_ms < m_curr_scene->m_fade_in_ms)
 				{
-					auto blend_rate = ((float)m_curr_scene->m_shown_ms / (float)m_curr_scene->m_fade_in_ms);
+					auto blend_rate = ((float)m_curr_scene->shown_ms / (float)m_curr_scene->m_fade_in_ms);
 					SDL_SetRenderDrawColor(m_renderer, 0x00, 0x00, 0x00, 255 - (255 * blend_rate));
 					SDL_RenderFillRect(m_renderer, &m_fade_rect);
 				}

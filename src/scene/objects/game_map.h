@@ -3,11 +3,11 @@
 
 #include "all.h"
 #include <SDL2/SDL.h>
-#include "util/vec2.h"
 #include "scene/game_object.h"
 #include "scene/scene.h"
 #include "event/event.h"
 #include "asset/sprite_sheet.h"
+#include "util/vec2.h"
 
 namespace ZJVL
 {
@@ -35,6 +35,7 @@ namespace ZJVL
         int m_tile_w, m_tile_h;
         std::string m_sprite_sheet_path;
         std::unique_ptr<SpriteSheet> m_wall_sprites;
+
         // TODO
         // std::vector<std::uint8_t> properties;
         // std::vector<std::uint32_t> sprites;

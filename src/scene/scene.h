@@ -4,6 +4,8 @@
 #include "all.h"
 #include <SDL2/SDL.h>
 #include "asset/texture.h"
+#include "game_object.h"
+#include "camera.h"
 
 namespace ZJVL
 {
@@ -13,21 +15,22 @@ namespace ZJVL
 		Scene();
 		virtual ~Scene() = default;
 
-		// TODO: Add Camera
+		void load();
+		void unload();
+		void update(std::uint32_t dt);
+		void render(SDL_Renderer *renderer);
 
-		virtual void load() = 0;
-		virtual void unload() = 0;
-		virtual void update(std::uint32_t dt) = 0;
-		virtual void render(SDL_Renderer *renderer) = 0;
-
-		void set_fading(std::uint32_t in_ms, std::uint32_t out_ms);
+		void set_fade(std::uint32_t in_ms, std::uint32_t out_ms);
 
 		Texture texture;
+		std::uint32_t shown_ms;
+
+		Camera camera;
+		std::vector<std::shared_ptr<GameObject>> objects;
 
 	protected:
 		friend class SceneManager;
 
-		std::uint32_t m_shown_ms;
 		bool m_fade;
 		std::uint32_t m_fade_in_ms;
 		std::uint32_t m_fade_out_ms;

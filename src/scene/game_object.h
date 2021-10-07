@@ -5,14 +5,15 @@
 #include <SDL2/SDL.h>
 #include "util/vec2.h"
 #include "event/observer.h"
-#include "scene.h"
 
 namespace ZJVL
 {
+	class Scene;
+
 	class GameObject : public Observer
 	{
 	protected:
-		GameObject(const Vec2 &pos = Vec2()) : pos(pos){};
+		GameObject(const Vec2 &pos = Vec2());
 
 	public:
 		virtual ~GameObject() = default;
@@ -22,12 +23,11 @@ namespace ZJVL
 		virtual void destroy() = 0;
 		virtual void on_notify(Event &e) = 0;
 
-		float get_object_distance(const GameObject &other)
-		{
-			return (pos - other.pos).magnitude();
-		}
+		float get_object_distance(const GameObject &other);
 
 		Vec2 pos;
+
+		std::string name;
 	};
 }
 

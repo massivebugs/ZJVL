@@ -3,11 +3,10 @@
 
 #include "all.h"
 #include <SDL2/SDL.h>
-#include "scene/game_object.h"
-#include "util/vec2.h"
 #include "scene/scene.h"
-#include "event/observer.h"
+#include "scene/game_object.h"
 #include "asset/sprite_sheet.h"
+#include "util/vec2.h"
 
 namespace ZJVL
 {
@@ -21,20 +20,13 @@ namespace ZJVL
 		virtual void destroy() = 0;
 		virtual void on_notify(Event &e) = 0;
 
-		std::string name;
 		float angle;
 		float fov;
 		std::size_t w, h;
 		SpriteSheet texture;
 
 	protected:
-		Actor(const Vec2 &pos, const std::string &texture_path)
-			: texture(texture_path),
-			  GameObject(pos)
-		{
-			angle = 0;
-			fov = M_PI / 3.f;
-		};
+		Actor(const Vec2 &pos, const std::string &texture_path);
 	};
 }
 
